@@ -1,0 +1,17 @@
+package com.athletiq.backend.security.authorization;
+
+public enum Permission {
+    EVENT_CREATE,
+    EVENT_READ,
+    EVENT_UPDATE,
+    EVENT_DELETE,
+    APPLICATION_CREATE,
+    APPLICATION_READ,
+    APPLICATION_READ_OWN,
+    APPLICATION_UPDATE_OWN,
+    APPLICATION_EVALUATE,
+    APPLICATION_SHORTLIST,
+    PLAYER_SELECT,
+    STAFF_MANAGE,
+    EVENT_DASHBOARD_READ
+}
