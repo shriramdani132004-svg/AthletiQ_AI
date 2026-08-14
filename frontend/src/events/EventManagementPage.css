@@ -1,0 +1,81 @@
+.events-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.events-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.event-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.event-card-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.event-status {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.event-card dl {
+    display: grid;
+    gap: 8px;
+    margin: 16px 0;
+}
+
+.event-card dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.event-card dt {
+    font-weight: 700;
+}
+
+.event-card dd {
+    margin: 0;
+}
+
+.event-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.event-actions button {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.event-message {
+    padding: 12px;
+}
+
+.event-error {
+    padding: 12px;
+}
+
+.empty-events {
+    padding: 40px;
+    text-align: center;
+    border: 1px dashed #aaa;
+    border-radius: 12px;
+}
