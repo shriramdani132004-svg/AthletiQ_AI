@@ -1,0 +1,133 @@
+﻿erDiagram
+    USER ||--o| ORGANIZATION : belongs_to
+    ORGANIZATION ||--o{ EVENT : owns
+    EVENT ||--o{ FORM : has
+    FORM ||--o{ FORM_FIELD : contains
+    EVENT ||--o{ APPLICATION : receives
+    USER ||--o| PLAYER : represents
+    PLAYER ||--o{ APPLICATION : submits
+    EVENT ||--o{ EVALUATION_CRITERIA : defines
+    APPLICATION ||--o| OBJECTIVE_EVALUATION : receives
+    APPLICATION ||--o| AI_EVALUATION : receives
+    APPLICATION ||--o| RANKING : receives
+    APPLICATION ||--o{ SELECTION : has
+    SELECTION ||--o| CANDIDATE_RESPONSE : receives
+    APPLICATION ||--o{ STATUS_HISTORY : records
+    APPLICATION ||--o{ EMAIL_MESSAGE : receives
+
+    USER {
+        uuid id
+        string email
+        string password_hash
+        string role
+        string status
+    }
+
+    ORGANIZATION {
+        uuid id
+        string name
+    }
+
+    EVENT {
+        uuid id
+        uuid organization_id
+        string name
+        string sport
+        string status
+        datetime start_date
+        datetime end_date
+    }
+
+    FORM {
+        uuid id
+        uuid event_id
+        int version
+        string status
+    }
+
+    FORM_FIELD {
+        uuid id
+        uuid form_id
+        string field_type
+        string label
+        boolean required
+        int ordering
+    }
+
+    PLAYER {
+        uuid id
+        uuid user_id
+        string name
+        string position
+        string location
+    }
+
+    APPLICATION {
+        uuid id
+        uuid event_id
+        uuid player_id
+        string status
+        boolean validation_status
+        boolean duplicate_status
+        datetime submitted_at
+    }
+
+    EVALUATION_CRITERIA {
+        uuid id
+        uuid event_id
+        string name
+        decimal weight
+    }
+
+    OBJECTIVE_EVALUATION {
+        uuid id
+        uuid application_id
+        decimal score
+    }
+
+    AI_EVALUATION {
+        uuid id
+        uuid application_id
+        decimal ai_score
+        string recommendation
+        string explanation
+        string model_version
+    }
+
+    RANKING {
+        uuid id
+        uuid application_id
+        decimal final_score
+        int rank
+    }
+
+    SELECTION {
+        uuid id
+        uuid application_id
+        string decision
+        string reason
+    }
+
+    CANDIDATE_RESPONSE {
+        uuid id
+        uuid selection_id
+        string response
+        datetime expires_at
+    }
+
+    STATUS_HISTORY {
+        uuid id
+        uuid application_id
+        string previous_status
+        string new_status
+        string reason
+        datetime created_at
+    }
+
+    EMAIL_MESSAGE {
+        uuid id
+        uuid application_id
+        string status
+        string template
+        datetime created_at
+    }

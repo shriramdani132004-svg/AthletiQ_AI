@@ -1,0 +1,56 @@
+﻿flowchart LR
+    SA[Super Admin]
+    O[Organizer]
+    S[Staff]
+    P[Player]
+
+    subgraph AthletiQ
+        AUTH[Authenticate]
+        EVENT[Manage Events]
+        FORM[Build Forms]
+        CRIT[Configure Criteria]
+        APPLY[Submit Application]
+        VALID[Validate Application]
+        EVAL[Evaluate Candidate]
+        AI[AI-Assisted Evaluation]
+        RANK[Rank Candidates]
+        DASH[Live Dashboard]
+        SHORT[Shortlist]
+        SELECT[Select Candidate]
+        EMAIL[Send Email]
+        RESP[Accept / Decline]
+        FINAL[Finalize Selection]
+    end
+
+    SA --> AUTH
+    SA --> EVENT
+
+    O --> AUTH
+    O --> EVENT
+    O --> FORM
+    O --> CRIT
+    O --> EVAL
+    O --> AI
+    O --> RANK
+    O --> DASH
+    O --> SHORT
+    O --> SELECT
+    O --> EMAIL
+    O --> FINAL
+
+    S --> AUTH
+    S --> DASH
+    S --> EVAL
+
+    P --> APPLY
+    P --> RESP
+
+    APPLY --> VALID
+    VALID --> EVAL
+    EVAL --> AI
+    AI --> RANK
+    RANK --> DASH
+    SELECT --> EMAIL
+    EMAIL --> RESP
+    RESP --> DASH
+    DASH --> FINAL

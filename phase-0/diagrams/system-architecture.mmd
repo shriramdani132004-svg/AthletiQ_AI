@@ -1,0 +1,32 @@
+﻿flowchart TB
+    UI[React.js Frontend]
+    API[Spring Boot REST APIs]
+    SEC[Spring Security + JWT]
+    DB[(PostgreSQL)]
+    REDIS[(Redis)]
+    QUEUE[Background Queue / Workers]
+    AI[Python + FastAPI AI Service]
+    RT[WebSocket / SSE]
+    EMAIL[Transactional Email]
+    STORAGE[Cloud / Object Storage]
+    DOCKER[Docker + CI/CD]
+    MON[Production Monitoring]
+
+    UI --> API
+    API --> SEC
+    API --> DB
+    API --> REDIS
+    API --> QUEUE
+    QUEUE --> AI
+    AI --> DB
+    API --> RT
+    RT --> UI
+    API --> EMAIL
+    API --> STORAGE
+
+    DOCKER -. deploys .-> UI
+    DOCKER -. deploys .-> API
+    DOCKER -. deploys .-> AI
+    MON -. observes .-> API
+    MON -. observes .-> QUEUE
+    MON -. observes .-> DB

@@ -1,0 +1,33 @@
+﻿flowchart LR
+    PLAYER[Player]
+    ORG[Organizer]
+    PUBLIC[Public Event / Application]
+    BACKEND[Spring Boot Backend]
+    VALIDATION[Validation + Duplicate Detection]
+    DB[(PostgreSQL)]
+    QUEUE[Evaluation Queue]
+    OBJECTIVE[Objective Evaluation]
+    AI[AI Service]
+    RANK[Ranking Engine]
+    DASH[Organizer Dashboard]
+    EMAIL[Email Service]
+    RESPONSE[Candidate Response]
+    RT[WebSocket / SSE]
+
+    PLAYER --> PUBLIC
+    PUBLIC --> BACKEND
+    BACKEND --> VALIDATION
+    VALIDATION --> DB
+    DB --> QUEUE
+    QUEUE --> OBJECTIVE
+    QUEUE --> AI
+    OBJECTIVE --> RANK
+    AI --> RANK
+    RANK --> DB
+    DB --> RT
+    RT --> DASH
+    ORG --> DASH
+    ORG --> EMAIL
+    EMAIL --> RESPONSE
+    RESPONSE --> BACKEND
+    BACKEND --> DB
