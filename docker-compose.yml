@@ -1,0 +1,17 @@
+﻿services:
+  redis:
+    image: redis:8
+    container_name: athletiq-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - athletiq_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  athletiq_redis_data:
