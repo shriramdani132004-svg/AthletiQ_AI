@@ -1,0 +1,97 @@
+import { useEffect, useState } from "react";
+import { profileApi } from "../api/profileApi";
+
+export default function ProfilePage() {
+    const [profile, setProfile] = useState(null);
+    const [organization, setOrganization] = useState(null);
+    const [preferences, setPreferences] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        Promise.all([
+            profileApi.getProfile(),
+            profileApi.getOrganization(),
+            profileApi.getEmailPreferences()
+        ]).then(([profileData, organizationData, preferencesData]) => {
+            setProfile(profileData);
+            setOrganization(organizationData);
+            setPreferences(preferencesData);
+        }).catch((err) => {
+            setError(err.message);
+        }).finally(() => setLoading(false));
+    }, []);
+
+    async function saveProfile(event) {
+        event.preventDefault();
+        setMessage("");
+        try {
+            const updated = await profileApi.updateProfile(profile);
+            setProfile(updated);
+            setMessage("Profile updated successfully.");
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+
+    async function saveOrganization(event) {
+        event.preventDefault();
+        try {
+            const updated = await profileApi.updateOrganization(organization);
+            setOrganization(updated);
+            setMessage("Organization information updated.");
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+
+    async function savePreferences(event) {
+        event.preventDefault();
+        try {
+            const updated = await profileApi.updateEmailPreferences(preferences);
+            setPreferences(updated);
+            setMessage("Email preferences updated.");
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+
+    if (loading) return <main className="profile-page"><h1>Profile</h1><p>Loading profile...</p></main>;
+    if (!profile || !organization || !preferences) return <main className="profile-page"><h1>Profile</h1><p>{error || "Profile unavailable."}</p></main>;
+
+    return (
+        <main className="profile-page">
+            <h1>Profile</h1>
+            {message && <p>{message}</p>}
+            {error && <p>{error}</p>}
+            <section>
+                <h2>Personal Information</h2>
+                <form onSubmit={saveProfile}>
+                    <input value={profile.firstName || ""} onChange={(e) => setProfile({ ...profile, firstName: e.target.value })} placeholder="First name" />
+                    <input value={profile.lastName || ""} onChange={(e) => setProfile({ ...profile, lastName: e.target.value })} placeholder="Last name" />
+                    <input value={profile.phoneNumber || ""} onChange={(e) => setProfile({ ...profile, phoneNumber: e.target.value })} placeholder="Phone number" />
+                    <input value={profile.profilePhotoUrl || ""} onChange={(e) => setProfile({ ...profile, profilePhotoUrl: e.target.value })} placeholder="Profile photo URL" />
+                    <button type="submit">Save Profile</button>
+                </form>
+            </section>
+            <section>
+                <h2>Organization</h2>
+                <form onSubmit={saveOrganization}>
+                    <input value={organization.organizationName || ""} onChange={(e) => setOrganization({ ...organization, organizationName: e.target.value })} placeholder="Organization name" />
+                    <textarea value={organization.organizationDescription || ""} onChange={(e) => setOrganization({ ...organization, organizationDescription: e.target.value })} placeholder="Organization description" />
+                    <button type="submit">Save Organization</button>
+                </form>
+            </section>
+            <section>
+                <h2>Email Preferences</h2>
+                <form onSubmit={savePreferences}>
+                    <label><input type="checkbox" checked={preferences.eventUpdates} onChange={(e) => setPreferences({ ...preferences, eventUpdates: e.target.checked })} /> Event updates</label>
+                    <label><input type="checkbox" checked={preferences.selectionUpdates} onChange={(e) => setPreferences({ ...preferences, selectionUpdates: e.target.checked })} /> Selection updates</label>
+                    <label><input type="checkbox" checked={preferences.marketingEmails} onChange={(e) => setPreferences({ ...preferences, marketingEmails: e.target.checked })} /> Marketing emails</label>
+                    <button type="submit">Save Preferences</button>
+                </form>
+            </section>
+        </main>
+    );
+}
