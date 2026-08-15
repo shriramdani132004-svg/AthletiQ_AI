@@ -7,7 +7,35 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "applications")
+@Table(
+        name = "applications",
+        indexes = {
+                @Index(
+                        name = "idx_application_event",
+                        columnList = "event_id"
+                ),
+                @Index(
+                        name = "idx_application_form_version",
+                        columnList = "form_version_id"
+                ),
+                @Index(
+                        name = "idx_application_applicant",
+                        columnList = "applicant_id"
+                ),
+                @Index(
+                        name = "idx_application_status",
+                        columnList = "status"
+                ),
+                @Index(
+                        name = "idx_application_email",
+                        columnList = "applicant_email"
+                ),
+                @Index(
+                        name = "idx_application_phone",
+                        columnList = "applicant_phone"
+                )
+        }
+)
 public class Application {
 
     @Id
@@ -15,16 +43,55 @@ public class Application {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "event_id", nullable = false)
+    @JoinColumn(
+            name = "event_id",
+            nullable = false
+    )
     private Event event;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "form_version_id", nullable = false)
+    @JoinColumn(
+            name = "form_version_id",
+            nullable = false
+    )
     private FormVersion formVersion;
 
+    /**
+     * Existing authenticated applicant reference.
+     *
+     * Public applications may legitimately have no authenticated
+     * applicant identity, therefore this field is nullable.
+     */
     @Column(name = "applicant_id")
     private Long applicantId;
 
+    /**
+     * Standard player identity fields.
+     *
+     * These are deliberately nullable because Phase 8 validation
+     * will enforce requirements based on the published form.
+     */
+    @Column(
+            name = "applicant_name",
+            length = 255
+    )
+    private String applicantName;
+
+    @Column(
+            name = "applicant_email",
+            length = 320
+    )
+    private String applicantEmail;
+
+    @Column(
+            name = "applicant_phone",
+            length = 40
+    )
+    private String applicantPhone;
+
+    /**
+     * Dynamic answers exactly as submitted against the published form.
+     */
     @Column(
             name = "submitted_data",
             columnDefinition = "TEXT",
@@ -32,10 +99,89 @@ public class Application {
     )
     private String submittedData;
 
-    @Column(name = "submitted_at")
+    /**
+     * Foundation for future file uploads.
+     *
+     * Actual file storage will be implemented in Phase 8 Step 5.
+     * This field stores metadata only.
+     */
+    @Column(
+            name = "file_metadata",
+            columnDefinition = "TEXT"
+    )
+    private String fileMetadata;
+
+        @Column(
+            name = "duplicate_email",
+            length = 320
+    )
+    private String duplicateEmail;
+
+    @Column(
+            name = "duplicate_phone",
+            length = 40
+    )
+    private String duplicatePhone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(
+            name = "status",
+            nullable = false,
+            length = 40
+    )
+    private ApplicationStatus status;
+
+    @Column(
+            name = "submitted_at",
+            nullable = false
+    )
     private LocalDateTime submittedAt;
 
+    @Column(
+            name = "created_at",
+            nullable = false
+    )
+    private LocalDateTime createdAt;
+
+    @Column(
+            name = "updated_at",
+            nullable = false
+    )
+    private LocalDateTime updatedAt;
+
     public Application() {
+    }
+
+    @PrePersist
+    protected void onCreate() {
+
+        LocalDateTime now =
+                LocalDateTime.now();
+
+        if (submittedAt == null) {
+            submittedAt = now;
+        }
+
+        if (createdAt == null) {
+            createdAt = now;
+        }
+
+        if (updatedAt == null) {
+            updatedAt = now;
+        }
+
+        if (status == null) {
+            status = ApplicationStatus.SUBMITTED;
+        }
+
+        if (submittedData == null) {
+            submittedData = "{}";
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -66,6 +212,30 @@ public class Application {
         this.applicantId = applicantId;
     }
 
+    public String getApplicantName() {
+        return applicantName;
+    }
+
+    public void setApplicantName(String applicantName) {
+        this.applicantName = applicantName;
+    }
+
+    public String getApplicantEmail() {
+        return applicantEmail;
+    }
+
+    public void setApplicantEmail(String applicantEmail) {
+        this.applicantEmail = applicantEmail;
+    }
+
+    public String getApplicantPhone() {
+        return applicantPhone;
+    }
+
+    public void setApplicantPhone(String applicantPhone) {
+        this.applicantPhone = applicantPhone;
+    }
+
     public String getSubmittedData() {
         return submittedData;
     }
@@ -74,11 +244,51 @@ public class Application {
         this.submittedData = submittedData;
     }
 
+    public String getFileMetadata() {
+        return fileMetadata;
+    }
+
+    public void setFileMetadata(String fileMetadata) {
+        this.fileMetadata = fileMetadata;
+    }
+
+    public String getDuplicateEmail() {
+        return duplicateEmail;
+    }
+
+    public void setDuplicateEmail(String duplicateEmail) {
+        this.duplicateEmail = duplicateEmail;
+    }
+
+    public String getDuplicatePhone() {
+        return duplicatePhone;
+    }
+
+    public void setDuplicatePhone(String duplicatePhone) {
+        this.duplicatePhone = duplicatePhone;
+    }
+
+    public ApplicationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ApplicationStatus status) {
+        this.status = status;
+    }
+
     public LocalDateTime getSubmittedAt() {
         return submittedAt;
     }
 
     public void setSubmittedAt(LocalDateTime submittedAt) {
         this.submittedAt = submittedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }

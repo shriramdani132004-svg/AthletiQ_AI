@@ -732,3 +732,9 @@ main.public-application-page
     opacity: .6;
     cursor: not-allowed;
 }
+
+.public-application-reference-time {
+    margin-top: 8px;
+    color: #667085;
+    font-size: 12px;
+}

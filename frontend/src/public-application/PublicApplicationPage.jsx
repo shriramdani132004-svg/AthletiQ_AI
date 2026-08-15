@@ -129,6 +129,64 @@ export default function PublicApplicationPage() {
 
     }, [publicCode]);
 
+    function getSubmissionErrorMessage(err) {
+
+        const response =
+            err?.response;
+
+        if(
+            response &&
+            typeof response === "object"
+        ){
+
+            if(response.code === "DUPLICATE_APPLICATION"){
+
+                return (
+                    response.message ||
+                    "An application already exists for this event."
+                );
+            }
+
+            if(response.message){
+
+                return response.message;
+            }
+        }
+
+        if(
+            typeof err?.message === "string" &&
+            err.message.trim()
+        ){
+
+            try {
+
+                const parsed =
+                    JSON.parse(
+                        err.message
+                    );
+
+                if(parsed?.code === "DUPLICATE_APPLICATION"){
+
+                    return (
+                        parsed.message ||
+                        "An application already exists for this event."
+                    );
+                }
+
+                if(parsed?.message){
+
+                    return parsed.message;
+                }
+
+            } catch {
+                // Normal plain-text error.
+            }
+
+            return err.message;
+        }
+
+        return "Application submission failed. Please try again.";
+    }
     function parseValidationConfig(field) {
 
         if (!field.validationConfig) {
@@ -151,91 +209,333 @@ export default function PublicApplicationPage() {
                 ? rawValue.trim()
                 : rawValue;
 
-        if (
+        const fieldType =
+            String(field.fieldType || "TEXT")
+                .toUpperCase();
+
+        const fieldKey =
+            String(field.fieldKey || "")
+                .trim()
+                .toLowerCase();
+
+        // ----------------------------------------------------
+        // REQUIRED
+        // ----------------------------------------------------
+
+        if(
             field.required &&
             (
                 value === "" ||
                 value === null ||
-                value === undefined
+                value === undefined ||
+                (
+                    Array.isArray(value) &&
+                    value.length === 0
+                )
             )
-        ) {
+        ){
             return "This field is required.";
         }
 
-        if (
+        // Optional empty fields are valid.
+        if(
             value === "" ||
             value === null ||
-            value === undefined
-        ) {
+            value === undefined ||
+            (
+                Array.isArray(value) &&
+                value.length === 0
+            )
+        ){
             return "";
         }
 
-        const type =
-            String(field.fieldType || "TEXT")
-                .toUpperCase();
+        // ----------------------------------------------------
+        // NAME
+        // ----------------------------------------------------
 
-        const config =
-            parseValidationConfig(field);
+        if(
+            fieldKey === "name" ||
+            fieldKey === "full_name" ||
+            fieldKey === "player_name"
+        ){
 
-        if(type === "EMAIL") {
+            if(value.length < 2){
+                return "Name must contain at least 2 characters.";
+            }
 
-            const emailPattern =
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(value.length > 100){
+                return "Name cannot exceed 100 characters.";
+            }
 
-            if(!emailPattern.test(value)) {
+            if(!/^[\p{L} .'-]+$/u.test(value)){
+                return "Name contains invalid characters.";
+            }
+        }
+
+        // ----------------------------------------------------
+        // EMAIL
+        // ----------------------------------------------------
+
+        if(
+            fieldKey === "email" ||
+            fieldType === "EMAIL"
+        ){
+
+            if(value.length > 320){
+                return "Email cannot exceed 320 characters.";
+            }
+
+            if(
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+            ){
                 return "Enter a valid email address.";
             }
         }
 
-        if(type === "URL") {
+        // ----------------------------------------------------
+        // PHONE
+        // ----------------------------------------------------
+
+        if(
+            fieldKey === "phone" ||
+            fieldType === "PHONE"
+        ){
+
+            const normalized =
+                String(value)
+                    .replace(/[\s()+-]/g, "");
+
+            if(!/^\d{7,15}$/.test(normalized)){
+                return "Enter a valid phone number.";
+            }
+        }
+
+        // ----------------------------------------------------
+        // AGE
+        // ----------------------------------------------------
+
+        if(fieldKey === "age"){
+
+            const age =
+                Number(value);
+
+            if(
+                !Number.isInteger(age) ||
+                age < 5 ||
+                age > 100
+            ){
+                return "Age must be a whole number between 5 and 100.";
+            }
+        }
+
+        // ----------------------------------------------------
+        // NUMBER
+        // ----------------------------------------------------
+
+        if(fieldType === "NUMBER"){
+
+            const number =
+                Number(value);
+
+            if(!Number.isFinite(number)){
+                return "Enter a valid number.";
+            }
+        }
+
+        // ----------------------------------------------------
+        // DATE
+        // ----------------------------------------------------
+
+        if(fieldType === "DATE"){
+
+            const parsed =
+                new Date(`${value}T00:00:00`);
+
+            if(
+                Number.isNaN(
+                    parsed.getTime()
+                )
+            ){
+                return "Enter a valid date.";
+            }
+
+            const normalized =
+                parsed
+                    .toISOString()
+                    .slice(0,10);
+
+            if(normalized !== value){
+                return "Enter a valid date.";
+            }
+        }
+
+        // ----------------------------------------------------
+        // URL
+        // ----------------------------------------------------
+
+        if(fieldType === "URL"){
 
             try {
+
                 new URL(value);
+
             } catch {
+
                 return "Enter a valid URL.";
             }
         }
 
-        if(type === "NUMBER") {
+        // ----------------------------------------------------
+        // TEXT LENGTH / NUMBER RANGE
+        // ----------------------------------------------------
 
-            const number=Number(value);
+        let config = {};
 
-            if(!Number.isFinite(number)) {
-                return "Enter a valid number.";
-            }
+        if(field.validationConfig){
 
-            if(
-                config.min !== undefined &&
-                number < Number(config.min)
-            ) {
-                return `Minimum value is ${config.min}.`;
-            }
+            try {
 
-            if(
-                config.max !== undefined &&
-                number > Number(config.max)
-            ) {
-                return `Maximum value is ${config.max}.`;
+                config =
+                    JSON.parse(
+                        field.validationConfig
+                    );
+
+            } catch {
+                config = {};
             }
         }
 
         if(
             config.minLength !== undefined &&
-            value.length < Number(config.minLength)
-        ) {
+            String(value).length <
+                Number(config.minLength)
+        ){
             return `Minimum ${config.minLength} characters required.`;
         }
 
         if(
             config.maxLength !== undefined &&
-            value.length > Number(config.maxLength)
-        ) {
+            String(value).length >
+                Number(config.maxLength)
+        ){
             return `Maximum ${config.maxLength} characters allowed.`;
+        }
+
+        if(
+            fieldType === "NUMBER" &&
+            config.min !== undefined &&
+            Number(value) < Number(config.min)
+        ){
+            return `Minimum value is ${config.min}.`;
+        }
+
+        if(
+            fieldType === "NUMBER" &&
+            config.max !== undefined &&
+            Number(value) > Number(config.max)
+        ){
+            return `Maximum value is ${config.max}.`;
+        }
+
+        // ----------------------------------------------------
+        // SELECT / RADIO / CHECKBOX / MULTI_SELECT
+        // ----------------------------------------------------
+
+        if(
+            fieldType === "SELECT" ||
+            fieldType === "RADIO" ||
+            fieldType === "CHECKBOX" ||
+            fieldType === "MULTI_SELECT"
+        ){
+
+            let allowedOptions = [];
+
+            if(field.optionsConfig){
+
+                try {
+
+                    const parsed =
+                        JSON.parse(
+                            field.optionsConfig
+                        );
+
+                    if(Array.isArray(parsed)){
+                        allowedOptions =
+                            parsed.map(
+                                option =>
+                                    typeof option === "object"
+                                        ? String(
+                                            option.value ??
+                                            option.label ??
+                                            ""
+                                        )
+                                        : String(option)
+                            );
+                    }
+
+                } catch {
+
+                    allowedOptions =
+                        String(
+                            field.optionsConfig
+                        )
+                        .split(",")
+                        .map(
+                            option =>
+                                option
+                                    .replace(/["[\]]/g, "")
+                                    .trim()
+                        )
+                        .filter(Boolean);
+                }
+            }
+
+            if(
+                allowedOptions.length > 0 &&
+                !(
+                    fieldType === "MULTI_SELECT"
+                        ? Array.isArray(value) &&
+                          value.every(
+                              item =>
+                                  allowedOptions.includes(
+                                      String(item)
+                                  )
+                          )
+                        : allowedOptions.includes(
+                              String(value)
+                          )
+                )
+            ){
+                return `Invalid option selected for ${field.label}.`;
+            }
         }
 
         return "";
     }
 
+    function validateApplication() {
+
+        const errors = {};
+
+        for(const field of data?.fields || []){
+
+            const message =
+                validateField(
+                    field,
+                    answers[field.fieldKey]
+                );
+
+            if(message){
+                errors[field.fieldKey] =
+                    message;
+            }
+        }
+
+        setFieldErrors(errors);
+
+        return Object.keys(errors).length === 0;
+    }
     function updateAnswer(field, value) {
 
         setAnswers(current => ({
@@ -278,9 +578,15 @@ export default function PublicApplicationPage() {
 
     async function handleSubmit() {
 
-        const valid = validateApplication();
+        // Prevent accidental double-click / repeated submission.
+        if(submitting || submission){
+            return;
+        }
 
-        if(!valid) {
+        const valid =
+            validateApplication();
+
+        if(!valid){
 
             setError(
                 "Please correct the highlighted fields before continuing."
@@ -302,11 +608,10 @@ export default function PublicApplicationPage() {
 
             setSubmission(result);
 
-        } catch (err) {
+        } catch(err) {
 
             setError(
-                err.message ||
-                "Application submission failed."
+                getSubmissionErrorMessage(err)
             );
 
         } finally {
@@ -314,49 +619,6 @@ export default function PublicApplicationPage() {
             setSubmitting(false);
         }
     }
-
-    if (submission) {
-
-        return (
-            <main className="public-application-page">
-
-                <section className="public-application-success">
-
-                    <div className="public-application-success-icon">
-                        ✓
-                    </div>
-
-                    <span className="public-application-eyebrow">
-                        APPLICATION SUBMITTED
-                    </span>
-
-                    <h1>
-                        Application submitted successfully
-                    </h1>
-
-                    <p>
-                        Your application has been received by the
-                        event organizer.
-                    </p>
-
-                    <div className="public-application-reference">
-
-                        <span>
-                            Application ID
-                        </span>
-
-                        <strong>
-                            {submission.applicationId}
-                        </strong>
-
-                    </div>
-
-                </section>
-
-            </main>
-        );
-    }
-
     if (loading) {
 
         return (
