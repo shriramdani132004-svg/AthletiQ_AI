@@ -1,0 +1,655 @@
+﻿/* ============================================================
+   ATHLETIQ GLOBAL TOP NAVIGATION
+   ============================================================ */
+
+.athletiq-topbar {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    width: 100%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #061426 0%,
+            #071a33 46%,
+            #0b3158 100%
+        );
+
+    color:
+        #ffffff;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.10);
+
+    box-shadow:
+        0 8px 30px
+        rgba(7,26,51,.14);
+}
+
+.athletiq-topbar-inner {
+    width:
+        min(
+            1440px,
+            calc(100% - 32px)
+        );
+
+    min-height:
+        72px;
+
+    margin:
+        0 auto;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        auto
+        1fr
+        auto;
+
+    align-items:
+        center;
+
+    gap:
+        24px;
+}
+
+.athletiq-brand {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        11px;
+
+    min-width:
+        max-content;
+
+    color:
+        #ffffff;
+
+    text-decoration:
+        none;
+}
+
+.athletiq-brand-mark {
+    width:
+        42px;
+
+    height:
+        42px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        rgba(103,232,249,.22);
+
+    border-radius:
+        13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #22d3ee,
+            #38bdf8
+        );
+
+    color:
+        #06213b;
+
+    font-size:
+        19px;
+
+    font-weight:
+        950;
+
+    box-shadow:
+        0 8px 24px
+        rgba(34,211,238,.22);
+
+    transition:
+        transform var(--aq-transition),
+        box-shadow var(--aq-transition);
+}
+
+.athletiq-brand:hover
+.athletiq-brand-mark {
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(34,211,238,.30);
+}
+
+.athletiq-brand-copy {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    line-height:
+        1.05;
+}
+
+.athletiq-brand-copy strong {
+    color:
+        #ffffff;
+
+    font-size:
+        18px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        -.035em;
+}
+
+.athletiq-brand-copy small {
+    margin-top:
+        4px;
+
+    color:
+        rgba(226,232,240,.54);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .09em;
+
+    text-transform:
+        uppercase;
+}
+
+.athletiq-global-nav {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        5px;
+}
+
+.athletiq-nav-link {
+    position:
+        relative;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        38px;
+
+    padding:
+        0 12px;
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius:
+        10px;
+
+    color:
+        rgba(226,232,240,.72);
+
+    font-size:
+        10px;
+
+    font-weight:
+        850;
+
+    text-decoration:
+        none;
+
+    transition:
+        background var(--aq-transition),
+        color var(--aq-transition),
+        border-color var(--aq-transition),
+        transform var(--aq-transition);
+}
+
+.athletiq-nav-link:hover {
+    transform:
+        translateY(-1px);
+
+    color:
+        #ffffff;
+
+    background:
+        rgba(255,255,255,.075);
+
+    border-color:
+        rgba(255,255,255,.06);
+}
+
+.athletiq-nav-link.active {
+    color:
+        #ffffff;
+
+    background:
+        rgba(56,189,248,.12);
+
+    border-color:
+        rgba(103,232,249,.11);
+}
+
+.athletiq-nav-link.active::after {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        13px;
+
+    right:
+        13px;
+
+    bottom:
+        4px;
+
+    height:
+        2px;
+
+    border-radius:
+        999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22d3ee,
+            #38bdf8
+        );
+}
+
+.athletiq-user-area {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        10px;
+}
+
+.athletiq-user-summary {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+}
+
+.athletiq-user-avatar {
+    width:
+        34px;
+
+    height:
+        34px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    border-radius:
+        50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0ea5e9,
+            #22d3ee
+        );
+
+    color:
+        #06213b;
+
+    font-size:
+        12px;
+
+    font-weight:
+        950;
+}
+
+.athletiq-user-text {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    line-height:
+        1.05;
+}
+
+.athletiq-user-text strong {
+    color:
+        #f8fafc;
+
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+}
+
+.athletiq-user-text span {
+    margin-top:
+        4px;
+
+    color:
+        rgba(226,232,240,.48);
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .08em;
+}
+
+.athletiq-logout-button {
+    min-height:
+        36px;
+
+    padding:
+        0 11px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(255,255,255,.045);
+
+    color:
+        #e2e8f0;
+
+    font-size:
+        9px;
+
+    font-weight:
+        850;
+
+    cursor:
+        pointer;
+
+    transition:
+        background var(--aq-transition),
+        border-color var(--aq-transition),
+        color var(--aq-transition),
+        transform var(--aq-transition);
+}
+
+.athletiq-logout-button:hover {
+    transform:
+        translateY(-1px);
+
+    background:
+        rgba(248,113,113,.10);
+
+    border-color:
+        rgba(248,113,113,.24);
+
+    color:
+        #fecaca;
+}
+
+/* ============================================================
+   RESPONSIVE NAVIGATION
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+    .athletiq-topbar-inner {
+        grid-template-columns:
+            1fr
+            auto;
+
+        gap:
+            10px;
+
+        padding:
+            10px 0;
+    }
+
+    .athletiq-global-nav {
+        grid-column:
+            1 / -1;
+
+        grid-row:
+            2;
+
+        justify-content:
+            flex-start;
+
+        overflow-x:
+            auto;
+
+        padding-bottom:
+            2px;
+
+        scrollbar-width:
+            none;
+    }
+
+    .athletiq-global-nav::-webkit-scrollbar {
+        display:
+            none;
+    }
+
+    .athletiq-nav-link {
+        white-space:
+            nowrap;
+    }
+
+    .athletiq-user-text {
+        display:
+            none;
+    }
+}
+
+@media (max-width: 640px) {
+
+    .athletiq-topbar-inner {
+        width:
+            calc(100% - 20px);
+
+        min-height:
+            64px;
+    }
+
+    .athletiq-brand-copy small {
+        display:
+            none;
+    }
+
+    .athletiq-brand-mark {
+        width:
+            38px;
+
+        height:
+            38px;
+    }
+
+    .athletiq-brand-copy strong {
+        font-size:
+            16px;
+    }
+
+    .athletiq-nav-link {
+        min-height:
+            34px;
+
+        padding:
+            0 10px;
+
+        font-size:
+            9px;
+    }
+
+    .athletiq-user-area {
+        gap:
+            6px;
+    }
+
+    .athletiq-logout-button {
+        min-height:
+            34px;
+
+        padding:
+            0 9px;
+
+        font-size:
+            8px;
+    }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .athletiq-brand-mark,
+    .athletiq-nav-link,
+    .athletiq-logout-button {
+        transition:
+            none !important;
+    }
+}
+
+/* ============================================================
+   ATHLETIQ NAVIGATION FOUNDATION
+   NAVY + BLUE, NOT FULL DARK MODE
+   ============================================================ */
+
+.athletiq-topbar {
+    position: sticky !important;
+    top: 0;
+
+    z-index: 1000;
+
+    width: 100%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #071a33,
+            #0b2d52 58%,
+            #0f4770
+        ) !important;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.10);
+
+    box-shadow:
+        0 8px 24px
+        rgba(7,26,51,.13);
+}
+
+.athletiq-brand-mark {
+    background:
+        linear-gradient(
+            135deg,
+            #22d3ee,
+            #38bdf8
+        ) !important;
+
+    color:
+        #06213b !important;
+}
+
+.athletiq-nav-link {
+    color:
+        rgba(255,255,255,.76) !important;
+}
+
+.athletiq-nav-link:hover {
+    color:
+        #ffffff !important;
+
+    background:
+        rgba(255,255,255,.07) !important;
+}
+
+.athletiq-nav-link.active {
+    color:
+        #ffffff !important;
+
+    background:
+        rgba(56,189,248,.13) !important;
+
+    border-color:
+        rgba(103,232,249,.13) !important;
+}
+
+.athletiq-nav-link.active::after {
+    background:
+        linear-gradient(
+            90deg,
+            #22d3ee,
+            #38bdf8
+        ) !important;
+}
+
+.athletiq-logout-button {
+    background:
+        rgba(255,255,255,.045) !important;
+
+    color:
+        #e2e8f0 !important;
+
+    border-color:
+        rgba(255,255,255,.12) !important;
+}

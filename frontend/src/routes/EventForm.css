@@ -1,0 +1,301 @@
+﻿/* ============================================================
+   ATHLETIQ EDIT EVENT & EVENT FORM - QUANTUM SYNTHWAVE SYSTEM
+   DEEP OBSIDIAN / NEON CYAN / HYPER MAGENTA / AMBER GLOW
+   ============================================================ */
+
+.edit-event-page,
+.event-form-page,
+.create-event-page,
+.event-form-container,
+.event-form {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 40px 4vw 80px !important;
+    background-color: #03050c !important;
+    background-image: 
+        radial-gradient(circle at 12% 18%, rgba(0, 240, 255, 0.14), transparent 45%),
+        radial-gradient(circle at 88% 82%, rgba(255, 0, 234, 0.14), transparent 45%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px) !important;
+    background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px !important;
+    color: #f8fafc !important;
+    font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    animation: aq-edit-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* ------------------------------------------------------------
+   HEADER & INTRO
+   ------------------------------------------------------------ */
+
+.event-form-header,
+.edit-event-page h1,
+.event-form-page h1,
+.create-event-page h1,
+.event-form > h1 {
+    font-size: clamp(34px, 4vw, 52px) !important;
+    font-weight: 950 !important;
+    letter-spacing: -0.04em !important;
+    margin: 0 0 12px 0 !important;
+    background: linear-gradient(90deg, #00f0ff 0%, #a855f7 50%, #ff00ea 100%) !important;
+    background-size: 200% auto !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    animation: aq-gradient-flow 6s linear infinite !important;
+    display: inline-block !important;
+}
+
+.event-form-header p,
+.edit-event-page > p,
+.event-form-page > p,
+.create-event-page > p,
+.event-form > p {
+    color: #94a3b8 !important;
+    font-size: 15px !important;
+    margin: 0 0 32px 0 !important;
+    font-weight: 500 !important;
+}
+
+/* ------------------------------------------------------------
+   FORM SHELL & GLASS CONTAINER
+   ------------------------------------------------------------ */
+
+.event-form-card,
+.event-form form,
+form.event-form {
+    position: relative !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 24px !important;
+    padding: 44px 48px !important;
+    border-radius: 28px !important;
+    background: rgba(15, 20, 40, 0.7) !important;
+    backdrop-filter: blur(20px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+    border: 1px solid rgba(0, 240, 255, 0.15) !important;
+    box-shadow: 
+        0 24px 60px -15px rgba(0, 0, 0, 0.7),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    overflow: hidden !important;
+}
+
+.event-form-card::before,
+.event-form form::before,
+form.event-form::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0; left: 0; right: 0;
+    height: 3px !important;
+    background: linear-gradient(90deg, #00f0ff, #ff00ea) !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.8) !important;
+}
+
+/* ------------------------------------------------------------
+   FORM GROUPS & LABELS
+   ------------------------------------------------------------ */
+
+.form-group,
+.form-field,
+.event-form label,
+form.event-form label,
+.event-form-card > div {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    font-size: 11px !important;
+    font-weight: 850 !important;
+    letter-spacing: 0.12em !important;
+    color: #64748b !important;
+    text-transform: uppercase !important;
+}
+
+.full-width,
+.form-group-full,
+.event-form-card .full-width,
+.form-group:has(textarea),
+.form-field:has(textarea),
+label:has(textarea) {
+    grid-column: 1 / -1 !important;
+}
+
+/* ------------------------------------------------------------
+   INPUTS, SELECTS & TEXTAREAS
+   ------------------------------------------------------------ */
+
+.event-form input,
+.event-form select,
+.event-form textarea,
+form.event-form input,
+form.event-form select,
+form.event-form textarea,
+.event-form-card input,
+.event-form-card select,
+.event-form-card textarea {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 16px 20px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(3, 7, 18, 0.75) !important;
+    color: #ffffff !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    outline: none !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.event-form textarea,
+form.event-form textarea,
+.event-form-card textarea {
+    min-height: 120px !important;
+    resize: vertical !important;
+    line-height: 1.6 !important;
+}
+
+.event-form input::placeholder,
+.event-form textarea::placeholder,
+form.event-form input::placeholder,
+form.event-form textarea::placeholder {
+    color: #475569 !important;
+    font-weight: 500 !important;
+}
+
+.event-form input:focus,
+.event-form select:focus,
+.event-form textarea:focus,
+form.event-form input:focus,
+form.event-form select:focus,
+form.event-form textarea:focus,
+.event-form-card input:focus,
+.event-form-card select:focus,
+.event-form-card textarea:focus {
+    border-color: #00f0ff !important;
+    background: rgba(5, 12, 28, 0.95) !important;
+    box-shadow:
+        0 0 0 4px rgba(0, 240, 255, 0.15),
+        0 0 25px rgba(0, 240, 255, 0.25),
+        inset 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ------------------------------------------------------------
+   ACTION BUTTONS & CONTROLS
+   ------------------------------------------------------------ */
+
+.form-actions,
+.event-form-actions,
+.event-form-card .form-actions,
+.event-form button[type="submit"],
+form.event-form button[type="submit"] {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    margin-top: 12px !important;
+}
+
+.event-form button,
+form.event-form button,
+.event-form-card button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 50px !important;
+    padding: 0 32px !important;
+    border-radius: 14px !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Primary Action: Save / Update Event */
+.event-form button[type="submit"],
+form.event-form button[type="submit"],
+.btn-primary {
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    background: linear-gradient(90deg, #00f0ff 0%, #0051ff 50%, #ff00ea 100%) !important;
+    background-size: 200% auto !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 25px rgba(0, 240, 255, 0.35) !important;
+}
+
+.event-form button[type="submit"]:hover,
+form.event-form button[type="submit"]:hover,
+.btn-primary:hover {
+    transform: translateY(-3px) scale(1.02) !important;
+    background-position: right center !important;
+    box-shadow: 0 15px 35px rgba(255, 0, 234, 0.5) !important;
+}
+
+/* Secondary Cancel / Back Button */
+.btn-secondary,
+.btn-cancel,
+.event-form a.btn-secondary,
+.event-form button[type="button"] {
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #94a3b8 !important;
+    text-decoration: none !important;
+}
+
+.btn-secondary:hover,
+.btn-cancel:hover,
+.event-form a.btn-secondary:hover,
+.event-form button[type="button"]:hover {
+    border-color: #ff3366 !important;
+    color: #ff3366 !important;
+    background: rgba(255, 0, 85, 0.1) !important;
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.2) !important;
+}
+
+/* ------------------------------------------------------------
+   KEYFRAME ANIMATIONS & RESPONSIVE
+   ------------------------------------------------------------ */
+
+@keyframes aq-edit-enter {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes aq-gradient-flow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+@media (max-width: 860px) {
+    .edit-event-page,
+    .event-form-page,
+    .create-event-page,
+    .event-form-container {
+        padding: 24px 18px 60px !important;
+    }
+
+    .event-form-card,
+    .event-form form,
+    form.event-form {
+        grid-template-columns: 1fr !important;
+        padding: 28px 22px !important;
+    }
+
+    .form-actions,
+    .event-form-actions {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    .event-form button,
+    form.event-form button,
+    .event-form-card button {
+        width: 100% !important;
+    }
+}

@@ -1,0 +1,611 @@
+﻿/* ============================================================
+   GLOBAL VITE / ROOT OVERRIDES (BREAK OUT TO FULL VIEWPORT)
+   ============================================================ */
+html,
+body,
+#root {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #020617 !important;
+    overflow: hidden !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   VIEWPORT WRAPPER (FIXED TO DEFY VITE CENTERING SQUEEZE)
+   ============================================================ */
+.aq-register-page {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    background: #020617;
+    color: #f8fafc;
+    z-index: 999;
+}
+
+/* ============================================================
+   AMBIENT CYBER BACKGROUND
+   ============================================================ */
+.aq-register-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.aq-grid-plane {
+    position: absolute;
+    inset: -40%;
+    background-image:
+        linear-gradient(rgba(0, 242, 254, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 242, 254, 0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: perspective(900px) rotateX(60deg) scale(1.3);
+    transform-origin: center bottom;
+    mask-image: radial-gradient(ellipse at 50% 60%, black 15%, transparent 70%);
+}
+
+.aq-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+}
+
+.aq-orb-cyan {
+    top: 5%;
+    left: 10%;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(0, 242, 254, 0.22), transparent 70%);
+}
+
+.aq-orb-purple {
+    bottom: 5%;
+    right: 10%;
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.2), transparent 70%);
+}
+
+/* ============================================================
+   MAIN GLASS CONTAINER (SOLID WIDESCREEN RATIO)
+   ============================================================ */
+.aq-register-card {
+    position: relative;
+    z-index: 2;
+    width: min(1080px, 94vw);
+    height: min(630px, 88vh);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    border-radius: 24px;
+    background: rgba(7, 16, 34, 0.85);
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    box-shadow:
+        0 40px 100px -20px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(255, 255, 255, 0.07);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.aq-card-glow-border {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(0, 242, 254, 0.4), rgba(168, 85, 247, 0.15) 50%, transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* ============================================================
+   LEFT PANEL - BRAND HERO
+   ============================================================ */
+.aq-brand-panel {
+    padding: clamp(24px, 4vh, 40px) clamp(28px, 3.5vw, 44px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    background: linear-gradient(145deg, rgba(0, 242, 254, 0.03) 0%, transparent 100%);
+    box-sizing: border-box;
+}
+
+.aq-brand-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.aq-logo-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 0 20px -4px rgba(0, 242, 254, 0.3);
+}
+
+.aq-register-logo {
+    width: 32px;
+    height: 32px;
+}
+
+.aq-brand-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.aq-brand-name {
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #ffffff;
+}
+
+.aq-brand-sub {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: #00f2fe;
+}
+
+.aq-brand-body {
+    margin: auto 0;
+}
+
+.aq-status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(0, 242, 254, 0.12);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    color: #38bdf8;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+}
+
+.aq-pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00f2fe;
+    box-shadow: 0 0 8px #00f2fe;
+}
+
+.aq-hero-headline {
+    font-size: clamp(28px, 3vw, 38px);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    margin: 0 0 10px 0;
+    color: #ffffff;
+}
+
+.aq-gradient-text {
+    display: block;
+    background: linear-gradient(90deg, #00f2fe 0%, #38bdf8 45%, #c084fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.aq-hero-desc {
+    color: #94a3b8;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 18px 0;
+    max-width: 420px;
+}
+
+.aq-process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.aq-step-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.aq-step-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #64748b;
+}
+
+.aq-step-item.active .aq-step-num {
+    background: rgba(0, 242, 254, 0.15);
+    border-color: rgba(0, 242, 254, 0.4);
+    color: #00f2fe;
+}
+
+.aq-step-text strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.aq-step-text span {
+    font-size: 10.5px;
+    color: #64748b;
+}
+
+.aq-step-line {
+    width: 2px;
+    height: 8px;
+    margin-left: 12px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.aq-brand-bottom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #475569;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+}
+
+.aq-bullet {
+    color: #334155;
+}
+
+/* ============================================================
+   RIGHT PANEL - FORM & SUCCESS
+   ============================================================ */
+.aq-form-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(20px, 3.5vh, 36px);
+    background: rgba(3, 9, 20, 0.65);
+    box-sizing: border-box;
+}
+
+.aq-form-wrapper {
+    width: 100%;
+    max-width: 350px;
+}
+
+.aq-form-header {
+    margin-bottom: 18px;
+}
+
+.aq-form-eyebrow {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: #00f2fe;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.aq-form-header h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.02em;
+}
+
+.aq-form-header p {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Error Box */
+.aq-error-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    margin-bottom: 14px;
+}
+
+.aq-error-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.aq-error-text {
+    font-size: 11px;
+    color: #fca5a5;
+    line-height: 1.3;
+}
+
+/* Form Controls */
+.aq-auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.aq-name-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.aq-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.aq-field-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+}
+
+.aq-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.aq-input-adornment {
+    position: absolute;
+    left: 12px;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.aq-input-container input {
+    width: 100%;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    border-radius: 9px;
+    padding: 0 12px;
+    color: #f8fafc;
+    font-size: 12.5px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.aq-input-container input[type="email"],
+.aq-input-container input[type="password"],
+.aq-input-container input[type="text"][name="password"] {
+    padding-left: 32px;
+    padding-right: 36px;
+}
+
+.aq-input-container input::placeholder {
+    color: #475569;
+}
+
+.aq-input-container input:focus {
+    border-color: #00f2fe;
+    background: rgba(0, 242, 254, 0.05);
+    box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15);
+}
+
+.aq-toggle-password {
+    position: absolute;
+    right: 6px;
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 6px;
+    display: grid;
+    place-items: center;
+    border-radius: 6px;
+}
+
+.aq-toggle-password:hover {
+    color: #00f2fe;
+}
+
+.aq-register-icon {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+}
+
+/* Button */
+.aq-submit-btn {
+    height: 44px;
+    margin-top: 4px;
+    border-radius: 9px;
+    border: none;
+    background: linear-gradient(135deg, #00f2fe 0%, #0284c7 50%, #7c3aed 100%);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px -6px rgba(0, 242, 254, 0.45);
+    transition: all 0.2s ease;
+}
+
+.aq-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px -4px rgba(0, 242, 254, 0.6);
+    filter: brightness(1.1);
+}
+
+.aq-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.aq-register-icon-arrow {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+}
+
+.aq-spinner {
+    width: 13px;
+    height: 13px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: aqSpin 0.6s linear infinite;
+}
+
+/* Footer Prompt */
+.aq-form-footer {
+    margin-top: 14px;
+    text-align: center;
+}
+
+.aq-register-prompt {
+    font-size: 11px;
+    color: #64748b;
+    margin: 0;
+}
+
+.aq-register-prompt button {
+    background: none;
+    border: none;
+    color: #00f2fe;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.aq-register-prompt button:hover {
+    text-decoration: underline;
+}
+
+/* SUCCESS CARD */
+.aq-register-success {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.aq-register-success-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    display: grid;
+    place-items: center;
+    margin: 0 auto 14px;
+    color: #4ade80;
+    box-shadow: 0 0 20px -4px rgba(34, 197, 94, 0.35);
+}
+
+.aq-register-check {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+}
+
+.aq-success-kicker {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: #4ade80;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.aq-register-success h3 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 6px 0;
+}
+
+.aq-register-success p {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin: 0 0 18px 0;
+}
+
+.aq-success-btn {
+    width: 100%;
+}
+
+@keyframes aqSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   RESPONSIVENESS
+   ============================================================ */
+@media (max-width: 860px) {
+    .aq-register-page {
+        position: relative;
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto !important;
+    }
+    .aq-register-card {
+        grid-template-columns: 1fr;
+        height: auto;
+        max-width: 440px;
+    }
+    .aq-brand-panel {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        padding: 24px;
+    }
+    .aq-process-steps {
+        display: none;
+    }
+    .aq-form-panel {
+        padding: 24px;
+    }
+}

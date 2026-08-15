@@ -1,22 +1,1102 @@
+﻿/* ============================================================
+   ATHLETIQ PROFILE
+   2026 IMMERSIVE ORGANIZER PROFILE
+   Based on the AthletiQ Login visual language
+   ============================================================ */
+
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
 .profile-page {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 32px;
+    position: relative;
+
+    width:
+        min(
+            1180px,
+            calc(100% - 44px)
+        );
+
+    min-height:
+        calc(100vh - 90px);
+
+    margin:
+        0 auto;
+
+    padding:
+        34px 0 60px;
+
+    box-sizing:
+        border-box;
+
+    color:
+        #e5eef8;
+
+    isolation:
+        isolate;
+
+    animation:
+        aq-profile-enter
+        .5s
+        cubic-bezier(.22,1,.36,1);
 }
 
-.profile-page section {
-    margin: 24px 0;
-    padding: 24px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
+
+/* ============================================================
+   BACKGROUND ATMOSPHERE
+   ============================================================ */
+
+.profile-page::before {
+    content:
+        "";
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        -3;
+
+    pointer-events:
+        none;
+
+    background:
+        radial-gradient(
+            circle at 12% 15%,
+            rgba(2,132,199,.18),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 88% 72%,
+            rgba(99,102,241,.15),
+            transparent 29%
+        ),
+        radial-gradient(
+            circle at 52% 44%,
+            rgba(34,211,238,.045),
+            transparent 25%
+        ),
+        linear-gradient(
+            135deg,
+            #030712 0%,
+            #080a1d 48%,
+            #0b0a25 73%,
+            #030712 100%
+        );
 }
 
-.profile-page form {
-    display: grid;
-    gap: 12px;
+.profile-page::after {
+    content:
+        "";
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        -2;
+
+    pointer-events:
+        none;
+
+    opacity:
+        .18;
+
+    background-image:
+        linear-gradient(
+            rgba(56,189,248,.11) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(56,189,248,.11) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        48px 48px;
+
+    mask-image:
+        radial-gradient(
+            ellipse 86% 78% at center,
+            black 12%,
+            transparent 90%
+        );
+
+    animation:
+        aq-profile-grid
+        26s
+        linear
+        infinite;
 }
 
-.profile-page input, .profile-page textarea, .profile-page button {
-    padding: 10px;
-    font: inherit;
+
+/* ============================================================
+   PAGE TITLE
+   ============================================================ */
+
+.profile-page > h1 {
+    position:
+        relative;
+
+    margin:
+        0 0 25px;
+
+    color:
+        #ffffff;
+
+    font-size:
+        clamp(
+            42px,
+            5vw,
+            68px
+        );
+
+    font-weight:
+        950;
+
+    line-height:
+        .94;
+
+    letter-spacing:
+        -.065em;
+}
+
+.profile-page > h1::after {
+    content:
+        "";
+
+    display:
+        block;
+
+    width:
+        70px;
+
+    height:
+        3px;
+
+    margin-top:
+        16px;
+
+    border-radius:
+        999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22d3ee,
+            #38bdf8,
+            #8b5cf6
+        );
+
+    box-shadow:
+        0 0 18px
+        rgba(34,211,238,.35);
+
+    animation:
+        aq-profile-line
+        2.8s
+        ease-in-out
+        infinite;
+}
+
+
+/* ============================================================
+   STATUS / MESSAGE
+   ============================================================ */
+
+.profile-page > p {
+    position:
+        relative;
+
+    display:
+        block;
+
+    margin:
+        0 0 14px;
+
+    padding:
+        12px 15px;
+
+    border:
+        1px solid
+        rgba(103,232,249,.12);
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(34,211,238,.045);
+
+    color:
+        #94a3b8;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.55;
+
+    box-shadow:
+        inset
+        0 1px 0
+        rgba(255,255,255,.025);
+}
+
+.profile-page > p:first-of-type {
+    animation:
+        aq-profile-message
+        .3s
+        ease;
+}
+
+
+/* Error-looking message */
+
+.profile-page > p:has(+ section) {
+    position:
+        relative;
+}
+
+
+/* ============================================================
+   MAIN SECTIONS
+   ============================================================ */
+
+.profile-page > section {
+    position:
+        relative;
+
+    margin:
+        14px 0;
+
+    padding:
+        24px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        rgba(148,163,184,.11);
+
+    border-radius:
+        20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13,25,50,.90),
+            rgba(6,13,29,.95)
+        );
+
+    box-shadow:
+        0 18px 45px
+        rgba(0,0,0,.22),
+        inset
+        0 1px 0
+        rgba(255,255,255,.035);
+
+    backdrop-filter:
+        blur(18px);
+
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+.profile-page > section::before {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(34,211,238,.22),
+            rgba(139,92,246,.16),
+            transparent
+        );
+}
+
+.profile-page > section::after {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    right:
+        -90px;
+
+    bottom:
+        -120px;
+
+    width:
+        260px;
+
+    height:
+        260px;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34,211,238,.045),
+            transparent 70%
+        );
+
+    pointer-events:
+        none;
+}
+
+.profile-page > section:hover {
+    border-color:
+        rgba(103,232,249,.15);
+
+    box-shadow:
+        0 22px 50px
+        rgba(0,0,0,.28),
+        0 0 32px
+        rgba(14,165,233,.025);
+}
+
+.profile-page > section h2 {
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    margin:
+        0 0 20px;
+
+    color:
+        #f8fafc;
+
+    font-size:
+        18px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        -.025em;
+}
+
+.profile-page > section h2::before {
+    content:
+        "";
+
+    display:
+        inline-block;
+
+    width:
+        7px;
+
+    height:
+        7px;
+
+    margin:
+        0 8px 2px 0;
+
+    border-radius:
+        50%;
+
+    background:
+        #22d3ee;
+
+    box-shadow:
+        0 0 10px
+        rgba(34,211,238,.45);
+}
+
+
+/* ============================================================
+   FORMS
+   ============================================================ */
+
+.profile-page > section form {
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    display:
+        grid;
+
+    gap:
+        14px;
+}
+
+
+/* ============================================================
+   STANDARD INPUTS
+   ============================================================ */
+
+.profile-page > section form > input,
+.profile-page > section form > textarea {
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid
+        rgba(148,163,184,.13);
+
+    border-radius:
+        12px;
+
+    outline:
+        none;
+
+    background:
+        rgba(2,6,23,.62);
+
+    color:
+        #e2e8f0;
+
+    font-size:
+        12px;
+
+    transition:
+        border-color .18s ease,
+        background .18s ease,
+        box-shadow .18s ease,
+        transform .18s ease;
+}
+
+.profile-page > section form > input {
+    min-height:
+        50px;
+
+    padding:
+        0 14px;
+}
+
+.profile-page > section form > textarea {
+    min-height:
+        130px;
+
+    padding:
+        13px 14px;
+
+    resize:
+        vertical;
+
+    line-height:
+        1.6;
+}
+
+.profile-page > section form > input::placeholder,
+.profile-page > section form > textarea::placeholder {
+    color:
+        #475569;
+}
+
+.profile-page > section form > input:hover,
+.profile-page > section form > textarea:hover {
+    border-color:
+        rgba(148,163,184,.22);
+
+    background:
+        rgba(3,8,20,.78);
+}
+
+.profile-page > section form > input:focus,
+.profile-page > section form > textarea:focus {
+    border-color:
+        #38bdf8;
+
+    background:
+        rgba(2,6,23,.92);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(56,189,248,.10),
+        0 0 24px
+        rgba(14,165,233,.05);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.profile-page > section form > button {
+    position:
+        relative;
+
+    width:
+        max-content;
+
+    min-width:
+        145px;
+
+    min-height:
+        44px;
+
+    margin-top:
+        3px;
+
+    padding:
+        0 16px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        rgba(103,232,249,.16);
+
+    border-radius:
+        11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #0ea5e9 50%,
+            #6366f1
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        9px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .08em;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 10px 26px
+        rgba(14,165,233,.20);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        filter .18s ease;
+}
+
+.profile-page > section form > button::after {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        -110%;
+
+    width:
+        55%;
+
+    height:
+        100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.28),
+            transparent
+        );
+
+    transform:
+        skewX(-24deg);
+
+    animation:
+        aq-profile-button-shimmer
+        4s
+        infinite;
+}
+
+.profile-page > section form > button:hover {
+    transform:
+        translateY(-2px);
+
+    filter:
+        saturate(1.08);
+
+    box-shadow:
+        0 16px 34px
+        rgba(14,165,233,.32);
+}
+
+.profile-page > section form > button:active {
+    transform:
+        translateY(0);
+}
+
+.profile-page > section form > button:disabled {
+    opacity:
+        .55;
+
+    cursor:
+        not-allowed;
+}
+
+
+/* ============================================================
+   EMAIL PREFERENCES
+   ============================================================ */
+
+.profile-page > section:nth-of-type(3) form {
+    gap:
+        9px;
+}
+
+.profile-page > section:nth-of-type(3) form > label {
+    position:
+        relative;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        11px;
+
+    min-height:
+        52px;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid
+        rgba(148,163,184,.08);
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    color:
+        #cbd5e1;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    transition:
+        background .16s ease,
+        border-color .16s ease,
+        transform .16s ease;
+}
+
+.profile-page > section:nth-of-type(3) form > label:hover {
+    transform:
+        translateX(2px);
+
+    border-color:
+        rgba(103,232,249,.14);
+
+    background:
+        rgba(34,211,238,.035);
+}
+
+.profile-page > section:nth-of-type(3)
+form > label > input[type="checkbox"] {
+
+    appearance:
+        none;
+
+    width:
+        19px;
+
+    height:
+        19px;
+
+    min-height:
+        19px;
+
+    flex:
+        0 0 auto;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    border:
+        1px solid
+        rgba(148,163,184,.25);
+
+    border-radius:
+        6px;
+
+    background:
+        rgba(2,6,23,.60);
+
+    cursor:
+        pointer;
+
+    position:
+        relative;
+
+    transition:
+        background .16s ease,
+        border-color .16s ease,
+        box-shadow .16s ease;
+}
+
+.profile-page > section:nth-of-type(3)
+form > label > input[type="checkbox"]:checked {
+
+    border-color:
+        #22d3ee;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #6366f1
+        );
+
+    box-shadow:
+        0 0 14px
+        rgba(34,211,238,.16);
+}
+
+.profile-page > section:nth-of-type(3)
+form > label > input[type="checkbox"]:checked::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        5px;
+
+    top:
+        2px;
+
+    width:
+        6px;
+
+    height:
+        10px;
+
+    border:
+        solid
+        #ffffff;
+
+    border-width:
+        0 2px 2px 0;
+
+    transform:
+        rotate(45deg);
+}
+
+.profile-page > section:nth-of-type(3)
+form > label > input[type="checkbox"]:focus-visible {
+
+    outline:
+        2px solid
+        rgba(56,189,248,.50);
+
+    outline-offset:
+        2px;
+}
+
+
+/* ============================================================
+   LOADING / UNAVAILABLE STATE
+   ============================================================ */
+
+.profile-page > h1 + p:only-child {
+
+    min-height:
+        220px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    margin:
+        0;
+
+    padding:
+        30px;
+
+    border:
+        1px dashed
+        rgba(103,232,249,.16);
+
+    border-radius:
+        20px;
+
+    background:
+        rgba(255,255,255,.018);
+
+    color:
+        #64748b;
+
+    text-align:
+        center;
+
+    box-shadow:
+        inset
+        0 1px 0
+        rgba(255,255,255,.025);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .profile-page {
+        width:
+            calc(100% - 30px);
+
+        padding:
+            28px 0
+            50px;
+    }
+
+    .profile-page > h1 {
+        font-size:
+            48px;
+    }
+
+    .profile-page > section {
+        padding:
+            21px;
+    }
+}
+
+@media (max-width: 620px) {
+
+    .profile-page {
+        width:
+            calc(100% - 18px);
+
+        padding:
+            22px 0
+            38px;
+    }
+
+    .profile-page > h1 {
+        font-size:
+            38px;
+
+        margin-bottom:
+            21px;
+    }
+
+    .profile-page > section {
+        margin:
+            11px 0;
+
+        padding:
+            17px;
+
+        border-radius:
+            17px;
+    }
+
+    .profile-page > section h2 {
+        font-size:
+            16px;
+    }
+
+    .profile-page > section form > input {
+        min-height:
+            48px;
+    }
+
+    .profile-page > section form > button {
+        width:
+            100%;
+
+        min-width:
+            0;
+    }
+
+    .profile-page > section:nth-of-type(3)
+    form > label {
+        min-height:
+            48px;
+    }
+}
+
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+
+@keyframes aq-profile-enter {
+
+    from {
+        opacity:
+            0;
+
+        transform:
+            translateY(9px);
+    }
+
+    to {
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+@keyframes aq-profile-grid {
+
+    from {
+        background-position:
+            0 0;
+    }
+
+    to {
+        background-position:
+            48px 48px;
+    }
+}
+
+@keyframes aq-profile-line {
+
+    0%,
+    100% {
+        opacity:
+            .72;
+
+        transform:
+            scaleX(1);
+
+        transform-origin:
+            left;
+    }
+
+    50% {
+        opacity:
+            1;
+
+        transform:
+            scaleX(1.12);
+
+        transform-origin:
+            left;
+    }
+}
+
+@keyframes aq-profile-message {
+
+    from {
+        opacity:
+            0;
+
+        transform:
+            translateY(-4px);
+    }
+
+    to {
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+@keyframes aq-profile-button-shimmer {
+
+    0% {
+        left:
+            -110%;
+    }
+
+    25%,
+    100% {
+        left:
+            185%;
+    }
+}
+
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .profile-page,
+    .profile-page::after,
+    .profile-page > h1::after,
+    .profile-page > section form > button::after {
+        animation:
+            none !important;
+    }
+
+    .profile-page > section,
+    .profile-page > section form > input,
+    .profile-page > section form > textarea,
+    .profile-page > section form > button,
+    .profile-page > section:nth-of-type(3)
+    form > label {
+        transition:
+            none !important;
+    }
 }

@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import {
     BrowserRouter,
@@ -9,7 +9,6 @@ import {
 
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import GlobalNavigation from "./routes/GlobalNavigation";
 
 import Login from "./routes/Login";
 import Register from "./routes/Register";
@@ -69,7 +68,6 @@ ReactDOM
             <BrowserRouter>
 
                 <AuthProvider>
-                    <GlobalNavigation />
 
                     <Routes>
 

@@ -1,0 +1,844 @@
+﻿/* ============================================================
+   ATHLETIQ DASHBOARD - QUANTUM SYNTHWAVE EDITION
+   DEEP OBSIDIAN / ELECTRIC CYAN / HYPER MAGENTA / NEON GREEN
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   CORE PAGE & AMBIENT ANIMATIONS
+   ------------------------------------------------------------ */
+.dashboard-page {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 32px 4vw 80px !important;
+    background-color: #03050c !important;
+    background-image: 
+        radial-gradient(circle at 15% 20%, rgba(255, 0, 234, 0.15), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0, 240, 255, 0.15), transparent 40%),
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px) !important;
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px !important;
+    background-position: 0 0, 0 0, 0 0, 0 0 !important;
+    color: #f8fafc !important;
+    font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    animation: aq-bg-pan 20s linear infinite, aq-dash-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+}
+
+/* ------------------------------------------------------------
+   1. TOP NAVIGATION
+   ------------------------------------------------------------ */
+.dashboard-topbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 16px 24px !important;
+    margin-bottom: 32px !important;
+    background: rgba(10, 15, 30, 0.6) !important;
+    backdrop-filter: blur(24px) saturate(150%) !important;
+    border: 1px solid rgba(0, 240, 255, 0.15) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 40px -10px rgba(0, 240, 255, 0.1) !important;
+}
+
+.dashboard-brand-block {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+}
+
+.dashboard-logo {
+    width: 48px !important;
+    height: 48px !important;
+    display: grid !important;
+    place-items: center !important;
+    background: linear-gradient(135deg, #00f0ff, #ff00ea) !important;
+    color: #ffffff !important;
+    font-size: 22px !important;
+    font-weight: 900 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 0 20px rgba(255, 0, 234, 0.4) !important;
+    animation: aq-float-slow 6s ease-in-out infinite !important;
+}
+
+.dashboard-brand-block strong {
+    display: block !important;
+    font-size: 20px !important;
+    font-weight: 950 !important;
+    color: #ffffff !important;
+    letter-spacing: -0.02em !important;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.4) !important;
+}
+
+.dashboard-brand-block span {
+    display: block !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    background: linear-gradient(90deg, #00f0ff, #ff00ea) !important;
+    -webkit-background-clip: text !important;
+    color: transparent !important;
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase !important;
+    animation: aq-hue-rotate 8s linear infinite !important;
+}
+
+.dashboard-top-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+}
+
+.dashboard-profile-button {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(0, 240, 255, 0.3) !important;
+    background: rgba(0, 240, 255, 0.1) !important;
+    color: #00f0ff !important;
+    font-size: 16px !important;
+    font-weight: 950 !important;
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.dashboard-profile-button:hover {
+    transform: translateY(-3px) scale(1.05) !important;
+    background: rgba(0, 240, 255, 0.2) !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4) !important;
+}
+
+.dashboard-logout {
+    padding: 10px 22px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255, 0, 85, 0.3) !important;
+    background: rgba(255, 0, 85, 0.05) !important;
+    color: #ff3366 !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.dashboard-logout:hover {
+    background: rgba(255, 0, 85, 0.2) !important;
+    border-color: #ff0055 !important;
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.4) !important;
+}
+
+/* ------------------------------------------------------------
+   2. HERO BANNER
+   ------------------------------------------------------------ */
+.dashboard-hero {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 56px 64px !important;
+    border-radius: 32px !important;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #240b36 100%) !important;
+    background-size: 200% 200% !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 0, 234, 0.2) !important;
+    box-shadow: 0 30px 60px -15px rgba(255, 0, 234, 0.2) !important;
+    overflow: hidden !important;
+    margin-bottom: 32px !important;
+    animation: aq-gradient-shift 10s ease infinite !important;
+}
+
+.dashboard-hero::after {
+    content: "" !important;
+    position: absolute !important;
+    top: -50% !important;
+    left: -50% !important;
+    width: 200% !important;
+    height: 200% !important;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 50%) !important;
+    animation: aq-spin-slow 20s linear infinite !important;
+    pointer-events: none !important;
+}
+
+.dashboard-eyebrow {
+    position: relative;
+    z-index: 2;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 6px 16px !important;
+    border-radius: 999px !important;
+    background: rgba(255, 0, 234, 0.15) !important;
+    border: 1px solid rgba(255, 0, 234, 0.4) !important;
+    color: #ffb3ff !important;
+    font-size: 11px !important;
+    font-weight: 950 !important;
+    letter-spacing: 0.2em !important;
+    box-shadow: 0 0 20px rgba(255, 0, 234, 0.3) !important;
+}
+
+.dashboard-hero h1 {
+    position: relative;
+    z-index: 2;
+    margin: 16px 0 16px !important;
+    font-size: clamp(36px, 4vw, 56px) !important;
+    font-weight: 950 !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.03em !important;
+}
+
+.dashboard-hero h1 strong {
+    background: linear-gradient(to right, #00f0ff, #ff00ea) !important;
+    -webkit-background-clip: text !important;
+    color: transparent !important;
+    animation: aq-hue-rotate 6s linear infinite !important;
+    text-shadow: none !important; /* text-shadow breaks background-clip */
+}
+
+.dashboard-hero p {
+    position: relative;
+    z-index: 2;
+    max-width: 600px !important;
+    margin: 0 !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+}
+
+.dashboard-hero-actions {
+    position: relative;
+    z-index: 2;
+    display: flex !important;
+    gap: 16px !important;
+    margin-top: 36px !important;
+}
+
+.dashboard-primary-button {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    height: 52px !important;
+    padding: 0 28px !important;
+    border-radius: 14px !important;
+    border: none !important;
+    background: linear-gradient(90deg, #00f0ff, #0051ff, #ff00ea) !important;
+    background-size: 200% auto !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.5) !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.dashboard-primary-button:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+    background-position: right center !important;
+    box-shadow: 0 0 40px rgba(255, 0, 234, 0.6) !important;
+}
+
+.dashboard-secondary-button {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 52px !important;
+    padding: 0 28px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(0, 240, 255, 0.4) !important;
+    background: rgba(0, 240, 255, 0.05) !important;
+    color: #00f0ff !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    backdrop-filter: blur(10px) !important;
+    transition: all 0.3s ease !important;
+}
+
+.dashboard-secondary-button:hover {
+    transform: translateY(-4px) !important;
+    background: rgba(0, 240, 255, 0.15) !important;
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.3) !important;
+    color: #ffffff !important;
+}
+
+/* ------------------------------------------------------------
+   3. METRIC STATISTICS (GLOWING GLASS CARDS)
+   ------------------------------------------------------------ */
+.dashboard-metrics {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+    margin-bottom: 32px !important;
+}
+
+.dashboard-metric-card {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 28px !important;
+    border-radius: 24px !important;
+    background: rgba(15, 20, 40, 0.6) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    overflow: hidden !important;
+}
+
+.dashboard-metric-card::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0; left: 0; right: 0; height: 3px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.4s ease !important;
+}
+
+.dashboard-metric-card:hover {
+    transform: translateY(-8px) !important;
+    border-color: rgba(0, 240, 255, 0.3) !important;
+    box-shadow: 0 20px 40px rgba(0, 240, 255, 0.15) !important;
+    background: rgba(15, 20, 40, 0.8) !important;
+}
+
+.dashboard-metric-card:hover::before {
+    background: linear-gradient(90deg, #00f0ff, #ff00ea) !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.8) !important;
+}
+
+.dashboard-metric-primary {
+    border-color: rgba(255, 0, 234, 0.3) !important;
+    background: rgba(255, 0, 234, 0.05) !important;
+}
+
+.dashboard-metric-primary::before {
+    background: linear-gradient(90deg, #ff00ea, #00f0ff) !important;
+}
+
+.dashboard-metric-card span {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    color: #94a3b8 !important;
+    letter-spacing: 0.15em !important;
+    text-transform: uppercase !important;
+}
+
+.dashboard-metric-card strong {
+    font-size: 42px !important;
+    font-weight: 950 !important;
+    color: #ffffff !important;
+    margin: 12px 0 6px !important;
+    line-height: 1 !important;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3) !important;
+}
+
+.dashboard-metric-primary strong {
+    color: #ff00ea !important;
+    text-shadow: 0 0 20px rgba(255, 0, 234, 0.5) !important;
+}
+
+.dashboard-metric-card:nth-child(2) strong { color: #00f0ff !important; text-shadow: 0 0 20px rgba(0, 240, 255, 0.5) !important; }
+.dashboard-metric-card:nth-child(3) strong { color: #f59e0b !important; text-shadow: 0 0 20px rgba(245, 158, 11, 0.5) !important; }
+.dashboard-metric-card:nth-child(4) strong { color: #39ff14 !important; text-shadow: 0 0 20px rgba(57, 255, 20, 0.5) !important; }
+
+.dashboard-metric-card small {
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-weight: 600 !important;
+}
+
+/* ------------------------------------------------------------
+   4. TWO-COLUMN WORKSPACE GRID
+   ------------------------------------------------------------ */
+.dashboard-main-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.7fr) minmax(340px, 1fr) !important;
+    gap: 28px !important;
+    margin-bottom: 32px !important;
+}
+
+/* Section Headings */
+.dashboard-section-heading {
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: space-between !important;
+    margin-bottom: 20px !important;
+    padding: 0 8px !important;
+}
+
+.dashboard-section-heading span {
+    display: block !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    color: #ff00ea !important;
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 4px !important;
+    text-shadow: 0 0 10px rgba(255, 0, 234, 0.4) !important;
+}
+
+.dashboard-section-heading h2 {
+    margin: 0 !important;
+    font-size: 26px !important;
+    font-weight: 950 !important;
+    color: #ffffff !important;
+    letter-spacing: -0.02em !important;
+}
+
+.dashboard-section-heading button {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    color: #00f0ff !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    cursor: pointer !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    transition: all 0.2s ease !important;
+}
+
+.dashboard-section-heading button:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 15px #00f0ff !important;
+}
+
+/* ------------------------------------------------------------
+   5. RECRUITMENT EVENTS GRID
+   ------------------------------------------------------------ */
+.dashboard-event-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 20px !important;
+}
+
+.dashboard-event-card {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 24px !important;
+    border-radius: 24px !important;
+    background: rgba(15, 20, 35, 0.7) !important;
+    border: 1px solid rgba(0, 240, 255, 0.15) !important;
+    backdrop-filter: blur(12px) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.dashboard-event-card:hover {
+    transform: translateY(-5px) scale(1.02) !important;
+    border-color: rgba(0, 240, 255, 0.5) !important;
+    box-shadow: 0 20px 40px rgba(0, 240, 255, 0.15), inset 0 0 20px rgba(0, 240, 255, 0.05) !important;
+    background: rgba(15, 20, 40, 0.9) !important;
+}
+
+.dashboard-event-card-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 20px !important;
+}
+
+.dashboard-sport-icon {
+    width: 48px !important;
+    height: 48px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 14px !important;
+    background: rgba(0, 240, 255, 0.1) !important;
+    border: 1px solid rgba(0, 240, 255, 0.4) !important;
+    color: #00f0ff !important;
+    font-size: 20px !important;
+    font-weight: 900 !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2) !important;
+    animation: aq-float 4s ease-in-out infinite !important;
+}
+
+/* Status Badges */
+.dashboard-status-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 6px 12px !important;
+    border-radius: 8px !important;
+    font-size: 10px !important;
+    font-weight: 950 !important;
+    letter-spacing: 0.15em !important;
+    text-transform: uppercase !important;
+    box-shadow: 0 0 15px currentColor !important;
+}
+
+.dashboard-status-applications-open, .dashboard-status-published {
+    background: rgba(57, 255, 20, 0.1) !important;
+    color: #39ff14 !important;
+    border: 1px solid #39ff14 !important;
+}
+
+.dashboard-status-applications-closed {
+    background: rgba(255, 0, 234, 0.1) !important;
+    color: #ff00ea !important;
+    border: 1px solid #ff00ea !important;
+}
+
+.dashboard-status-draft {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #94a3b8 !important;
+    border: 1px solid #475569 !important;
+    box-shadow: none !important;
+}
+
+.dashboard-event-card-body {
+    margin-bottom: 20px !important;
+}
+
+.dashboard-event-sport {
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    color: #00f0ff !important;
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase !important;
+}
+
+.dashboard-event-card-body h3 {
+    margin: 8px 0 !important;
+    font-size: 18px !important;
+    font-weight: 950 !important;
+    color: #ffffff !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.dashboard-event-card-body p {
+    margin: 0 !important;
+    font-size: 13px !important;
+    color: #94a3b8 !important;
+}
+
+.dashboard-event-card-stats {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    padding: 16px !important;
+    margin-bottom: 20px !important;
+    border-radius: 14px !important;
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.dashboard-event-card-stats div {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.dashboard-event-card-stats strong {
+    font-size: 20px !important;
+    font-weight: 950 !important;
+    color: #ffffff !important;
+}
+
+.dashboard-event-card-stats span {
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    color: #64748b !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+}
+
+.dashboard-event-card-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding-top: 16px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.dashboard-event-card-footer > span {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #64748b !important;
+}
+
+.dashboard-event-card-footer div {
+    display: flex !important;
+    gap: 10px !important;
+}
+
+.dashboard-event-card-footer button {
+    padding: 8px 16px !important;
+    border-radius: 10px !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+/* View Event button */
+.dashboard-event-card-footer button:first-child {
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+.dashboard-event-card-footer button:first-child:hover {
+    border-color: #00f0ff !important;
+    color: #00f0ff !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2) !important;
+}
+
+/* Applications button */
+.dashboard-event-card-footer button:last-child {
+    background: rgba(0, 240, 255, 0.1) !important;
+    border: 1px solid #00f0ff !important;
+    color: #00f0ff !important;
+}
+
+.dashboard-event-card-footer button:last-child:hover {
+    background: #00f0ff !important;
+    color: #000000 !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.6) !important;
+}
+
+/* ------------------------------------------------------------
+   6. RECENT ACTIVITY (RIGHT COLUMN)
+   ------------------------------------------------------------ */
+.dashboard-activity-card {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    padding: 24px !important;
+    border-radius: 24px !important;
+    background: rgba(15, 20, 35, 0.6) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 0, 234, 0.15) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dashboard-activity-item {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    align-items: center !important;
+    gap: 16px !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+    text-align: left !important;
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.dashboard-activity-item:hover {
+    background: rgba(255, 0, 234, 0.1) !important;
+    border-color: #ff00ea !important;
+    transform: translateX(6px) !important;
+    box-shadow: 0 0 20px rgba(255, 0, 234, 0.2) !important;
+}
+
+.dashboard-activity-number {
+    width: 42px !important;
+    height: 42px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 12px !important;
+    background: rgba(255, 0, 234, 0.15) !important;
+    border: 1px solid rgba(255, 0, 234, 0.4) !important;
+    color: #ff00ea !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+}
+
+.dashboard-activity-content {
+    min-width: 0 !important;
+}
+
+.dashboard-activity-content strong {
+    display: block !important;
+    font-size: 15px !important;
+    font-weight: 950 !important;
+    color: #ffffff !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.dashboard-activity-content span {
+    display: block !important;
+    font-size: 11px !important;
+    color: #94a3b8 !important;
+    margin-top: 4px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.dashboard-activity-meta {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 6px !important;
+}
+
+.dashboard-activity-meta small {
+    font-size: 11px !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-weight: 700 !important;
+}
+
+/* ------------------------------------------------------------
+   7. QUICK ACTIONS MATRIX
+   ------------------------------------------------------------ */
+.dashboard-action-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+    margin-bottom: 40px !important;
+}
+
+.dashboard-action-grid button {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 28px 24px !important;
+    border-radius: 24px !important;
+    background: rgba(15, 20, 35, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    cursor: pointer !important;
+    backdrop-filter: blur(12px) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    text-align: left !important;
+}
+
+.dashboard-action-grid button:hover {
+    transform: translateY(-6px) !important;
+    border-color: #00f0ff !important;
+    background: rgba(0, 240, 255, 0.05) !important;
+    box-shadow: 0 15px 35px rgba(0, 240, 255, 0.2), inset 0 0 20px rgba(0, 240, 255, 0.1) !important;
+}
+
+.dashboard-action-icon {
+    width: 48px !important;
+    height: 48px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 14px !important;
+    background: rgba(0, 240, 255, 0.1) !important;
+    color: #00f0ff !important;
+    font-size: 22px !important;
+    font-weight: 900 !important;
+    margin-bottom: 16px !important;
+    border: 1px solid rgba(0, 240, 255, 0.4) !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2) !important;
+    animation: aq-pulse-glow 3s infinite alternate !important;
+}
+
+.dashboard-action-grid button strong {
+    font-size: 16px !important;
+    font-weight: 950 !important;
+    color: #ffffff !important;
+    margin-bottom: 6px !important;
+}
+
+.dashboard-action-grid button small {
+    font-size: 12px !important;
+    color: #94a3b8 !important;
+    line-height: 1.5 !important;
+}
+
+/* ------------------------------------------------------------
+   8. FOOTER
+   ------------------------------------------------------------ */
+.dashboard-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 32px 12px 0 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-size: 12px !important;
+}
+
+.dashboard-footer strong {
+    color: #00f0ff !important;
+    font-weight: 950 !important;
+    margin-right: 8px !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+}
+
+/* ------------------------------------------------------------
+   9. HYPER-ANIMATIONS
+   ------------------------------------------------------------ */
+@keyframes aq-dash-enter {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes aq-bg-pan {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+@keyframes aq-gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes aq-hue-rotate {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes aq-float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes aq-float {
+    0%, 100% { transform: translateY(0); box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
+    50% { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 240, 255, 0.4); }
+}
+
+@keyframes aq-pulse-glow {
+    0% { box-shadow: 0 0 10px rgba(0, 240, 255, 0.2); }
+    100% { box-shadow: 0 0 25px rgba(0, 240, 255, 0.6); }
+}
+
+@keyframes aq-hero-shimmer {
+    0% { left: -100%; }
+    20%, 100% { left: 200%; }
+}
+
+@keyframes aq-spin-slow {
+    to { transform: rotate(360deg); }
+}
+
+/* ------------------------------------------------------------
+   10. RESPONSIVE BREAKPOINTS
+   ------------------------------------------------------------ */
+@media (max-width: 1200px) {
+    .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    .dashboard-main-grid { grid-template-columns: 1fr !important; }
+    .dashboard-action-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    .dashboard-hero { padding: 40px !important; flex-direction: column; align-items: flex-start; gap: 24px; }
+}
+
+@media (max-width: 768px) {
+    .dashboard-page { padding: 24px 4vw 60px !important; }
+    .dashboard-hero h1 { font-size: 36px !important; }
+    .dashboard-metrics { grid-template-columns: 1fr !important; }
+    .dashboard-action-grid { grid-template-columns: 1fr !important; }
+    .dashboard-topbar { flex-direction: column; gap: 16px; align-items: flex-start; }
+    .dashboard-top-actions { width: 100%; justify-content: space-between; }
+    .dashboard-event-grid { grid-template-columns: 1fr !important; }
+    .dashboard-event-card-stats { grid-template-columns: 1fr !important; }
+}

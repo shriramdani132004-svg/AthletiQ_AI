@@ -1,0 +1,690 @@
+﻿import {
+    useEffect,
+    useRef,
+    useState
+} from "react";
+
+import {
+    useLocation,
+    useNavigate
+} from "react-router-dom";
+
+import "./GlobalNavigation.css";
+
+const staticPages = [
+    {
+        label: "Dashboard",
+        description: "Organizer overview",
+        path: "/"
+    },
+    {
+        label: "Events",
+        description: "Manage all events",
+        path: "/events"
+    },
+    {
+        label: "Create Event",
+        description: "Create a new event",
+        path: "/events/create"
+    },
+    {
+        label: "Profile",
+        description: "Manage your profile",
+        path: "/profile"
+    },
+    {
+        label: "Register",
+        description: "Create an account",
+        path: "/register"
+    },
+    {
+        label: "Login",
+        description: "Open authentication",
+        path: "/login"
+    }
+];
+
+export default function GlobalNavigation() {
+
+    const location =
+        useLocation();
+
+    const navigate =
+        useNavigate();
+
+    const [open, setOpen] =
+        useState(false);
+
+    const [eventId, setEventId] =
+        useState("");
+
+    const [publicCode, setPublicCode] =
+        useState("");
+
+    /*
+     * How much of the navigation drawer is exposed.
+     * Closed = only the small edge handle.
+     * Open = full drawer.
+     */
+    const [exposure, setExposure] =
+        useState(20);
+
+    const [dragging, setDragging] =
+        useState(false);
+
+    const dragState =
+        useRef({
+            startX: 0,
+            startExposure: 20,
+            pointerId: null
+        });
+
+    useEffect(() => {
+
+        const match =
+            location.pathname.match(
+                /^\/events\/(\d+)/
+            );
+
+        if (match?.[1]) {
+            setEventId(match[1]);
+        }
+
+        const publicMatch =
+            location.pathname.match(
+                /^\/apply\/([^/]+)/
+            );
+
+        if (publicMatch?.[1]) {
+            setPublicCode(
+                publicMatch[1]
+            );
+        }
+
+    }, [location.pathname]);
+
+    useEffect(() => {
+
+        if (!open) {
+            return;
+        }
+
+        function handleKeyDown(event) {
+
+            if (
+                event.key === "Escape"
+            ) {
+                closeNavigation();
+            }
+        }
+
+        function handlePointerDown(event) {
+
+            if (
+                !event.target.closest(
+                    ".aq-global-navigation"
+                )
+            ) {
+                closeNavigation();
+            }
+        }
+
+        document.addEventListener(
+            "keydown",
+            handleKeyDown
+        );
+
+        document.addEventListener(
+            "mousedown",
+            handlePointerDown
+        );
+
+        return () => {
+
+            document.removeEventListener(
+                "keydown",
+                handleKeyDown
+            );
+
+            document.removeEventListener(
+                "mousedown",
+                handlePointerDown
+            );
+        };
+
+    }, [open]);
+
+    /*
+     * Login remains deliberately excluded.
+     */
+    if (
+        location.pathname === "/login"
+    ) {
+        return null;
+    }
+
+    function getMaxExposure() {
+
+        if (
+            typeof window !==
+            "undefined"
+        ) {
+            return Math.min(
+                390,
+                window.innerWidth
+            );
+        }
+
+        return 390;
+    }
+
+    function closeNavigation() {
+
+        setDragging(false);
+        setOpen(false);
+        setExposure(20);
+    }
+
+    function openNavigation() {
+
+        setDragging(false);
+        setOpen(true);
+        setExposure(
+            getMaxExposure()
+        );
+    }
+
+    function toggleNavigation() {
+
+        if (open) {
+            closeNavigation();
+        } else {
+            openNavigation();
+        }
+    }
+
+    function handlePointerDown(
+        event
+    ) {
+
+        if (
+            event.pointerType ===
+            "mouse" &&
+            event.button !== 0
+        ) {
+            return;
+        }
+
+        dragState.current = {
+            startX:
+                event.clientX,
+
+            startExposure:
+                exposure,
+
+            pointerId:
+                event.pointerId
+        };
+
+        setDragging(true);
+
+        event.currentTarget.setPointerCapture(
+            event.pointerId
+        );
+    }
+
+    function handlePointerMove(
+        event
+    ) {
+
+        if (
+            !dragging ||
+            dragState.current.pointerId !==
+                event.pointerId
+        ) {
+            return;
+        }
+
+        const delta =
+            dragState.current.startX -
+            event.clientX;
+
+        const nextExposure =
+            Math.max(
+                20,
+                Math.min(
+                    getMaxExposure(),
+                    dragState.current
+                        .startExposure +
+                    delta
+                )
+            );
+
+        setExposure(
+            nextExposure
+        );
+    }
+
+    function finishDrag(
+        event
+    ) {
+
+        if (
+            dragState.current.pointerId !==
+            event.pointerId
+        ) {
+            return;
+        }
+
+        const finalExposure =
+            exposure;
+
+        setDragging(false);
+
+        try {
+            event.currentTarget.releasePointerCapture(
+                event.pointerId
+            );
+        } catch {
+            // Pointer capture may already be released.
+        }
+
+        /*
+         * If the handle was pulled far enough,
+         * snap fully open.
+         *
+         * Otherwise return to the tiny edge handle.
+         */
+        if (
+            finalExposure >=
+            Math.min(
+                145,
+                getMaxExposure() * 0.42
+            )
+        ) {
+            setOpen(true);
+            setExposure(
+                getMaxExposure()
+            );
+        } else {
+            setOpen(false);
+            setExposure(20);
+        }
+    }
+
+    function go(path) {
+
+        setOpen(false);
+        setExposure(20);
+
+        navigate(path);
+    }
+
+    function goToEventPage(page) {
+
+        const cleanEventId =
+            String(eventId).trim();
+
+        if (
+            !/^\d+$/.test(
+                cleanEventId
+            )
+        ) {
+            return;
+        }
+
+        go(
+            `/events/${cleanEventId}/${page}`
+        );
+    }
+
+    function goToEventRoot() {
+
+        const cleanEventId =
+            String(eventId).trim();
+
+        if (
+            !/^\d+$/.test(
+                cleanEventId
+            )
+        ) {
+            return;
+        }
+
+        go(
+            `/events/${cleanEventId}`
+        );
+    }
+
+    function goToPublicApplication() {
+
+        const cleanCode =
+            String(publicCode).trim();
+
+        if (!cleanCode) {
+            return;
+        }
+
+        go(
+            `/apply/${encodeURIComponent(
+                cleanCode
+            )}`
+        );
+    }
+
+    const hasValidEventId =
+        /^\d+$/.test(
+            String(eventId).trim()
+        );
+
+    const hasPublicCode =
+        String(publicCode).trim().length >
+        0;
+
+    const visiblePanel =
+        open ||
+        dragging ||
+        exposure > 32;
+
+    return (
+        <div className={`aq-global-navigation ${open ? "is-open" : ""} ${dragging ? "is-dragging" : ""}`}>
+
+            <aside
+                    className="aq-global-navigation-panel"
+                    aria-label="Page navigation"
+                >
+
+                    <div className="aq-global-navigation-header">
+
+                        <div>
+
+                            <span className="aq-global-navigation-eyebrow">
+                                ATHLETIQ
+                            </span>
+
+                            <h2>
+                                Page Navigation
+                            </h2>
+
+                            <p>
+                                Jump anywhere in the workspace.
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            className="aq-global-navigation-close"
+                            aria-label="Close navigation"
+                            onClick={
+                                closeNavigation
+                            }
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+                    <div className="aq-global-navigation-section">
+
+                        <div className="aq-global-navigation-section-title">
+                            CORE PAGES
+                        </div>
+
+                        <div className="aq-global-navigation-list">
+
+                            {staticPages.map(
+                                page => (
+
+                                    <button
+                                        type="button"
+                                        key={page.path}
+                                        className={
+                                            `aq-global-navigation-item ${
+                                                location.pathname ===
+                                                page.path
+                                                    ? "active"
+                                                    : ""
+                                            }`
+                                        }
+                                        onClick={() =>
+                                            go(
+                                                page.path
+                                            )
+                                        }
+                                    >
+
+                                        <span className="aq-global-navigation-item-title">
+                                            {page.label}
+                                        </span>
+
+                                        <span className="aq-global-navigation-item-description">
+                                            {page.description}
+                                        </span>
+
+                                    </button>
+
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+                    <div className="aq-global-navigation-section">
+
+                        <div className="aq-global-navigation-section-title">
+                            EVENT WORKSPACE
+                        </div>
+
+                        <div className="aq-global-navigation-input-row">
+
+                            <input
+                                type="text"
+                                inputMode="numeric"
+                                value={eventId}
+                                onChange={
+                                    event =>
+                                        setEventId(
+                                            event.target.value.replace(
+                                                /[^\d]/g,
+                                                ""
+                                            )
+                                        )
+                                }
+                                placeholder="Event ID"
+                                aria-label="Event ID"
+                            />
+
+                        </div>
+
+                        <div className="aq-global-navigation-grid">
+
+                            <button
+                                type="button"
+                                disabled={
+                                    !hasValidEventId
+                                }
+                                onClick={
+                                    goToEventRoot
+                                }
+                            >
+                                Details
+                            </button>
+
+                            <button
+                                type="button"
+                                disabled={
+                                    !hasValidEventId
+                                }
+                                onClick={() =>
+                                    goToEventPage(
+                                        "edit"
+                                    )
+                                }
+                            >
+                                Edit Event
+                            </button>
+
+                            <button
+                                type="button"
+                                disabled={
+                                    !hasValidEventId
+                                }
+                                onClick={() =>
+                                    goToEventPage(
+                                        "form-builder"
+                                    )
+                                }
+                            >
+                                Form Builder
+                            </button>
+
+                            <button
+                                type="button"
+                                disabled={
+                                    !hasValidEventId
+                                }
+                                onClick={() =>
+                                    goToEventPage(
+                                        "evaluation"
+                                    )
+                                }
+                            >
+                                Evaluation
+                            </button>
+
+                            <button
+                                type="button"
+                                disabled={
+                                    !hasValidEventId
+                                }
+                                onClick={() =>
+                                    goToEventPage(
+                                        "applications"
+                                    )
+                                }
+                            >
+                                Applications
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div className="aq-global-navigation-section">
+
+                        <div className="aq-global-navigation-section-title">
+                            PUBLIC APPLICATION
+                        </div>
+
+                        <div className="aq-global-navigation-input-row">
+
+                            <input
+                                type="text"
+                                value={
+                                    publicCode
+                                }
+                                onChange={
+                                    event =>
+                                        setPublicCode(
+                                            event.target.value
+                                        )
+                                }
+                                placeholder="Public application code"
+                                aria-label="Public application code"
+                                onKeyDown={
+                                    event => {
+
+                                        if (
+                                            event.key ===
+                                                "Enter" &&
+                                            hasPublicCode
+                                        ) {
+                                            goToPublicApplication();
+                                        }
+
+                                    }
+                                }
+                            />
+
+                            <button
+                                type="button"
+                                disabled={
+                                    !hasPublicCode
+                                }
+                                onClick={
+                                    goToPublicApplication
+                                }
+                            >
+                                Open
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div className="aq-global-navigation-footer">
+
+                        <span>
+                            Current page:
+                        </span>
+
+                        <strong>
+                            {location.pathname}
+                        </strong>
+
+                    </div>
+
+                </aside>
+
+            <button
+                type="button"
+                className="aq-global-navigation-trigger"
+                aria-label={
+                    open
+                        ? "Close page navigation"
+                        : "Open page navigation"
+                }
+                aria-expanded={
+                    open
+                }
+                onClick={
+                    toggleNavigation
+                }
+                onPointerDown={
+                    handlePointerDown
+                }
+                onPointerMove={
+                    handlePointerMove
+                }
+                onPointerUp={
+                    finishDrag
+                }
+                onPointerCancel={
+                    finishDrag
+                }
+            >
+
+                <span
+                    className="aq-global-navigation-grip"
+                    aria-hidden="true"
+                >
+                    <i />
+                    <i />
+                    <i />
+                </span>
+
+                <span
+                    className="aq-global-navigation-arrow"
+                    aria-hidden="true"
+                >
+                    ‹
+                </span>
+
+            </button>
+
+        </div>
+    );
+}
+

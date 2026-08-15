@@ -1,0 +1,1444 @@
+﻿/* ============================================================
+   ATHLETIQ LOGIN
+   COOL BLUE / WHITE 2026 PRODUCT UI
+   ============================================================ */
+
+.aq-login-page {
+    position: relative;
+
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    display: grid;
+    place-items: center;
+
+    box-sizing: border-box;
+
+    padding:
+        28px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef7fd 0%,
+            #f7fbfe 45%,
+            #edf6fc 100%
+        );
+
+    color:
+        #10233f;
+}
+
+/* ------------------------------------------------------------
+   Ambient background
+   ------------------------------------------------------------ */
+
+.aq-login-bg-orb {
+    position: absolute;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    filter: blur(6px);
+}
+
+.aq-login-bg-orb-one {
+    width: 360px;
+    height: 360px;
+
+    left: -120px;
+    top: -130px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34,211,238,.20),
+            transparent 68%
+        );
+
+    animation:
+        aq-login-orb-one
+        9s
+        ease-in-out
+        infinite;
+}
+
+.aq-login-bg-orb-two {
+    width: 440px;
+    height: 440px;
+
+    right: -180px;
+    bottom: -170px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(99,102,241,.15),
+            transparent 68%
+        );
+
+    animation:
+        aq-login-orb-two
+        11s
+        ease-in-out
+        infinite;
+}
+
+.aq-login-bg-orb-three {
+    width: 220px;
+    height: 220px;
+
+    left: 46%;
+    top: 8%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(56,189,248,.10),
+            transparent 70%
+        );
+
+    animation:
+        aq-login-orb-three
+        8s
+        ease-in-out
+        infinite;
+}
+
+.aq-login-grid {
+    position: absolute;
+
+    inset: 0;
+
+    opacity: .30;
+
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            rgba(14,165,233,.028) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(14,165,233,.028) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        44px 44px;
+
+    mask-image:
+        radial-gradient(
+            ellipse at center,
+            black 0%,
+            transparent 72%
+        );
+
+    animation:
+        aq-login-grid
+        24s
+        linear
+        infinite;
+}
+
+/* ------------------------------------------------------------
+   Main composition
+   ------------------------------------------------------------ */
+
+.aq-login-shell {
+    position: relative;
+
+    z-index: 2;
+
+    width:
+        min(
+            1120px,
+            100%
+        );
+
+    min-height:
+        650px;
+
+    display: grid;
+
+    grid-template-columns:
+        1.08fr
+        .92fr;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(191,210,227,.92);
+
+    border-radius:
+        28px;
+
+    background:
+        rgba(255,255,255,.92);
+
+    box-shadow:
+        0 30px 80px
+        rgba(7,26,51,.12),
+        0 10px 30px
+        rgba(7,26,51,.05);
+
+    backdrop-filter:
+        blur(18px);
+
+    animation:
+        aq-login-enter
+        .55s
+        cubic-bezier(.22,1,.36,1);
+}
+
+/* ------------------------------------------------------------
+   Brand panel
+   ------------------------------------------------------------ */
+
+.aq-login-brand-panel {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    padding:
+        44px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 86% 10%,
+            rgba(34,211,238,.14),
+            transparent 26%
+        ),
+        radial-gradient(
+            circle at 12% 92%,
+            rgba(99,102,241,.11),
+            transparent 28%
+        ),
+        linear-gradient(
+            145deg,
+            #071a33 0%,
+            #0b3156 58%,
+            #0e4a71 100%
+        );
+
+    color:
+        #ffffff;
+}
+
+.aq-login-brand-panel::after {
+    content: "";
+
+    position: absolute;
+
+    right: -100px;
+    bottom: -150px;
+
+    width: 380px;
+    height: 380px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(103,232,249,.12);
+
+    box-shadow:
+        0 0 0 45px
+        rgba(34,211,238,.025),
+        0 0 0 90px
+        rgba(99,102,241,.02);
+
+    animation:
+        aq-login-ring
+        10s
+        ease-in-out
+        infinite;
+}
+
+.aq-login-brand {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap:
+        13px;
+}
+
+.aq-login-logo-wrap {
+    width: 60px;
+    height: 60px;
+
+    display: grid;
+    place-items: center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    border-radius:
+        17px;
+
+    background:
+        rgba(255,255,255,.055);
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.08),
+        0 14px 28px
+        rgba(0,0,0,.14);
+}
+
+.aq-login-logo {
+    width: 48px;
+    height: 48px;
+
+    display: block;
+
+    filter:
+        drop-shadow(
+            0 6px 15px
+            rgba(34,211,238,.18)
+        );
+}
+
+.aq-login-brand-name {
+    font-size: 22px;
+
+    font-weight: 950;
+
+    letter-spacing: -.04em;
+}
+
+.aq-login-brand-subtitle {
+    margin-top: 4px;
+
+    color:
+        #8be8f7;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    letter-spacing: .16em;
+}
+
+.aq-login-brand-content {
+    position: relative;
+
+    z-index: 2;
+
+    max-width:
+        570px;
+
+    margin:
+        auto 0;
+}
+
+.aq-login-eyebrow {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding:
+        7px 10px;
+
+    border:
+        1px solid
+        rgba(103,232,249,.18);
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(103,232,249,.055);
+
+    color:
+        #b6f2fa;
+
+    font-size: 8px;
+
+    font-weight: 950;
+
+    letter-spacing: .13em;
+}
+
+.aq-login-brand-content h1 {
+    margin:
+        18px 0
+        15px;
+
+    max-width:
+        580px;
+
+    font-size:
+        clamp(
+            42px,
+            4.8vw,
+            64px
+        );
+
+    font-weight:
+        950;
+
+    line-height:
+        .95;
+
+    letter-spacing:
+        -.065em;
+}
+
+.aq-login-brand-content h1 span {
+    display: block;
+
+    background:
+        linear-gradient(
+            90deg,
+            #67e8f9,
+            #7dd3fc 46%,
+            #c4b5fd 100%
+        );
+
+    -webkit-background-clip:
+        text;
+
+    background-clip:
+        text;
+
+    color:
+        transparent;
+}
+
+.aq-login-brand-content p {
+    max-width:
+        510px;
+
+    margin: 0;
+
+    color:
+        rgba(226,232,240,.72);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.72;
+}
+
+.aq-login-trust-row {
+    display: flex;
+
+    align-items: center;
+
+    gap:
+        16px;
+
+    margin-top:
+        27px;
+}
+
+.aq-login-trust-item {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.aq-login-trust-item strong {
+    color:
+        #67e8f9;
+
+    font-size:
+        17px;
+
+    font-weight:
+        950;
+}
+
+.aq-login-trust-item span {
+    color:
+        rgba(226,232,240,.50);
+
+    font-size:
+        7px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .10em;
+}
+
+.aq-login-trust-divider {
+    width: 1px;
+    height: 30px;
+
+    background:
+        rgba(255,255,255,.13);
+}
+
+.aq-login-brand-footer {
+    position:
+        relative;
+
+    z-index: 2;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    color:
+        rgba(226,232,240,.48);
+
+    font-size:
+        7px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .08em;
+}
+
+.aq-login-live-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background:
+        #22c55e;
+
+    box-shadow:
+        0 0 9px
+        rgba(34,197,94,.55);
+}
+
+.aq-login-footer-divider {
+    width: 28px;
+    height: 1px;
+
+    background:
+        rgba(255,255,255,.14);
+}
+
+/* ------------------------------------------------------------
+   Form panel
+   ------------------------------------------------------------ */
+
+.aq-login-form-panel {
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    padding:
+        48px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #fafdff 100%
+        );
+}
+
+.aq-login-card {
+    width:
+        min(
+            380px,
+            100%
+        );
+}
+
+.aq-login-card-top {
+    margin-bottom:
+        27px;
+}
+
+.aq-login-kicker {
+    display:
+        block;
+
+    margin-bottom:
+        8px;
+
+    color:
+        #0284c7;
+
+    font-size:
+        8px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .17em;
+}
+
+.aq-login-card-top h2 {
+    margin: 0;
+
+    color:
+        #10233f;
+
+    font-size:
+        42px;
+
+    font-weight:
+        950;
+
+    line-height:
+        1;
+
+    letter-spacing:
+        -.055em;
+}
+
+.aq-login-card-top p {
+    margin:
+        8px 0 0;
+
+    color:
+        #7288a0;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.6;
+}
+
+/* ------------------------------------------------------------
+   Error
+   ------------------------------------------------------------ */
+
+.aq-login-error {
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        17px;
+
+    padding:
+        12px 13px;
+
+    border:
+        1px solid
+        #fecaca;
+
+    border-radius:
+        12px;
+
+    background:
+        #fff7f7;
+
+    color:
+        #b91c1c;
+
+    animation:
+        aq-login-shake
+        .3s
+        ease;
+}
+
+.aq-login-error-mark {
+    width: 21px;
+    height: 21px;
+
+    flex:
+        0 0 auto;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        #ef4444;
+
+    color:
+        #ffffff;
+
+    font-size:
+        11px;
+
+    font-weight:
+        950;
+}
+
+.aq-login-error strong,
+.aq-login-error span {
+    display:
+        block;
+}
+
+.aq-login-error strong {
+    font-size:
+        10px;
+}
+
+.aq-login-error span {
+    margin-top:
+        2px;
+
+    color:
+        #b42318;
+
+    font-size:
+        9px;
+
+    line-height:
+        1.5;
+}
+
+/* ------------------------------------------------------------
+   Form
+   ------------------------------------------------------------ */
+
+.aq-login-form {
+    display:
+        grid;
+
+    gap:
+        17px;
+}
+
+.aq-login-field {
+    display:
+        grid;
+
+    gap:
+        7px;
+}
+
+.aq-login-field > span {
+    color:
+        #48617c;
+
+    font-size:
+        8px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .12em;
+}
+
+.aq-login-input-wrap {
+    position:
+        relative;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+}
+
+.aq-login-input-prefix {
+    position:
+        absolute;
+
+    left:
+        14px;
+
+    z-index:
+        2;
+
+    color:
+        #8aa0b5;
+
+    font-size:
+        14px;
+
+    font-weight:
+        800;
+
+    pointer-events:
+        none;
+}
+
+.aq-login-input-wrap input {
+    width:
+        100%;
+
+    min-height:
+        50px;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        0 46px
+        0 39px;
+
+    border:
+        1px solid
+        #d7e3ee;
+
+    border-radius:
+        12px;
+
+    outline:
+        none;
+
+    background:
+        #ffffff;
+
+    color:
+        #10233f;
+
+    font-size:
+        12px;
+
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        background 160ms ease;
+}
+
+.aq-login-input-wrap input::placeholder {
+    color:
+        #9aabba;
+}
+
+.aq-login-input-wrap input:hover {
+    border-color:
+        #bfd2e3;
+
+    background:
+        #fbfdff;
+}
+
+.aq-login-input-wrap input:focus {
+    border-color:
+        #38bdf8;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(56,189,248,.10);
+}
+
+.aq-login-password-toggle {
+    position:
+        absolute;
+
+    right:
+        8px;
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        0;
+
+    border-radius:
+        9px;
+
+    background:
+        transparent;
+
+    color:
+        #7a90a5;
+
+    cursor:
+        pointer;
+}
+
+.aq-login-password-toggle:hover {
+    background:
+        #eef8fd;
+
+    color:
+        #0284c7;
+}
+
+.aq-login-password-toggle:disabled {
+    opacity:
+        .50;
+
+    cursor:
+        not-allowed;
+}
+
+.aq-login-icon {
+    width:
+        17px;
+
+    height:
+        17px;
+
+    fill:
+        none;
+
+    stroke:
+        currentColor;
+
+    stroke-width:
+        1.8;
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+}
+
+/* ------------------------------------------------------------
+   Submit
+   ------------------------------------------------------------ */
+
+.aq-login-submit {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        9px;
+
+    width:
+        100%;
+
+    min-height:
+        52px;
+
+    margin-top:
+        4px;
+
+    border:
+        1px solid
+        rgba(2,132,199,.18);
+
+    border-radius:
+        12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #0ea5e9 48%,
+            #4f7de1
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        10px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .08em;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 12px 26px
+        rgba(2,132,199,.18);
+
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease,
+        filter 160ms ease;
+}
+
+.aq-login-submit:hover:not(:disabled) {
+    transform:
+        translateY(-2px);
+
+    filter:
+        saturate(1.08);
+
+    box-shadow:
+        0 17px 32px
+        rgba(2,132,199,.23);
+}
+
+.aq-login-submit:active:not(:disabled) {
+    transform:
+        translateY(0);
+}
+
+.aq-login-submit:disabled {
+    opacity:
+        .64;
+
+    cursor:
+        not-allowed;
+}
+
+.aq-login-arrow {
+    width:
+        17px;
+
+    height:
+        17px;
+
+    fill:
+        none;
+
+    stroke:
+        currentColor;
+
+    stroke-width:
+        2;
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+}
+
+.aq-login-spinner {
+    width:
+        14px;
+
+    height:
+        14px;
+
+    border:
+        2px solid
+        rgba(255,255,255,.35);
+
+    border-top-color:
+        #ffffff;
+
+    border-radius:
+        50%;
+
+    animation:
+        aq-login-spin
+        .7s
+        linear
+        infinite;
+}
+
+/* ------------------------------------------------------------
+   Footer actions
+   ------------------------------------------------------------ */
+
+.aq-login-register {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        6px;
+
+    margin-top:
+        21px;
+
+    color:
+        #7288a0;
+
+    font-size:
+        9px;
+}
+
+.aq-login-register button {
+    padding:
+        0;
+
+    border:
+        0;
+
+    background:
+        transparent;
+
+    color:
+        #0284c7;
+
+    font-size:
+        9px;
+
+    font-weight:
+        950;
+
+    cursor:
+        pointer;
+}
+
+.aq-login-register button:hover {
+    color:
+        #0369a1;
+
+    text-decoration:
+        underline;
+}
+
+.aq-login-security {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        7px;
+
+    margin-top:
+        23px;
+
+    color:
+        #98aabd;
+
+    font-size:
+        7px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .12em;
+}
+
+.aq-login-security span {
+    width:
+        5px;
+
+    height:
+        5px;
+
+    border-radius:
+        50%;
+
+    background:
+        #10b981;
+
+    box-shadow:
+        0 0 8px
+        rgba(16,185,129,.40);
+}
+
+/* ------------------------------------------------------------
+   Animation
+   ------------------------------------------------------------ */
+
+@keyframes aq-login-enter {
+    from {
+        opacity: 0;
+        transform:
+            translateY(12px)
+            scale(.99);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+@keyframes aq-login-orb-one {
+    0%,100% {
+        transform:
+            translate(0,0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate(28px,18px)
+            scale(1.07);
+    }
+}
+
+@keyframes aq-login-orb-two {
+    0%,100% {
+        transform:
+            translate(0,0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate(-22px,-18px)
+            scale(1.06);
+    }
+}
+
+@keyframes aq-login-orb-three {
+    0%,100% {
+        transform:
+            translate(0,0);
+    }
+
+    50% {
+        transform:
+            translate(14px,20px);
+    }
+}
+
+@keyframes aq-login-ring {
+    0%,100% {
+        transform:
+            translate(0,0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate(-12px,-10px)
+            scale(1.04);
+    }
+}
+
+@keyframes aq-login-grid {
+    from {
+        transform:
+            translate(0,0);
+    }
+
+    to {
+        transform:
+            translate(44px,44px);
+    }
+}
+
+@keyframes aq-login-spin {
+    to {
+        transform:
+            rotate(360deg);
+    }
+}
+
+@keyframes aq-login-shake {
+    0%,100% {
+        transform:
+            translateX(0);
+    }
+
+    25% {
+        transform:
+            translateX(-4px);
+    }
+
+    75% {
+        transform:
+            translateX(4px);
+    }
+}
+
+/* ------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+
+    .aq-login-page {
+        padding:
+            18px;
+        overflow-y:
+            auto;
+    }
+
+    .aq-login-shell {
+        grid-template-columns:
+            1fr;
+
+        min-height:
+            auto;
+    }
+
+    .aq-login-brand-panel {
+        min-height:
+            340px;
+
+        padding:
+            30px;
+    }
+
+    .aq-login-brand-content {
+        margin:
+            55px 0
+            24px;
+    }
+
+    .aq-login-form-panel {
+        padding:
+            36px 30px;
+    }
+
+    .aq-login-trust-row {
+        margin-top:
+            22px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .aq-login-page {
+        min-height:
+            100dvh;
+
+        padding:
+            0;
+    }
+
+    .aq-login-shell {
+        width:
+            100%;
+
+        min-height:
+            100dvh;
+
+        border:
+            0;
+
+        border-radius:
+            0;
+    }
+
+    .aq-login-brand-panel {
+        min-height:
+            275px;
+
+        padding:
+            22px;
+    }
+
+    .aq-login-logo-wrap {
+        width:
+            52px;
+
+        height:
+            52px;
+    }
+
+    .aq-login-logo {
+        width:
+            42px;
+
+        height:
+            42px;
+    }
+
+    .aq-login-brand-name {
+        font-size:
+            20px;
+    }
+
+    .aq-login-brand-content {
+        margin:
+            38px 0
+            0;
+    }
+
+    .aq-login-brand-content h1 {
+        margin-top:
+            14px;
+
+        font-size:
+            36px;
+    }
+
+    .aq-login-brand-content p {
+        font-size:
+            11px;
+    }
+
+    .aq-login-trust-row {
+        display:
+            none;
+    }
+
+    .aq-login-brand-footer {
+        display:
+            none;
+    }
+
+    .aq-login-form-panel {
+        padding:
+            30px 22px 34px;
+    }
+
+    .aq-login-card-top h2 {
+        font-size:
+            36px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .aq-login-bg-orb-one,
+    .aq-login-bg-orb-two,
+    .aq-login-bg-orb-three,
+    .aq-login-grid,
+    .aq-login-brand-panel::after,
+    .aq-login-shell,
+    .aq-login-spinner {
+        animation:
+            none !important;
+    }
+
+    .aq-login-submit,
+    .aq-login-input-wrap input,
+    .aq-login-password-toggle {
+        transition:
+            none !important;
+    }
+}

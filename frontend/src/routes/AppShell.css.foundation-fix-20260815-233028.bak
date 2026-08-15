@@ -1,0 +1,105 @@
+﻿
+/* ============================================================
+   ATHLETIQ GLOBAL DOCUMENT SCROLL SAFETY
+   ============================================================ */
+
+html,
+body {
+    width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    height: auto !important;
+
+    margin: 0;
+
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+
+body {
+    position: relative;
+}
+
+#root {
+    width: 100% !important;
+    min-width: 100% !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    max-height: none !important;
+
+    margin: 0 !important;
+
+    overflow: visible !important;
+}
+
+.athletiq-app-shell {
+    width: 100% !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    max-height: none !important;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: visible !important;
+}
+
+.athletiq-app-content {
+    width: 100% !important;
+
+    flex: 0 0 auto !important;
+
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+
+    overflow: visible !important;
+}
+
+.athletiq-app-content > * {
+    min-height: 0;
+    height: auto;
+    max-height: none;
+}
+
+main,
+section,
+article {
+    max-height: none;
+}
+
+html::-webkit-scrollbar {
+    width: 10px;
+}
+
+html::-webkit-scrollbar-track {
+    background: #020617;
+}
+
+html::-webkit-scrollbar-thumb {
+    border: 2px solid #020617;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #0ea5e9,
+            #6d28d9
+        );
+}
+
+html::-webkit-scrollbar-thumb:hover {
+    background:
+        linear-gradient(
+            180deg,
+            #22d3ee,
+            #8b5cf6
+        );
+}
+
+/* Firefox */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #0ea5e9 #020617;
+}

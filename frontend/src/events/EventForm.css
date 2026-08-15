@@ -1,63 +1,1277 @@
+﻿/* ============================================================
+   ATHLETIQ EVENT FORM
+   2026 IMMERSIVE EVENT CREATION WORKSPACE
+   ============================================================ */
+
+
+/* ============================================================
+   FORM SHELL
+   ============================================================ */
+
 .event-form {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 32px;
+
+    position:
+        relative;
+
+    width:
+        min(
+            1040px,
+            calc(100% - 44px)
+        );
+
+    min-height:
+        calc(100vh - 100px);
+
+    margin:
+        0 auto;
+
+    padding:
+        34px 0 58px;
+
+    box-sizing:
+        border-box;
+
+    color:
+        #e5eef8;
+
+    animation:
+        aq-event-form-enter
+        .5s
+        cubic-bezier(.22,1,.36,1);
 }
 
-.event-form header {
-    margin-bottom: 24px;
+
+/* ============================================================
+   ATMOSPHERE
+   ============================================================ */
+
+.event-form::before {
+
+    content:
+        "";
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        -3;
+
+    pointer-events:
+        none;
+
+    background:
+
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(2,132,199,.18),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 88% 72%,
+            rgba(99,102,241,.16),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 48% 36%,
+            rgba(34,211,238,.045),
+            transparent 25%
+        ),
+
+        linear-gradient(
+            135deg,
+            #030712 0%,
+            #080a1d 48%,
+            #0b0a25 74%,
+            #030712 100%
+        );
 }
 
-.event-form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-    margin-bottom: 16px;
+.event-form::after {
+
+    content:
+        "";
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        -2;
+
+    pointer-events:
+        none;
+
+    opacity:
+        .18;
+
+    background-image:
+
+        linear-gradient(
+            rgba(56,189,248,.11) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(56,189,248,.11) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        48px 48px;
+
+    mask-image:
+        radial-gradient(
+            ellipse 88% 78% at center,
+            black 12%,
+            transparent 90%
+        );
+
+    animation:
+        aq-event-form-grid
+        26s
+        linear
+        infinite;
 }
 
-.event-form label {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 16px;
-    font-weight: 600;
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.event-form > header {
+
+    position:
+        relative;
+
+    margin:
+        0 0 18px;
+
+    padding:
+        34px 38px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        rgba(103,232,249,.13);
+
+    border-radius:
+        24px;
+
+    background:
+
+        radial-gradient(
+            circle at 88% 16%,
+            rgba(34,211,238,.14),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 95% 90%,
+            rgba(99,102,241,.15),
+            transparent 29%
+        ),
+
+        linear-gradient(
+            125deg,
+            rgba(9,16,37,.96),
+            rgba(14,29,62,.94) 52%,
+            rgba(31,23,67,.92)
+        );
+
+    box-shadow:
+        0 26px 70px
+        rgba(0,0,0,.31),
+
+        inset
+        0 1px 0
+        rgba(255,255,255,.045);
+
+    backdrop-filter:
+        blur(16px);
 }
 
-.event-form input,
-.event-form textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font: inherit;
+.event-form > header::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    pointer-events:
+        none;
+
+    background:
+        linear-gradient(
+            115deg,
+            transparent 15%,
+            rgba(255,255,255,.035) 48%,
+            transparent 68%
+        );
+
+    transform:
+        translateX(-110%);
+
+    animation:
+        aq-event-form-sweep
+        8s
+        ease-in-out
+        infinite;
 }
 
-.event-form textarea {
-    resize: vertical;
+.event-form > header::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        340px;
+
+    height:
+        340px;
+
+    right:
+        -160px;
+
+    bottom:
+        -190px;
+
+    border-radius:
+        50%;
+
+    border:
+        1px solid
+        rgba(103,232,249,.09);
+
+    box-shadow:
+        0 0 0 40px
+        rgba(34,211,238,.018),
+
+        0 0 0 82px
+        rgba(99,102,241,.018);
+
+    animation:
+        aq-event-form-ring
+        10s
+        ease-in-out
+        infinite;
 }
 
-.event-form button {
-    padding: 11px 18px;
-    border: 0;
-    border-radius: 8px;
-    cursor: pointer;
+.event-form > header h1 {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    margin:
+        0;
+
+    color:
+        #ffffff;
+
+    font-size:
+        clamp(
+            40px,
+            5vw,
+            62px
+        );
+
+    font-weight:
+        950;
+
+    line-height:
+        .95;
+
+    letter-spacing:
+        -.065em;
 }
 
-.event-form button:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
+.event-form > header h1::before {
+
+    content:
+        "EVENT WORKSPACE";
+
+    display:
+        block;
+
+    margin:
+        0 0 10px;
+
+    color:
+        #38bdf8;
+
+    font-size:
+        8px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .17em;
 }
+
+.event-form > header p {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    max-width:
+        570px;
+
+    margin:
+        12px 0 0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.7;
+}
+
+
+/* ============================================================
+   STATUS
+   ============================================================ */
 
 .event-form-error,
 .event-form-message {
-    padding: 12px;
-    margin-bottom: 16px;
-    border-radius: 8px;
+
+    position:
+        relative;
+
+    margin:
+        11px 0;
+
+    padding:
+        12px 15px;
+
+    border-radius:
+        12px;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.55;
+
+    animation:
+        aq-event-form-message
+        .3s
+        ease;
 }
 
-@media (max-width: 700px) {
+.event-form-error {
+
+    border:
+        1px solid
+        rgba(248,113,113,.22);
+
+    background:
+        rgba(127,29,29,.16);
+
+    color:
+        #fca5a5;
+}
+
+.event-form-message {
+
+    border:
+        1px solid
+        rgba(34,197,94,.20);
+
+    background:
+        rgba(34,197,94,.075);
+
+    color:
+        #86efac;
+}
+
+
+/* ============================================================
+   FORM CONTAINER
+   ============================================================ */
+
+.event-form > form {
+
+    position:
+        relative;
+
+    padding:
+        26px;
+
+    border:
+        1px solid
+        rgba(148,163,184,.11);
+
+    border-radius:
+        21px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13,25,50,.91),
+            rgba(6,13,29,.96)
+        );
+
+    box-shadow:
+        0 20px 48px
+        rgba(0,0,0,.24),
+
+        inset
+        0 1px 0
+        rgba(255,255,255,.028);
+
+    backdrop-filter:
+        blur(18px);
+}
+
+.event-form > form::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(34,211,238,.22),
+            rgba(139,92,246,.14),
+            transparent
+        );
+}
+
+
+/* ============================================================
+   PRIMARY FIELD GRID
+   ============================================================ */
+
+.event-form-grid {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0,1fr)
+        );
+
+    gap:
+        13px;
+
+    margin-bottom:
+        17px;
+
+    padding:
+        18px;
+
+    border:
+        1px solid
+        rgba(148,163,184,.07);
+
+    border-radius:
+        16px;
+
+    background:
+        rgba(255,255,255,.018);
+}
+
+.event-form-grid::before {
+
+    content:
+        "BASIC EVENT INFORMATION";
+
+    grid-column:
+        1 / -1;
+
+    display:
+        block;
+
+    margin:
+        0 0 2px;
+
+    color:
+        #38bdf8;
+
+    font-size:
+        8px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .15em;
+}
+
+
+/* ============================================================
+   ALL LABELS
+   ============================================================ */
+
+.event-form label {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        7px;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        8px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        .09em;
+
+    text-transform:
+        uppercase;
+}
+
+
+/* ============================================================
+   INPUTS / TEXTAREAS
+   ============================================================ */
+
+.event-form input,
+.event-form textarea {
+
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid
+        rgba(148,163,184,.13);
+
+    border-radius:
+        11px;
+
+    outline:
+        none;
+
+    background:
+        rgba(2,6,23,.64);
+
+    color:
+        #e2e8f0;
+
+    font:
+        inherit;
+
+    font-size:
+        12px;
+
+    letter-spacing:
+        normal;
+
+    text-transform:
+        none;
+
+    transition:
+        border-color .18s ease,
+        background .18s ease,
+        box-shadow .18s ease,
+        transform .18s ease;
+}
+
+.event-form input {
+
+    min-height:
+        49px;
+
+    padding:
+        0 13px;
+}
+
+.event-form textarea {
+
+    min-height:
+        125px;
+
+    padding:
+        13px;
+
+    resize:
+        vertical;
+
+    line-height:
+        1.6;
+}
+
+.event-form input::placeholder,
+.event-form textarea::placeholder {
+
+    color:
+        #475569;
+}
+
+.event-form input:hover,
+.event-form textarea:hover {
+
+    border-color:
+        rgba(148,163,184,.23);
+
+    background:
+        rgba(3,8,20,.80);
+}
+
+.event-form input:focus,
+.event-form textarea:focus {
+
+    border-color:
+        #38bdf8;
+
+    background:
+        rgba(2,6,23,.94);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(56,189,248,.10),
+
+        0 0 22px
+        rgba(14,165,233,.045);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* ============================================================
+   SPECIAL DATE / NUMBER INPUTS
+   ============================================================ */
+
+.event-form input[type="date"],
+.event-form input[type="datetime-local"],
+.event-form input[type="number"] {
+
+    color-scheme:
+        dark;
+}
+
+
+/* ============================================================
+   LONG-FORM SECTIONS
+   ============================================================ */
+
+.event-form > form > label {
+
+    display:
+        grid;
+
+    gap:
+        8px;
+
+    margin:
+        13px 0;
+
+    padding:
+        15px;
+
+    border:
+        1px solid
+        rgba(148,163,184,.07);
+
+    border-radius:
+        15px;
+
+    background:
+        rgba(255,255,255,.018);
+}
+
+.event-form > form > label::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        15px;
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+    margin-top:
+        3px;
+
+    border-radius:
+        50%;
+
+    background:
+        #22d3ee;
+
+    box-shadow:
+        0 0 8px
+        rgba(34,211,238,.38);
+}
+
+.event-form > form > label > textarea,
+.event-form > form > label > input {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+}
+
+
+/* ============================================================
+   SUBMIT BUTTON
+   ============================================================ */
+
+.event-form > form > button {
+
+    position:
+        relative;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        100%;
+
+    min-height:
+        53px;
+
+    margin-top:
+        8px;
+
+    padding:
+        0 18px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        rgba(255,255,255,.16);
+
+    border-radius:
+        13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #0ea5e9 50%,
+            #6366f1
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        10px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .10em;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 14px 32px
+        rgba(14,165,233,.27);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        filter .18s ease,
+        opacity .18s ease;
+}
+
+.event-form > form > button::before {
+
+    content:
+        "→";
+
+    position:
+        absolute;
+
+    right:
+        18px;
+
+    font-size:
+        17px;
+
+    line-height:
+        1;
+
+    transition:
+        transform .18s ease;
+}
+
+.event-form > form > button::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        -110%;
+
+    width:
+        55%;
+
+    height:
+        100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.30),
+            transparent
+        );
+
+    transform:
+        skewX(-24deg);
+
+    animation:
+        aq-event-form-button-shimmer
+        4s
+        infinite;
+}
+
+.event-form > form > button:hover:not(:disabled) {
+
+    transform:
+        translateY(-2px);
+
+    filter:
+        saturate(1.08);
+
+    box-shadow:
+        0 19px 40px
+        rgba(14,165,233,.39);
+}
+
+.event-form > form > button:hover:not(:disabled)::before {
+
+    transform:
+        translateX(4px);
+}
+
+.event-form > form > button:active:not(:disabled) {
+
+    transform:
+        translateY(0);
+}
+
+.event-form > form > button:disabled {
+
+    opacity:
+        .58;
+
+    cursor:
+        not-allowed;
+}
+
+.event-form > form > button:disabled::before {
+
+    content:
+        "";
+}
+
+
+/* ============================================================
+   LOADING STATE
+   ============================================================ */
+
+.event-form > p:only-child {
+
+    min-height:
+        300px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    margin:
+        0;
+
+    border:
+        1px dashed
+        rgba(103,232,249,.15);
+
+    border-radius:
+        20px;
+
+    background:
+        rgba(255,255,255,.018);
+
+    color:
+        #64748b;
+
+    text-align:
+        center;
+}
+
+.event-form > p:only-child::before {
+
+    content:
+        "";
+
+    width:
+        29px;
+
+    height:
+        29px;
+
+    margin-bottom:
+        13px;
+
+    border:
+        2px solid
+        rgba(56,189,248,.14);
+
+    border-top-color:
+        #38bdf8;
+
+    border-right-color:
+        #8b5cf6;
+
+    border-radius:
+        50%;
+
+    animation:
+        aq-event-form-spinner
+        .72s
+        linear
+        infinite;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 820px) {
+
+    .event-form {
+
+        width:
+            calc(100% - 30px);
+
+        padding:
+            26px 0 45px;
+    }
+
+    .event-form > header {
+
+        padding:
+            30px;
+    }
+
+    .event-form > form {
+
+        padding:
+            21px;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .event-form {
+
+        width:
+            calc(100% - 18px);
+
+        padding:
+            18px 0 35px;
+    }
+
+    .event-form > header {
+
+        padding:
+            25px 20px;
+
+        border-radius:
+            19px;
+    }
+
+    .event-form > header h1 {
+
+        font-size:
+            39px;
+    }
+
+    .event-form > header p {
+
+        font-size:
+            11px;
+    }
+
+    .event-form > form {
+
+        padding:
+            16px;
+
+        border-radius:
+            17px;
+    }
+
     .event-form-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
+
+        padding:
+            13px;
+    }
+
+    .event-form-grid::before {
+
+        grid-column:
+            auto;
+    }
+
+    .event-form > form > label {
+
+        padding:
+            13px;
+    }
+}
+
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes aq-event-form-enter {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(9px);
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+@keyframes aq-event-form-grid {
+
+    from {
+
+        background-position:
+            0 0;
+    }
+
+    to {
+
+        background-position:
+            48px 48px;
+    }
+}
+
+@keyframes aq-event-form-sweep {
+
+    0%,
+    58% {
+
+        transform:
+            translateX(-110%);
+    }
+
+    82%,
+    100% {
+
+        transform:
+            translateX(130%);
+    }
+}
+
+@keyframes aq-event-form-ring {
+
+    0%,
+    100% {
+
+        transform:
+            translate(
+                0,
+                0
+            )
+            scale(1);
+    }
+
+    50% {
+
+        transform:
+            translate(
+                -10px,
+                -9px
+            )
+            scale(1.04);
+    }
+}
+
+@keyframes aq-event-form-button-shimmer {
+
+    0% {
+
+        left:
+            -110%;
+    }
+
+    25%,
+    100% {
+
+        left:
+            185%;
+    }
+}
+
+@keyframes aq-event-form-spinner {
+
+    to {
+
+        transform:
+            rotate(360deg);
+    }
+}
+
+@keyframes aq-event-form-message {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(-4px);
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .event-form,
+    .event-form::after,
+    .event-form > header::before,
+    .event-form > header::after,
+    .event-form > form > button::after,
+    .event-form > p:only-child::before {
+
+        animation:
+            none !important;
+    }
+
+    .event-form input,
+    .event-form textarea,
+    .event-form > form > button {
+
+        transition:
+            none !important;
     }
 }

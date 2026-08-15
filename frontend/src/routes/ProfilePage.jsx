@@ -1,6 +1,6 @@
-﻿import "./ProfilePage.css";
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { profileApi } from "../api/profileApi";
+import "./Profile.css";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState(null);
@@ -64,8 +64,8 @@ export default function ProfilePage() {
     return (
         <main className="profile-page">
             <h1>Profile</h1>
-            {message && <p>{message}</p>}
-            {error && <p>{error}</p>}
+            {message && <p className="status-msg success">{message}</p>}
+            {error && <p className="status-msg error">{error}</p>}
             <section>
                 <h2>Personal Information</h2>
                 <form onSubmit={saveProfile}>
@@ -96,6 +96,3 @@ export default function ProfilePage() {
         </main>
     );
 }
-
-
-

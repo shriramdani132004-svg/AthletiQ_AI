@@ -1,0 +1,617 @@
+﻿/* ============================================================
+   ATHLETIQ PROFILE
+   DARK PREMIUM ORGANIZER PROFILE
+   ============================================================ */
+
+html:has(.profile-page),
+body:has(.profile-page) {
+    background: #020617 !important;
+    color: #e2e8f0;
+}
+
+#root:has(.profile-page) {
+    background: #020617 !important;
+}
+
+.profile-page {
+    position: relative;
+
+    width:
+        min(
+            1180px,
+            calc(100% - 44px)
+        );
+
+    margin:
+        0 auto;
+
+    padding:
+        34px 0
+        56px;
+
+    box-sizing: border-box;
+
+    color: #e2e8f0;
+
+    animation:
+        aq-profile-in
+        .55s
+        cubic-bezier(.22,1,.36,1);
+}
+
+.profile-page::before {
+    content: "";
+
+    position: fixed;
+
+    inset: 72px 0 0;
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 15% 12%,
+            rgba(34,211,238,.055),
+            transparent 24%
+        ),
+        radial-gradient(
+            circle at 88% 76%,
+            rgba(139,92,246,.055),
+            transparent 25%
+        );
+
+    opacity: .9;
+}
+
+/* ------------------------------------------------------------
+   PAGE HEADER
+   ------------------------------------------------------------ */
+
+.profile-page > h1 {
+    position: relative;
+
+    margin:
+        0 0
+        8px;
+
+    color: #f8fafc;
+
+    font-size:
+        clamp(
+            34px,
+            4vw,
+            52px
+        );
+
+    font-weight: 950;
+
+    letter-spacing: -.06em;
+
+    line-height: .96;
+}
+
+.profile-page > h1::after {
+    content: "";
+
+    display: block;
+
+    width: 54px;
+    height: 3px;
+
+    margin-top: 14px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22d3ee,
+            #38bdf8,
+            #8b5cf6
+        );
+
+    box-shadow:
+        0 0 18px
+        rgba(34,211,238,.28);
+}
+
+/* ------------------------------------------------------------
+   GLOBAL MESSAGE / STATUS TEXT
+   ------------------------------------------------------------ */
+
+.profile-page > p {
+    margin:
+        10px 0
+        0;
+
+    padding:
+        11px 13px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(34,211,238,.04);
+
+    border:
+        1px solid
+        rgba(103,232,249,.10);
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    line-height: 1.55;
+}
+
+/* ------------------------------------------------------------
+   SECTIONS
+   ------------------------------------------------------------ */
+
+.profile-page section {
+    position: relative;
+
+    margin:
+        18px 0;
+
+    padding:
+        24px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(148,163,184,.10);
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(8,26,48,.84),
+            rgba(3,14,29,.94)
+        );
+
+    box-shadow:
+        0 16px 38px
+        rgba(0,0,0,.18);
+
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+.profile-page section::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(103,232,249,.16),
+            rgba(139,92,246,.12),
+            transparent
+        );
+}
+
+.profile-page section:hover {
+    border-color:
+        rgba(103,232,249,.14);
+
+    box-shadow:
+        0 20px 44px
+        rgba(0,0,0,.24);
+}
+
+.profile-page section h2 {
+    margin:
+        0 0
+        18px;
+
+    color: #f1f5f9;
+
+    font-size: 18px;
+
+    font-weight: 900;
+
+    letter-spacing: -.025em;
+}
+
+.profile-page section h3 {
+    margin:
+        18px 0
+        10px;
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: -.01em;
+}
+
+/* ------------------------------------------------------------
+   FORMS
+   ------------------------------------------------------------ */
+
+.profile-page form {
+    display: grid;
+
+    gap: 15px;
+}
+
+/* ------------------------------------------------------------
+   LABELS
+   ------------------------------------------------------------ */
+
+.profile-page label {
+    display: grid;
+
+    gap: 7px;
+
+    color: #94a3b8;
+
+    font-size: 8px;
+
+    font-weight: 950;
+
+    letter-spacing: .12em;
+
+    text-transform: uppercase;
+}
+
+.profile-page label input,
+.profile-page label textarea,
+.profile-page label select {
+    margin-top: 0;
+}
+
+/* ------------------------------------------------------------
+   INPUTS / TEXTAREA / SELECT
+   ------------------------------------------------------------ */
+
+.profile-page input,
+.profile-page textarea,
+.profile-page select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid
+        rgba(100,116,139,.22);
+
+    border-radius: 11px;
+
+    outline: none;
+
+    background:
+        #071426;
+
+    color: #e2e8f0;
+
+    font-size: 12px;
+
+    transition:
+        border-color .16s ease,
+        box-shadow .16s ease,
+        background .16s ease,
+        transform .16s ease;
+}
+
+.profile-page input,
+.profile-page select {
+    min-height: 48px;
+}
+
+.profile-page textarea {
+    min-height: 110px;
+
+    padding:
+        12px 13px;
+
+    resize: vertical;
+}
+
+.profile-page input::placeholder,
+.profile-page textarea::placeholder {
+    color: #475569;
+}
+
+.profile-page input:hover,
+.profile-page textarea:hover,
+.profile-page select:hover {
+    border-color:
+        rgba(100,116,139,.36);
+
+    background:
+        #0a192d;
+}
+
+.profile-page input:focus,
+.profile-page textarea:focus,
+.profile-page select:focus {
+    border-color:
+        #0ea5e9;
+
+    background:
+        #081b31;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(14,165,233,.08),
+        0 0 22px
+        rgba(14,165,233,.04);
+}
+
+/* ------------------------------------------------------------
+   BUTTONS
+   ------------------------------------------------------------ */
+
+.profile-page button {
+    min-height: 44px;
+
+    padding:
+        0 15px;
+
+    border:
+        1px solid
+        rgba(103,232,249,.11);
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #0e7490 48%,
+            #6d28d9
+        );
+
+    color: #ffffff;
+
+    font-size: 9px;
+
+    font-weight: 950;
+
+    letter-spacing: .06em;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 24px
+        rgba(2,132,199,.14);
+
+    transition:
+        transform .16s ease,
+        box-shadow .16s ease,
+        filter .16s ease,
+        opacity .16s ease;
+}
+
+.profile-page button:hover:not(:disabled) {
+    transform:
+        translateY(-2px);
+
+    filter:
+        saturate(1.10);
+
+    box-shadow:
+        0 15px 30px
+        rgba(2,132,199,.22);
+}
+
+.profile-page button:active:not(:disabled) {
+    transform:
+        translateY(0);
+}
+
+.profile-page button:disabled {
+    opacity: .55;
+
+    cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------
+   CHECKBOX / RADIO
+   ------------------------------------------------------------ */
+
+.profile-page input[type="checkbox"],
+.profile-page input[type="radio"] {
+    width: 16px;
+    min-height: 16px;
+
+    accent-color:
+        #0ea5e9;
+}
+
+/* ------------------------------------------------------------
+   LISTS / SMALL TEXT
+   ------------------------------------------------------------ */
+
+.profile-page section p {
+    color: #64748b;
+
+    font-size: 10px;
+
+    line-height: 1.65;
+}
+
+.profile-page section ul {
+    margin:
+        0;
+
+    padding-left: 17px;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    line-height: 1.7;
+}
+
+.profile-page section li::marker {
+    color: #22d3ee;
+}
+
+/* ------------------------------------------------------------
+   LOADING / ERROR / EMPTY
+   ------------------------------------------------------------ */
+
+.profile-page > p:only-child {
+    min-height: 180px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 22px;
+
+    border:
+        1px dashed
+        rgba(103,232,249,.12);
+
+    border-radius: 18px;
+
+    background:
+        rgba(8,26,48,.55);
+
+    color: #64748b;
+
+    text-align: center;
+}
+
+.profile-page [role="alert"] {
+    border-color:
+        rgba(248,113,113,.18);
+
+    background:
+        rgba(127,29,29,.14);
+
+    color: #fca5a5;
+}
+
+/* ------------------------------------------------------------
+   COMMON SAVE STATE COLORS
+   ------------------------------------------------------------ */
+
+.profile-page .success,
+.profile-page [role="status"] {
+    border-color:
+        rgba(34,197,94,.17);
+
+    background:
+        rgba(34,197,94,.06);
+
+    color: #86efac;
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE
+   ------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+
+    .profile-page {
+        width:
+            calc(100% - 30px);
+
+        padding:
+            26px 0
+            45px;
+    }
+}
+
+@media (max-width: 620px) {
+
+    .profile-page {
+        width:
+            calc(100% - 18px);
+
+        padding:
+            18px 0
+            32px;
+    }
+
+    .profile-page > h1 {
+        font-size: 36px;
+    }
+
+    .profile-page section {
+        margin:
+            14px 0;
+
+        padding:
+            18px;
+
+        border-radius: 16px;
+    }
+
+    .profile-page section h2 {
+        font-size: 16px;
+    }
+
+    .profile-page form {
+        gap: 13px;
+    }
+
+    .profile-page input,
+    .profile-page select {
+        min-height: 46px;
+    }
+
+    .profile-page button {
+        width: 100%;
+    }
+}
+
+/* ------------------------------------------------------------
+   ANIMATION
+   ------------------------------------------------------------ */
+
+@keyframes aq-profile-in {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .profile-page {
+        animation: none !important;
+    }
+
+    .profile-page section,
+    .profile-page button,
+    .profile-page input,
+    .profile-page textarea,
+    .profile-page select {
+        transition: none !important;
+    }
+}

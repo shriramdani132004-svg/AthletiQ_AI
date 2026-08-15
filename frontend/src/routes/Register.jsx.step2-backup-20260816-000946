@@ -1,0 +1,367 @@
+﻿import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api } from "../api/apiClient";
+import "./Register.css";
+
+function LogoMark() {
+    return (
+        <svg
+            className="aq-register-logo"
+            viewBox="0 0 100 100"
+            aria-label="AthletiQ Logo"
+            role="img"
+        >
+            <defs>
+                <linearGradient id="aqRegLogoGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#00f2fe" />
+                    <stop offset="50%" stopColor="#38bdf8" />
+                    <stop offset="100%" stopColor="#a855f7" />
+                </linearGradient>
+
+                <linearGradient id="aqRegShieldGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#00f2fe" />
+                    <stop offset="100%" stopColor="#6366f1" />
+                </linearGradient>
+
+                <filter id="aqRegLogoGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <circle
+                cx="50"
+                cy="50"
+                r="44"
+                fill="none"
+                stroke="rgba(0, 242, 254, 0.2)"
+                strokeWidth="1.5"
+                strokeDasharray="4 4"
+            />
+
+            <path
+                d="M50 10 L82 24 V46 C82 66 68 83 50 91 C32 83 18 66 18 46 V24 Z"
+                fill="rgba(4, 12, 24, 0.9)"
+                stroke="url(#aqRegShieldGrad)"
+                strokeWidth="2.5"
+                filter="url(#aqRegLogoGlow)"
+            />
+
+            <path
+                d="M32 68 L46 32 H54 L68 68 H58 L55 59 H45 L42 68 Z M47 51 H53 L50 40 Z"
+                fill="url(#aqRegLogoGrad)"
+            />
+
+            <circle cx="72" cy="22" r="3.5" fill="#00f2fe" />
+        </svg>
+    );
+}
+
+function EyeIcon({ hidden }) {
+    if (hidden) {
+        return (
+            <svg viewBox="0 0 24 24" className="aq-register-icon" aria-hidden="true">
+                <path d="M3 3l18 18" strokeWidth="2" strokeLinecap="round" />
+                <path d="M10.5 10.677a2 2 0 002.823 2.823" strokeWidth="2" strokeLinecap="round" />
+                <path d="M7.362 7.561C4.68 9.227 2.8 12 2.8 12s3.6 7.2 9.2 7.2c2.04 0 3.84-.71 5.275-1.782M9.88 4.284C10.564 4.098 11.27 4 12 4c5.6 0 9.2 7.2 9.2 7.2s-1.127 2.254-2.884 4.116" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+        );
+    }
+    return (
+        <svg viewBox="0 0 24 24" className="aq-register-icon" aria-hidden="true">
+            <path d="M2 12s3.6-7.2 10-7.2 10 7.2 10 7.2-3.6 7.2-10 7.2-10-7.2-10-7.2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <circle cx="12" cy="12" r="3" strokeWidth="2" fill="none" />
+        </svg>
+    );
+}
+
+function ArrowIcon() {
+    return (
+        <svg viewBox="0 0 24 24" className="aq-register-icon-arrow" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        </svg>
+    );
+}
+
+function CheckIcon() {
+    return (
+        <svg viewBox="0 0 24 24" className="aq-register-check" aria-hidden="true">
+            <path d="M5 13l4 4L19 7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        </svg>
+    );
+}
+
+export default function Register() {
+    const navigate = useNavigate();
+
+    const [form, setForm] = useState({
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: ""
+    });
+
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
+    function updateField(event) {
+        setForm(current => ({
+            ...current,
+            [event.target.name]: event.target.value
+        }));
+
+        if (error) {
+            setError("");
+        }
+    }
+
+    async function submit(event) {
+        event.preventDefault();
+        setError("");
+        setSuccess(false);
+        setLoading(true);
+
+        try {
+            await api.post("/v1/auth/register", form);
+            setSuccess(true);
+        } catch (err) {
+            setError(err?.message || "Registration failed. Please verify your details.");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return (
+        <main className="aq-register-page">
+            {/* FULL VIEWPORT AMBIENCE */}
+            <div className="aq-register-bg">
+                <div className="aq-grid-plane" />
+                <div className="aq-orb aq-orb-cyan" />
+                <div className="aq-orb aq-orb-purple" />
+            </div>
+
+            <div className="aq-register-card">
+                <div className="aq-card-glow-border" />
+
+                {/* LEFT: BRAND PIPELINE HERO */}
+                <section className="aq-brand-panel">
+                    <div className="aq-brand-top">
+                        <div className="aq-logo-box">
+                            <LogoMark />
+                        </div>
+                        <div className="aq-brand-titles">
+                            <span className="aq-brand-name">ATHLETIQ</span>
+                            <span className="aq-brand-sub">SPORTS TALENT INTELLIGENCE</span>
+                        </div>
+                    </div>
+
+                    <div className="aq-brand-body">
+                        <div className="aq-status-chip">
+                            <span className="aq-pulse-dot" />
+                            ORGANIZER ONBOARDING
+                        </div>
+
+                        <h1 className="aq-hero-headline">
+                            Build your
+                            <span className="aq-gradient-text">talent pipeline.</span>
+                        </h1>
+
+                        <p className="aq-hero-desc">
+                            Create your organizer workspace and deploy objective sports recruitment workflows instantly.
+                        </p>
+
+                        <div className="aq-process-steps">
+                            <div className="aq-step-item active">
+                                <span className="aq-step-num">01</span>
+                                <div className="aq-step-text">
+                                    <strong>Create Profile</strong>
+                                    <span>Set up your organizer identity</span>
+                                </div>
+                            </div>
+                            <div className="aq-step-line" />
+                            <div className="aq-step-item">
+                                <span className="aq-step-num">02</span>
+                                <div className="aq-step-text">
+                                    <strong>Verify Identity</strong>
+                                    <span>Confirm workspace authorization</span>
+                                </div>
+                            </div>
+                            <div className="aq-step-line" />
+                            <div className="aq-step-item">
+                                <span className="aq-step-num">03</span>
+                                <div className="aq-step-text">
+                                    <strong>Launch Combine</strong>
+                                    <span>Begin automated applicant scouting</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="aq-brand-bottom">
+                        <span>ATHLETIQ INTELLIGENCE v3.2</span>
+                        <span className="aq-bullet">•</span>
+                        <span>ENTERPRISE SCOUTING NETWORK</span>
+                    </div>
+                </section>
+
+                {/* RIGHT: REGISTER FORM / SUCCESS */}
+                <section className="aq-form-panel">
+                    <div className="aq-form-wrapper">
+                        {success ? (
+                            <div className="aq-register-success" role="status" aria-live="polite">
+                                <div className="aq-register-success-icon">
+                                    <CheckIcon />
+                                </div>
+
+                                <span className="aq-success-kicker">ONBOARDING CONFIRMED</span>
+                                <h3>Welcome to AthletiQ</h3>
+                                <p>
+                                    Your organizer profile has been provisioned. Check your email for verification before signing in.
+                                </p>
+
+                                <button
+                                    type="button"
+                                    className="aq-submit-btn aq-success-btn"
+                                    onClick={() => navigate("/login")}
+                                >
+                                    <span>GO TO LOGIN</span>
+                                    <ArrowIcon />
+                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="aq-form-header">
+                                    <span className="aq-form-eyebrow">NEW ORGANIZER</span>
+                                    <h2>Join AthletiQ</h2>
+                                    <p>Deploy your intelligent athletic combine workspace.</p>
+                                </div>
+
+                                {error && (
+                                    <div className="aq-error-box" role="alert">
+                                        <div className="aq-error-icon">!</div>
+                                        <div className="aq-error-text">{error}</div>
+                                    </div>
+                                )}
+
+                                <form className="aq-auth-form" onSubmit={submit}>
+                                    <div className="aq-name-grid">
+                                        <div className="aq-field-group">
+                                            <label className="aq-field-label" htmlFor="aq-firstName">FIRST NAME</label>
+                                            <div className="aq-input-container">
+                                                <input
+                                                    id="aq-firstName"
+                                                    name="firstName"
+                                                    type="text"
+                                                    value={form.firstName}
+                                                    onChange={updateField}
+                                                    placeholder="Alex"
+                                                    autoComplete="given-name"
+                                                    required
+                                                    disabled={loading}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="aq-field-group">
+                                            <label className="aq-field-label" htmlFor="aq-lastName">LAST NAME</label>
+                                            <div className="aq-input-container">
+                                                <input
+                                                    id="aq-lastName"
+                                                    name="lastName"
+                                                    type="text"
+                                                    value={form.lastName}
+                                                    onChange={updateField}
+                                                    placeholder="Morgan"
+                                                    autoComplete="family-name"
+                                                    required
+                                                    disabled={loading}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="aq-field-group">
+                                        <label className="aq-field-label" htmlFor="aq-email">WORK EMAIL</label>
+                                        <div className="aq-input-container">
+                                            <span className="aq-input-adornment">@</span>
+                                            <input
+                                                id="aq-email"
+                                                name="email"
+                                                type="email"
+                                                value={form.email}
+                                                onChange={updateField}
+                                                placeholder="organizer@athletiq.ai"
+                                                autoComplete="email"
+                                                required
+                                                disabled={loading}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="aq-field-group">
+                                        <label className="aq-field-label" htmlFor="aq-password">PASSWORD</label>
+                                        <div className="aq-input-container">
+                                            <span className="aq-input-adornment">#</span>
+                                            <input
+                                                id="aq-password"
+                                                name="password"
+                                                type={showPassword ? "text" : "password"}
+                                                value={form.password}
+                                                onChange={updateField}
+                                                placeholder="••••••••••••"
+                                                autoComplete="new-password"
+                                                required
+                                                disabled={loading}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="aq-toggle-password"
+                                                onClick={() => setShowPassword(prev => !prev)}
+                                                disabled={loading}
+                                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                            >
+                                                <EyeIcon hidden={!showPassword} />
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" className="aq-submit-btn" disabled={loading}>
+                                        {loading ? (
+                                            <>
+                                                <span className="aq-spinner" />
+                                                <span>CREATING ACCOUNT...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>CREATE ACCOUNT</span>
+                                                <ArrowIcon />
+                                            </>
+                                        )}
+                                    </button>
+                                </form>
+
+                                <div className="aq-form-footer">
+                                    <p className="aq-register-prompt">
+                                        Already have an account?{" "}
+                                        <button
+                                            type="button"
+                                            onClick={() => navigate("/login")}
+                                            disabled={loading}
+                                        >
+                                            Sign In
+                                        </button>
+                                    </p>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </section>
+            </div>
+        </main>
+    );
+}

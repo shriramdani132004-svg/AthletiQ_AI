@@ -1,0 +1,321 @@
+﻿/* ============================================================
+   ATHLETIQ PROFILE - QUANTUM SYNTHWAVE / CYBER-ATHLETIC UI
+   DEEP OBSIDIAN / NEON CYAN / HYPER MAGENTA / AMBER GLOW
+   ============================================================ */
+
+.profile-page {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 40px 4vw 80px !important;
+    background-color: #03050c !important;
+    background-image: 
+        radial-gradient(circle at 10% 15%, rgba(255, 0, 234, 0.14), transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(0, 240, 255, 0.14), transparent 45%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px) !important;
+    background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px !important;
+    color: #f8fafc !important;
+    font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    animation: aq-profile-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* ------------------------------------------------------------
+   PAGE HEADER & TITLE
+   ------------------------------------------------------------ */
+
+.profile-page > h1 {
+    font-size: clamp(38px, 4.5vw, 56px) !important;
+    font-weight: 950 !important;
+    letter-spacing: -0.04em !important;
+    margin: 0 0 24px 0 !important;
+    background: linear-gradient(90deg, #00f0ff 0%, #a855f7 50%, #ff00ea 100%) !important;
+    background-size: 200% auto !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    animation: aq-gradient-flow 6s linear infinite !important;
+    display: inline-block !important;
+}
+
+/* ------------------------------------------------------------
+   NOTIFICATION MESSAGES & STATUS BANNERS
+   ------------------------------------------------------------ */
+
+.profile-page > p {
+    padding: 14px 20px !important;
+    border-radius: 14px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.02em !important;
+    margin: 0 0 24px 0 !important;
+    animation: aq-banner-pop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+/* Success Message */
+.profile-page > p:not(:has(+ p)):not(:empty) {
+    background: rgba(57, 255, 20, 0.1) !important;
+    border: 1px solid rgba(57, 255, 20, 0.4) !important;
+    color: #39ff14 !important;
+    box-shadow: 0 0 25px rgba(57, 255, 20, 0.15) !important;
+}
+
+/* Error Message */
+.profile-page > p + p {
+    background: rgba(255, 0, 85, 0.1) !important;
+    border: 1px solid rgba(255, 0, 85, 0.4) !important;
+    color: #ff3366 !important;
+    box-shadow: 0 0 25px rgba(255, 0, 85, 0.15) !important;
+}
+
+/* ------------------------------------------------------------
+   SECTION PANELS (CYBER GLASS CARDS)
+   ------------------------------------------------------------ */
+
+.profile-page section {
+    position: relative !important;
+    margin: 0 0 32px 0 !important;
+    padding: 36px 40px !important;
+    border-radius: 28px !important;
+    background: rgba(15, 20, 40, 0.65) !important;
+    backdrop-filter: blur(20px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+    border: 1px solid rgba(0, 240, 255, 0.12) !important;
+    box-shadow:
+        0 20px 50px -10px rgba(0, 0, 0, 0.6),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    overflow: hidden !important;
+}
+
+.profile-page section::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0; left: 0; right: 0;
+    height: 3px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    transition: all 0.35s ease !important;
+}
+
+.profile-page section:hover {
+    transform: translateY(-4px) !important;
+    border-color: rgba(0, 240, 255, 0.35) !important;
+    box-shadow:
+        0 30px 60px -15px rgba(0, 240, 255, 0.15),
+        inset 0 0 25px rgba(0, 240, 255, 0.04) !important;
+}
+
+.profile-page section:hover::before {
+    background: linear-gradient(90deg, #00f0ff, #ff00ea) !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.8) !important;
+}
+
+.profile-page section h2 {
+    margin: 0 0 24px 0 !important;
+    font-size: 22px !important;
+    font-weight: 950 !important;
+    color: #ffffff !important;
+    letter-spacing: -0.02em !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.profile-page section h2::before {
+    content: "" !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #00f0ff !important;
+    box-shadow: 0 0 12px #00f0ff !important;
+}
+
+/* ------------------------------------------------------------
+   FORM & INPUT CONTROLS
+   ------------------------------------------------------------ */
+
+.profile-page form {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+    width: 100% !important;
+}
+
+.profile-page input,
+.profile-page textarea {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 16px 20px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(3, 7, 18, 0.75) !important;
+    color: #ffffff !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    outline: none !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.profile-page textarea {
+    grid-column: 1 / -1 !important;
+    min-height: 130px !important;
+    resize: vertical !important;
+    line-height: 1.6 !important;
+}
+
+.profile-page input::placeholder,
+.profile-page textarea::placeholder {
+    color: #64748b !important;
+    font-weight: 500 !important;
+}
+
+.profile-page input:focus,
+.profile-page textarea:focus {
+    border-color: #00f0ff !important;
+    background: rgba(5, 12, 28, 0.95) !important;
+    box-shadow:
+        0 0 0 4px rgba(0, 240, 255, 0.15),
+        0 0 25px rgba(0, 240, 255, 0.25),
+        inset 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ------------------------------------------------------------
+   CHECKBOX LABELS (PREFERENCES)
+   ------------------------------------------------------------ */
+
+.profile-page label {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding: 16px 20px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    background: rgba(3, 7, 18, 0.5) !important;
+    color: #e2e8f0 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+    user-select: none !important;
+}
+
+.profile-page label:hover {
+    background: rgba(0, 240, 255, 0.06) !important;
+    border-color: rgba(0, 240, 255, 0.3) !important;
+    transform: translateX(4px) !important;
+}
+
+.profile-page label input[type="checkbox"] {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    width: 22px !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    padding: 0 !important;
+    border-radius: 7px !important;
+    border: 1.5px solid rgba(0, 240, 255, 0.4) !important;
+    background: rgba(0, 240, 255, 0.05) !important;
+    cursor: pointer !important;
+    display: grid !important;
+    place-items: center !important;
+    flex-shrink: 0 !important;
+    transition: all 0.2s ease !important;
+}
+
+.profile-page label input[type="checkbox"]:checked {
+    background: linear-gradient(135deg, #00f0ff, #ff00ea) !important;
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.6) !important;
+}
+
+.profile-page label input[type="checkbox"]:checked::after {
+    content: "✓" !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+}
+
+/* ------------------------------------------------------------
+   ACTION BUTTONS
+   ------------------------------------------------------------ */
+
+.profile-page button[type="submit"] {
+    grid-column: 1 / -1 !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 48px !important;
+    padding: 0 32px !important;
+    margin-top: 8px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: linear-gradient(90deg, #00f0ff 0%, #0051ff 50%, #ff00ea 100%) !important;
+    background-size: 200% auto !important;
+    color: #ffffff !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    box-shadow: 0 10px 25px rgba(0, 240, 255, 0.35) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.profile-page button[type="submit"]:hover {
+    transform: translateY(-3px) scale(1.02) !important;
+    background-position: right center !important;
+    box-shadow: 0 15px 35px rgba(255, 0, 234, 0.5) !important;
+}
+
+.profile-page button[type="submit"]:active {
+    transform: translateY(0) scale(0.99) !important;
+}
+
+/* ------------------------------------------------------------
+   KEYFRAME ANIMATIONS
+   ------------------------------------------------------------ */
+
+@keyframes aq-profile-enter {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes aq-gradient-flow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+@keyframes aq-banner-pop {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVE BREAKPOINTS
+   ------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+    .profile-page {
+        padding: 24px 18px 60px !important;
+    }
+    
+    .profile-page section {
+        padding: 24px 20px !important;
+    }
+    
+    .profile-page form {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .profile-page button[type="submit"] {
+        width: 100% !important;
+    }
+}

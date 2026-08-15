@@ -1,0 +1,597 @@
+﻿/* ============================================================
+   ATHLETIQ SUPREME DIRECT-PORTAL LOGIN
+   ============================================================ */
+
+.aq-direct-viewport-root {
+    --mouse-x: 50vw;
+    --mouse-y: 50vh;
+    position: fixed !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 2147483647 !important;
+    background-color: #030712 !important;
+    color: #ffffff !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    display: block !important;
+    box-sizing: border-box !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+/* Background Atmosphere */
+.aq-spotlight {
+    position: fixed;
+    top: var(--mouse-y);
+    left: var(--mouse-x);
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.16) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.aq-bg-aurora {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.aq-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+}
+
+.aq-orb-1 {
+    width: 700px;
+    height: 700px;
+    top: -200px;
+    left: -150px;
+    background: radial-gradient(circle, #0284c7 0%, transparent 70%);
+    opacity: 0.6;
+    animation: aq-orb-move-1 20s ease-in-out infinite alternate;
+}
+
+.aq-orb-2 {
+    width: 750px;
+    height: 750px;
+    bottom: -200px;
+    right: -150px;
+    background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+    opacity: 0.55;
+    animation: aq-orb-move-2 24s ease-in-out infinite alternate;
+}
+
+.aq-orb-3 {
+    width: 500px;
+    height: 500px;
+    top: 30%;
+    left: 45%;
+    background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
+    opacity: 0.25;
+}
+
+.aq-cyber-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(56, 189, 248, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.15) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 90%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Two-Column Fullscreen Layout */
+.aq-portal-layout {
+    position: relative;
+    z-index: 2;
+    width: 100vw;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    box-sizing: border-box;
+}
+
+/* Left Brand Panel */
+.aq-brand-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(48px, 6vw, 96px);
+    background: linear-gradient(135deg, rgba(7, 26, 51, 0.88) 0%, rgba(10, 18, 38, 0.75) 100%);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    box-sizing: border-box;
+}
+
+.aq-brand-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.aq-logo-box {
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.aq-login-logo {
+    width: 44px;
+    height: 44px;
+}
+
+.aq-brand-title {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.aq-chip {
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #0ea5e9, #6366f1);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.4);
+}
+
+.aq-brand-sub {
+    font-size: 9px;
+    font-weight: 800;
+    color: #38bdf8;
+    letter-spacing: 0.2em;
+    margin-top: 2px;
+}
+
+.aq-brand-center {
+    max-width: 650px;
+    margin: 48px 0;
+}
+
+.aq-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    color: #7dd3fc;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.15);
+}
+
+.aq-badge-dot {
+    width: 6px;
+    height: 6px;
+    background: #38bdf8;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #38bdf8;
+}
+
+.aq-main-heading {
+    font-size: clamp(40px, 4.5vw, 68px);
+    font-weight: 900;
+    line-height: 1.04;
+    letter-spacing: -0.05em;
+    margin: 24px 0 16px;
+}
+
+.aq-text-gradient {
+    display: block;
+    background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: aq-gradient-scroll 7s linear infinite;
+}
+
+.aq-hero-desc {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #94a3b8;
+    margin: 0;
+    max-width: 520px;
+}
+
+.aq-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+}
+
+.aq-stat-box {
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.aq-stat-box strong {
+    font-size: 20px;
+    font-weight: 900;
+    color: #38bdf8;
+}
+
+.aq-stat-box span {
+    font-size: 9px;
+    font-weight: 800;
+    color: #64748b;
+    letter-spacing: 0.06em;
+}
+
+.aq-brand-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #64748b;
+}
+
+.aq-pulse-indicator {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    display: grid;
+    place-items: center;
+}
+
+.aq-pulse-core {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 10px #10b981;
+}
+
+.aq-pulse-ring {
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1px solid #10b981;
+    animation: aq-ring-expand 2s ease-out infinite;
+}
+
+/* Right Form Panel */
+.aq-form-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(32px, 5vw, 64px);
+    background: rgba(5, 10, 20, 0.7);
+    box-sizing: border-box;
+}
+
+.aq-form-card {
+    width: min(440px, 100%);
+    padding: clamp(36px, 4vw, 48px);
+    border-radius: 28px;
+    background: rgba(13, 22, 41, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(30px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+    box-sizing: border-box;
+}
+
+.aq-form-header {
+    margin-bottom: 28px;
+}
+
+.aq-access-tag {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: #38bdf8;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.aq-form-header h2 {
+    font-size: clamp(32px, 3.5vw, 40px);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    margin: 0;
+}
+
+.aq-form-header p {
+    color: #94a3b8;
+    font-size: 14px;
+    margin: 6px 0 0;
+}
+
+.aq-error-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+    margin-bottom: 20px;
+}
+
+.aq-error-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ef4444;
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.aq-error-banner strong {
+    display: block;
+    font-size: 11px;
+    color: #ffffff;
+}
+
+.aq-error-banner span {
+    display: block;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.aq-inputs-form {
+    display: grid;
+    gap: 20px;
+}
+
+.aq-input-wrap {
+    display: grid;
+    gap: 8px;
+}
+
+.aq-input-wrap label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+}
+
+.aq-input-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.aq-icon-prefix {
+    position: absolute;
+    left: 16px;
+    color: #64748b;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.aq-input-box input {
+    width: 100%;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 0 46px 0 44px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(2, 6, 23, 0.6);
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.aq-input-box input:focus {
+    border-color: #38bdf8;
+    background: rgba(2, 6, 23, 0.95);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
+}
+
+.aq-eye-btn {
+    position: absolute;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.aq-eye-btn:hover {
+    color: #38bdf8;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.aq-login-icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+}
+
+.aq-primary-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 54px;
+    margin-top: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 50%, #6366f1 100%);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 12px 28px -6px rgba(14, 165, 233, 0.5);
+    transition: transform 0.2s ease;
+}
+
+.aq-primary-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px -6px rgba(14, 165, 233, 0.7);
+}
+
+.aq-btn-glow-shimmer {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-25deg);
+    animation: aq-shimmer-loop 3.5s infinite;
+}
+
+.aq-login-arrow {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    transition: transform 0.2s ease;
+}
+
+.aq-primary-btn:hover:not(:disabled) .aq-login-arrow {
+    transform: translateX(4px);
+}
+
+.aq-loader-spin {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: aq-spin-anim 0.6s linear infinite;
+}
+
+.aq-bottom-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.aq-bottom-actions button {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: #38bdf8;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.aq-bottom-actions button:hover {
+    color: #7dd3fc;
+    text-decoration: underline;
+}
+
+.aq-encryption-tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: #64748b;
+}
+
+.aq-enc-dot {
+    width: 6px;
+    height: 6px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #10b981;
+}
+
+/* Animations */
+@keyframes aq-orb-move-1 {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 40px); }
+}
+
+@keyframes aq-orb-move-2 {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-50px, -40px); }
+}
+
+@keyframes aq-gradient-scroll {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+@keyframes aq-ring-expand {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2.8); opacity: 0; }
+}
+
+@keyframes aq-shimmer-loop {
+    0% { left: -100%; }
+    25%, 100% { left: 180%; }
+}
+
+@keyframes aq-spin-anim {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+    .aq-portal-layout {
+        grid-template-columns: 1fr;
+    }
+    .aq-brand-col {
+        padding: 40px 24px;
+    }
+    .aq-stats-grid {
+        display: none;
+    }
+    .aq-form-col {
+        padding: 40px 20px 60px;
+    }
+}

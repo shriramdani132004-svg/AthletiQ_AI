@@ -1,5 +1,4 @@
-﻿import "./ProfilePage.css";
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { profileApi } from "../api/profileApi";
 
 export default function ProfilePage() {
@@ -96,6 +95,5 @@ export default function ProfilePage() {
         </main>
     );
 }
-
 
 

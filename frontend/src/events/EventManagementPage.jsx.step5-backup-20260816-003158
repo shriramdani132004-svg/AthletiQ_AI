@@ -1,4 +1,3 @@
-﻿import "./EventManagementPage.css";
 import { useEffect, useState } from "react";
 import { eventApi } from "../api/eventApi";
 
