@@ -15,12 +15,14 @@ async function request(path, options = {}) {
                 headers: {
                     "Content-Type":
                         "application/json",
+
                     ...(token
                         ? {
                             Authorization:
                                 `Bearer ${token}`
                         }
                         : {}),
+
                     ...(options.headers || {})
                 }
             }
@@ -37,13 +39,83 @@ async function request(path, options = {}) {
         );
     }
 
+    if(response.status === 204){
+        return null;
+    }
+
     return response.json();
+}
+
+function buildQuery(params = {}){
+
+    const query =
+        new URLSearchParams();
+
+    Object.entries(params)
+        .forEach(([key,value]) => {
+
+            if(
+                value !== undefined &&
+                value !== null &&
+                String(value).trim() !== ""
+            ){
+
+                query.set(
+                    key,
+                    String(value)
+                );
+            }
+        });
+
+    const result =
+        query.toString();
+
+    return result
+        ? `?${result}`
+        : "";
 }
 
 export const applicationApi = {
 
-    list: eventId =>
+    list: (
+        eventId,
+        {
+            page = 0,
+            size = 20,
+            search = "",
+            email = "",
+            age = "",
+            position = "",
+            status = "",
+            sort = "submittedAt",
+            direction = "desc"
+        } = {}
+    ) =>
         request(
-            `/${eventId}/applications`
+            `/${eventId}/applications` +
+            buildQuery({
+                page,
+                size,
+                search,
+                email,
+                age,
+                position,
+                status,
+                sort,
+                direction
+            })
+        ),
+
+    statistics: eventId =>
+        request(
+            `/${eventId}/applications/statistics`
+        ),
+
+    get: (
+        eventId,
+        applicationId
+    ) =>
+        request(
+            `/${eventId}/applications/${applicationId}`
         )
 };

@@ -1,12 +1,14 @@
 package com.athletiq.backend.application.controller;
 
-import com.athletiq.backend.application.dto.OrganizerApplicationResponse;
+import com.athletiq.backend.application.dto.OrganizerApplicationDetailResponse;
+
+import com.athletiq.backend.application.dto.OrganizerApplicationPageResponse;
+import com.athletiq.backend.application.dto.OrganizerApplicationStatisticsResponse;
+import com.athletiq.backend.application.entity.ApplicationStatus;
 import com.athletiq.backend.application.service.OrganizerApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/events")
@@ -21,9 +23,45 @@ public class OrganizerApplicationController {
     }
 
     @GetMapping("/{eventId}/applications")
-    public ResponseEntity<List<OrganizerApplicationResponse>>
+    public ResponseEntity<OrganizerApplicationPageResponse>
     getApplications(
             @PathVariable Long eventId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) Integer age,
+            @RequestParam(required = false) String position,
+            @RequestParam(required = false) ApplicationStatus status,
+            @RequestParam(defaultValue = "submittedAt") String sort,
+            @RequestParam(defaultValue = "desc") String direction,
+            Authentication authentication
+    ) {
+
+        authenticatedUserId(authentication);
+
+        return ResponseEntity.ok(
+                service.getApplications(
+                        authenticatedUserId(authentication),
+                        eventId,
+                        page,
+                        size,
+                        search,
+                        email,
+                        age,
+                        position,
+                        status,
+                        sort,
+                        direction
+                )
+        );
+    }
+
+    @GetMapping("/{eventId}/applications/{applicationId}")
+    public ResponseEntity<OrganizerApplicationDetailResponse>
+    getApplicationDetail(
+            @PathVariable Long eventId,
+            @PathVariable Long applicationId,
             Authentication authentication
     ) {
 
@@ -31,8 +69,25 @@ public class OrganizerApplicationController {
                 authenticatedUserId(authentication);
 
         return ResponseEntity.ok(
-                service.getApplications(
+                service.getApplicationDetail(
                         organizerId,
+                        eventId,
+                        applicationId
+                )
+        );
+    }
+    @GetMapping("/{eventId}/applications/statistics")
+    public ResponseEntity<OrganizerApplicationStatisticsResponse>
+    getStatistics(
+            @PathVariable Long eventId,
+            Authentication authentication
+    ) {
+
+        authenticatedUserId(authentication);
+
+        return ResponseEntity.ok(
+                service.getStatistics(
+                        authenticatedUserId(authentication),
                         eventId
                 )
         );
@@ -42,10 +97,11 @@ public class OrganizerApplicationController {
             Authentication authentication
     ) {
 
-        if (
+        if(
                 authentication == null ||
                 authentication.getName() == null
         ) {
+
             throw new IllegalStateException(
                     "Authenticated user is required."
             );
@@ -57,7 +113,7 @@ public class OrganizerApplicationController {
                     authentication.getName()
             );
 
-        } catch (NumberFormatException exception) {
+        } catch(NumberFormatException exception) {
 
             throw new IllegalStateException(
                     "Authenticated principal must contain a numeric user ID."

@@ -1,109 +1,565 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { applicationApi } from "../api/applicationApi";
 import "./EventApplicationsPage.css";
 
+const DEFAULT_FILTERS = {
+    search: "",
+    email: "",
+    age: "",
+    position: "",
+    status: ""
+};
+
+const EMPTY_STATS = {
+    totalApplications: 0,
+    pendingEvaluation: 0,
+    evaluated: 0,
+    selected: 0,
+    accepted: 0,
+    declined: 0
+};
+
+function formatDate(value) {
+
+    if(!value){
+        return "—";
+    }
+
+    const date =
+        new Date(value);
+
+    if(Number.isNaN(date.getTime())){
+        return value;
+    }
+
+    return date.toLocaleString();
+}
+
+function parseSubmittedData(value) {
+
+    if(!value){
+        return {};
+    }
+
+    if(typeof value === "object"){
+        return value;
+    }
+
+    try{
+        return JSON.parse(value);
+    }catch{
+        return {};
+    }
+}
+
+function displayValue(value) {
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+        return "—";
+    }
+
+    if(Array.isArray(value)){
+        return value.join(", ");
+    }
+
+    if(typeof value === "object"){
+        return JSON.stringify(value);
+    }
+
+    return String(value);
+}
+
+function parseFileMetadata(value) {
+
+    if(!value){
+        return [];
+    }
+
+    if(Array.isArray(value)){
+        return value;
+    }
+
+    if(typeof value === "object"){
+        return [value];
+    }
+
+    try{
+
+        const parsed =
+            JSON.parse(value);
+
+        if(Array.isArray(parsed)){
+            return parsed;
+        }
+
+        if(parsed && typeof parsed === "object"){
+            return [parsed];
+        }
+
+        return [];
+
+    }catch{
+
+        return [
+            {
+                raw: String(value)
+            }
+        ];
+    }
+}
+
+function formatFileSize(value) {
+
+    const bytes =
+        Number(value);
+
+    if(
+        !Number.isFinite(bytes) ||
+        bytes < 0
+    ){
+        return "—";
+    }
+
+    if(bytes < 1024){
+        return `${bytes} B`;
+    }
+
+    if(bytes < 1024 * 1024){
+        return `${(bytes / 1024).toFixed(1)} KB`;
+    }
+
+    if(bytes < 1024 * 1024 * 1024){
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    return `${(
+        bytes /
+        (1024 * 1024 * 1024)
+    ).toFixed(1)} GB`;
+}
+
 export default function EventApplicationsPage() {
 
-    const { eventId } = useParams();
-    const navigate = useNavigate();
+    const { eventId } =
+        useParams();
 
-    const [applications, setApplications] =
-        useState([]);
+    const navigate =
+        useNavigate();
+
+    const [page, setPage] =
+        useState(0);
+
+    const [size, setSize] =
+        useState(20);
+
+    const [filters, setFilters] =
+        useState(DEFAULT_FILTERS);
+
+    const [appliedFilters, setAppliedFilters] =
+        useState(DEFAULT_FILTERS);
+
+    const [sort, setSort] =
+        useState("submittedAt");
+
+    const [direction, setDirection] =
+        useState("desc");
+
+    const [data, setData] =
+        useState({
+            content: [],
+            page: 0,
+            size: 20,
+            totalElements: 0,
+            totalPages: 0,
+            first: true,
+            last: true
+        });
+
+    const [stats, setStats] =
+        useState(EMPTY_STATS);
 
     const [loading, setLoading] =
+        useState(true);
+
+    const [statsLoading, setStatsLoading] =
         useState(true);
 
     const [error, setError] =
         useState("");
 
-    const [selected, setSelected] =
+    const [statsError, setStatsError] =
+        useState("");
+
+    const [detail, setDetail] =
         useState(null);
+
+    const [detailLoading, setDetailLoading] =
+        useState(false);
+
+    const [detailError, setDetailError] =
+        useState("");
+
+    const requestVersionRef =
+        useRef(0);
+
+    const searchDebounceRef =
+        useRef(null);
+
+    const loadApplications =
+        useCallback(
+            async () => {
+
+                const requestVersion =
+                    ++requestVersionRef.current;
+
+                setLoading(true);
+                setError("");
+
+                try{
+
+                    const result =
+                        await applicationApi.list(
+                            eventId,
+                            {
+                                page,
+                                size,
+                                ...appliedFilters,
+                                sort,
+                                direction
+                            }
+                        );
+
+                    /*
+                     * Ignore an older HTTP response if a newer
+                     * filter/search request has already started.
+                     */
+                    if(
+                        requestVersion !==
+                        requestVersionRef.current
+                    ){
+                        return;
+                    }
+
+                    setData(
+                        result || {
+                            content: [],
+                            page,
+                            size,
+                            totalElements: 0,
+                            totalPages: 0,
+                            first: true,
+                            last: true
+                        }
+                    );
+
+                }catch(err){
+
+                    if(
+                        requestVersion !==
+                        requestVersionRef.current
+                    ){
+                        return;
+                    }
+
+                    setError(
+                        err.message ||
+                        "Unable to load applications."
+                    );
+
+                }finally{
+
+                    if(
+                        requestVersion ===
+                        requestVersionRef.current
+                    ){
+                        setLoading(false);
+                    }
+                }
+            },
+            [
+                eventId,
+                page,
+                size,
+                appliedFilters,
+                sort,
+                direction
+            ]
+        );
+    const loadStatistics =
+        useCallback(
+            async () => {
+
+                setStatsLoading(true);
+                setStatsError("");
+
+                try{
+
+                    const result =
+                        await applicationApi.statistics(
+                            eventId
+                        );
+
+                    setStats(
+                        result || EMPTY_STATS
+                    );
+
+                }catch(err){
+
+                    setStatsError(
+                        err.message ||
+                        "Unable to load application statistics."
+                    );
+
+                }finally{
+
+                    setStatsLoading(false);
+                }
+            },
+            [eventId]
+        );
+
+    useEffect(() => {
+        loadApplications();
+    }, [loadApplications]);
+
+    useEffect(() => {
+        loadStatistics();
+    }, [loadStatistics]);
+    useEffect(() => {
+        return () => {
+
+            if(
+                searchDebounceRef.current
+            ){
+
+                clearTimeout(
+                    searchDebounceRef.current
+                );
+            }
+        };
+    }, []);
 
     useEffect(() => {
 
-        async function load() {
+        const currentSearch =
+            filters.search.trim();
 
-            setLoading(true);
-            setError("");
+        const appliedSearch =
+            appliedFilters.search.trim();
 
-            try {
+        if(
+            currentSearch ===
+            appliedSearch
+        ){
+            return;
+        }
 
-                const result =
-                    await applicationApi.list(
-                        eventId
+        if(
+            searchDebounceRef.current
+        ){
+
+            clearTimeout(
+                searchDebounceRef.current
+            );
+        }
+
+        searchDebounceRef.current =
+            setTimeout(
+                () => {
+
+                    setPage(0);
+
+                    setAppliedFilters(
+                        current => ({
+                            ...current,
+                            search:
+                                currentSearch
+                        })
                     );
+                },
+                450
+            );
 
-                setApplications(result || []);
+        return () => {
 
-            } catch(err) {
+            if(
+                searchDebounceRef.current
+            ){
 
-                setError(
-                    err.message ||
-                    "Unable to load applications."
+                clearTimeout(
+                    searchDebounceRef.current
+                );
+            }
+        };
+
+    }, [
+        filters.search,
+        appliedFilters.search
+    ]);
+
+    function updateFilter(
+        key,
+        value
+    ){
+
+        if(key === "age"){
+
+            const normalized =
+                String(value)
+                    .replace(/[^\d]/g, "");
+
+            if(normalized === ""){
+
+                setFilters(
+                    current => ({
+                        ...current,
+                        age: ""
+                    })
                 );
 
-            } finally {
-
-                setLoading(false);
+                return;
             }
-        }
 
-        load();
+            const numeric =
+                Number(normalized);
 
-    }, [eventId]);
+            if(
+                numeric < 0 ||
+                numeric > 150
+            ){
 
-    const sortedApplications =
-        useMemo(
-            () =>
-                [...applications].sort(
-                    (a, b) =>
-                        new Date(
-                            b.submittedAt
-                        ) -
-                        new Date(
-                            a.submittedAt
-                        )
-                ),
-            [applications]
-        );
+                return;
+            }
 
-    function parseAnswers(application) {
-
-        if(!application.submittedData){
-            return {};
-        }
-
-        try {
-            return JSON.parse(
-                application.submittedData
+            setFilters(
+                current => ({
+                    ...current,
+                    age: String(numeric)
+                })
             );
-        } catch {
-            return {};
+
+            return;
+        }
+
+        setFilters(
+            current => ({
+                ...current,
+                [key]: value
+            })
+        );
+    }
+    function applyFilters(){
+
+        setPage(0);
+
+        setAppliedFilters({
+            search:
+                filters.search.trim(),
+
+            email:
+                filters.email.trim(),
+
+            age:
+                filters.age.trim(),
+
+            position:
+                filters.position.trim(),
+
+            status:
+                filters.status
+        });
+    }
+    function clearFilters(){
+
+        if(
+            searchDebounceRef.current
+        ){
+            clearTimeout(
+                searchDebounceRef.current
+            );
+        }
+
+        setFilters(
+            DEFAULT_FILTERS
+        );
+
+        setAppliedFilters(
+            DEFAULT_FILTERS
+        );
+
+        setPage(0);
+    }
+    function changeSort(value){
+
+        setSort(value);
+        setPage(0);
+    }
+
+    function toggleDirection(){
+
+        setDirection(
+            current =>
+                current === "asc"
+                    ? "desc"
+                    : "asc"
+        );
+
+        setPage(0);
+    }
+
+    function changePageSize(value){
+
+        setSize(
+            Number(value)
+        );
+
+        setPage(0);
+    }
+
+    async function openApplication(
+        applicationId
+    ){
+
+        setDetail(null);
+        setDetailError("");
+        setDetailLoading(true);
+
+        try{
+
+            const result =
+                await applicationApi.get(
+                    eventId,
+                    applicationId
+                );
+
+            setDetail(result);
+
+        }catch(err){
+
+            setDetailError(
+                err.message ||
+                "Unable to load application."
+            );
+
+        }finally{
+
+            setDetailLoading(false);
         }
     }
 
-    if(loading){
+    function closeDetail(){
 
-        return (
-            <main className="applications-page">
-                <div className="applications-state">
-                    Loading applications...
-                </div>
-            </main>
-        );
+        setDetail(null);
+        setDetailError("");
     }
 
-    if(error){
-
-        return (
-            <main className="applications-page">
-                <div className="applications-state applications-state-error">
-                    {error}
-                </div>
-            </main>
-        );
-    }
+    const applications =
+        data.content || [];
 
     return (
         <main className="applications-page">
@@ -133,216 +589,779 @@ export default function EventApplicationsPage() {
                     </h1>
 
                     <p>
-                        Review player submissions
-                        received for this event.
+                        Review and manage player
+                        submissions for this event.
                     </p>
 
                 </div>
 
-                <div className="applications-count">
+                <div className="applications-header-total">
+
                     <strong>
-                        {applications.length}
+                        {stats.totalApplications}
                     </strong>
+
                     <span>
-                        submissions
+                        Total Applications
                     </span>
+
                 </div>
 
             </header>
 
-            {applications.length === 0 ? (
+            <section className="applications-stats">
+
+                <div className="application-stat-card">
+                    <span>Total Applications</span>
+                    <strong>
+                        {statsLoading
+                            ? "—"
+                            : stats.totalApplications}
+                    </strong>
+                </div>
+
+                <div className="application-stat-card">
+                    <span>Pending Evaluation</span>
+                    <strong>
+                        {statsLoading
+                            ? "—"
+                            : stats.pendingEvaluation}
+                    </strong>
+                </div>
+
+                <div className="application-stat-card">
+                    <span>Evaluated</span>
+                    <strong>
+                        {statsLoading
+                            ? "—"
+                            : stats.evaluated}
+                    </strong>
+                </div>
+
+                <div className="application-stat-card">
+                    <span>Selected</span>
+                    <strong>
+                        {statsLoading
+                            ? "—"
+                            : stats.selected}
+                    </strong>
+                </div>
+
+                <div className="application-stat-card">
+                    <span>Accepted</span>
+                    <strong>
+                        {statsLoading
+                            ? "—"
+                            : stats.accepted}
+                    </strong>
+                </div>
+
+                <div className="application-stat-card">
+                    <span>Declined</span>
+                    <strong>
+                        {statsLoading
+                            ? "—"
+                            : stats.declined}
+                    </strong>
+                </div>
+
+            </section>
+
+            {statsError && (
+                <div className="applications-inline-error">
+                    {statsError}
+                </div>
+            )}
+
+            <section className="applications-toolbar">
+
+                <div className="application-filter-grid">
+
+                    <label>
+                        <span>Search player</span>
+                        <input
+                            type="text"
+                            value={filters.search}
+                            onChange={event =>
+                                updateFilter(
+                                    "search",
+                                    event.target.value
+                                )
+                            }
+                            placeholder="Player, phone or name"
+                        />
+                    </label>
+
+                    <label>
+                        <span>Email</span>
+                        <input
+                            type="text"
+                            value={filters.email}
+                            onChange={event =>
+                                updateFilter(
+                                    "email",
+                                    event.target.value
+                                )
+                            }
+                            placeholder="player@example.com"
+                        />
+                    </label>
+
+                    <label>
+                        <span>Age</span>
+                        <input
+                            type="number"
+                            min="0"
+                            max="150"
+                            value={filters.age}
+                            onChange={event =>
+                                updateFilter(
+                                    "age",
+                                    event.target.value
+                                )
+                            }
+                            placeholder="Age"
+                        />
+                    </label>
+
+                    <label>
+                        <span>Position</span>
+                        <input
+                            type="text"
+                            value={filters.position}
+                            onChange={event =>
+                                updateFilter(
+                                    "position",
+                                    event.target.value
+                                )
+                            }
+                            placeholder="Position"
+                        />
+                    </label>
+
+                    <label>
+                        <span>Status</span>
+                        <select
+                            value={filters.status}
+                            onChange={event =>
+                                updateFilter(
+                                    "status",
+                                    event.target.value
+                                )
+                            }
+                        >
+                            <option value="">
+                                All statuses
+                            </option>
+                            <option value="SUBMITTED">
+                                Submitted
+                            </option>
+                            <option value="VALIDATED">
+                                Validated
+                            </option>
+                            <option value="EVALUATION_PENDING">
+                                Evaluation Pending
+                            </option>
+                        </select>
+                    </label>
+
+                    <div className="application-filter-actions">
+
+                        <button
+                            type="button"
+                            className="applications-primary-button"
+                            onClick={applyFilters}
+                        >
+                            Apply Filters
+                        </button>
+
+                        <button
+                            type="button"
+                            className="applications-secondary-button"
+                            onClick={clearFilters}
+                        >
+                            Clear
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div className="application-sort-row">
+
+                    <label>
+                        <span>Sort by</span>
+                        <select
+                            value={sort}
+                            onChange={event =>
+                                changeSort(
+                                    event.target.value
+                                )
+                            }
+                        >
+                            <option value="submittedAt">
+                                Application Date
+                            </option>
+                            <option value="name">
+                                Player Name
+                            </option>
+                            <option value="email">
+                                Email
+                            </option>
+                            <option value="status">
+                                Status
+                            </option>
+                        </select>
+                    </label>
+
+                    <button
+                        type="button"
+                        className="applications-sort-button"
+                        onClick={toggleDirection}
+                    >
+                        {direction === "asc"
+                            ? "Ascending ↑"
+                            : "Descending ↓"}
+                    </button>
+
+                    <label>
+                        <span>Rows</span>
+                        <select
+                            value={size}
+                            onChange={event =>
+                                changePageSize(
+                                    event.target.value
+                                )
+                            }
+                        >
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </label>
+
+                </div>
+
+            </section>
+
+            {loading ? (
+
+                <section className="applications-state">
+                    Loading applications...
+                </section>
+
+            ) : error ? (
+
+                <section className="applications-state applications-state-error">
+                    {error}
+                </section>
+
+            ) : applications.length === 0 ? (
 
                 <section className="applications-empty">
 
                     <h2>
-                        No applications yet
+                        No applications found
                     </h2>
 
                     <p>
-                        Player submissions will
-                        appear here once they
-                        apply through the public
-                        application link.
+                        No applications match the
+                        current search or filters.
                     </p>
 
                 </section>
 
             ) : (
 
-                <section className="applications-list">
+                <section className="applications-table-card">
 
-                    {sortedApplications.map(
-                        application => {
+                    <div className="applications-table-wrapper">
 
-                            const answers =
-                                parseAnswers(
-                                    application
-                                );
+                        <table className="applications-table">
 
-                            return (
-                                <article
-                                    key={
-                                        application.id
-                                    }
-                                    className="application-row"
-                                    onClick={() =>
-                                        setSelected(
-                                            application
-                                        )
-                                    }
-                                >
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Player</th>
+                                    <th>Age</th>
+                                    <th>Position</th>
+                                    <th>Score</th>
+                                    <th>Status</th>
+                                    <th>Application Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
 
-                                    <div className="application-number">
-                                        #{application.id}
-                                    </div>
+                            <tbody>
 
-                                    <div className="application-summary">
+                                {applications.map(
+                                    application => (
 
-                                        <strong>
-                                            {answers.phone ||
-                                                "Public Applicant"}
-                                        </strong>
-
-                                        <span>
-                                            Form version{" "}
-                                            {
-                                                application
-                                                    .formVersionNumber
+                                        <tr
+                                            key={
+                                                application.applicationId
                                             }
-                                        </span>
+                                        >
 
-                                    </div>
+                                            <td>
+                                                {application.ranking ??
+                                                    "—"}
+                                            </td>
 
-                                    <div className="application-date">
-                                        {
-                                            new Date(
-                                                application.submittedAt
-                                            ).toLocaleString()
-                                        }
-                                    </div>
+                                            <td>
+                                                <div className="player-cell">
 
-                                    <div className="application-arrow">
-                                        →
-                                    </div>
+                                                    <strong>
+                                                        {application.playerName ||
+                                                            "Public Applicant"}
+                                                    </strong>
 
-                                </article>
-                            );
-                        }
-                    )}
+                                                    <span>
+                                                        {application.email ||
+                                                            application.phone ||
+                                                            "No contact information"}
+                                                    </span>
+
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                {application.age ??
+                                                    "—"}
+                                            </td>
+
+                                            <td>
+                                                {application.position ||
+                                                    "—"}
+                                            </td>
+
+                                            <td>
+                                                {application.score ??
+                                                    "—"}
+                                            </td>
+
+                                            <td>
+
+                                                <span
+                                                    className={
+                                                        `application-status-badge application-status-${String(
+                                                            application.status ||
+                                                            ""
+                                                        ).toLowerCase()}`
+                                                    }
+                                                >
+                                                    {application.status ||
+                                                        "UNKNOWN"}
+                                                </span>
+
+                                            </td>
+
+                                            <td>
+                                                {formatDate(
+                                                    application.applicationDate
+                                                )}
+                                            </td>
+
+                                            <td>
+
+                                                <button
+                                                    type="button"
+                                                    className="application-view-button"
+                                                    onClick={() =>
+                                                        openApplication(
+                                                            application.applicationId
+                                                        )
+                                                    }
+                                                >
+                                                    View
+                                                </button>
+
+                                            </td>
+
+                                        </tr>
+
+                                    )
+                                )}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div className="applications-pagination">
+
+                        <div className="applications-pagination-info">
+                            Showing{" "}
+                            {applications.length}
+                            {" "}of{" "}
+                            {data.totalElements}
+                            {" "}applications
+                        </div>
+
+                        <div className="applications-pagination-controls">
+
+                            <button
+                                type="button"
+                                disabled={data.first}
+                                onClick={() =>
+                                    setPage(
+                                        current =>
+                                            Math.max(
+                                                0,
+                                                current - 1
+                                            )
+                                    )
+                                }
+                            >
+                                Previous
+                            </button>
+
+                            <span>
+                                Page{" "}
+                                {data.totalPages === 0
+                                    ? 0
+                                    : data.page + 1}
+                                {" "}of{" "}
+                                {data.totalPages}
+                            </span>
+
+                            <button
+                                type="button"
+                                disabled={data.last}
+                                onClick={() =>
+                                    setPage(
+                                        current =>
+                                            Math.min(
+                                                data.totalPages - 1,
+                                                current + 1
+                                            )
+                                    )
+                                }
+                            >
+                                Next
+                            </button>
+
+                        </div>
+
+                    </div>
 
                 </section>
+
             )}
 
-            {selected && (
+            {(detail || detailLoading || detailError) && (
 
                 <div
-                    className="application-modal-backdrop"
-                    onClick={() =>
-                        setSelected(null)
-                    }
+                    className="application-detail-backdrop"
+                    onClick={closeDetail}
                 >
 
                     <section
-                        className="application-modal"
+                        className="application-detail-modal"
                         onClick={event =>
                             event.stopPropagation()
                         }
                     >
 
-                        <div className="application-modal-header">
+                        <header className="application-detail-header">
 
                             <div>
 
                                 <span>
                                     APPLICATION #
-                                    {selected.id}
+                                    {detail?.applicationId || "…"}
                                 </span>
 
                                 <h2>
-                                    Player Submission
+                                    Application Details
                                 </h2>
 
                             </div>
 
                             <button
                                 type="button"
-                                onClick={() =>
-                                    setSelected(null)
-                                }
+                                onClick={closeDetail}
                             >
                                 ×
                             </button>
 
-                        </div>
+                        </header>
 
-                        <div className="application-modal-body">
+                        {detailLoading ? (
 
-                            <div className="application-detail">
-
-                                <span>
-                                    Form Version
-                                </span>
-
-                                <strong>
-                                    {selected.formVersionNumber}
-                                </strong>
-
+                            <div className="application-detail-state">
+                                Loading application...
                             </div>
 
-                            <div className="application-detail">
+                        ) : detailError ? (
 
-                                <span>
-                                    Submitted
-                                </span>
-
-                                <strong>
-                                    {new Date(
-                                        selected.submittedAt
-                                    ).toLocaleString()}
-                                </strong>
-
+                            <div className="application-detail-state application-detail-state-error">
+                                {detailError}
                             </div>
 
-                            <div className="application-answers">
+                        ) : detail ? (
 
-                                <h3>
-                                    Submitted Answers
-                                </h3>
+                            <div className="application-detail-body">
 
-                                {Object.entries(
-                                    parseAnswers(
-                                        selected
-                                    )
-                                ).map(
-                                    ([key, value]) => (
+                                <div className="application-detail-grid">
 
-                                        <div
-                                            key={key}
-                                            className="application-answer"
-                                        >
+                                    <div>
+                                        <span>Application ID</span>
+                                        <strong>
+                                            {detail.applicationId}
+                                        </strong>
+                                    </div>
 
+                                    <div>
+                                        <span>Form Version</span>
+                                        <strong>
+                                            {detail.formVersionNumber}
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Player</span>
+                                        <strong>
+                                            {detail.playerName ||
+                                                "Public Applicant"}
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Email</span>
+                                        <strong>
+                                            {detail.email || "—"}
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Phone</span>
+                                        <strong>
+                                            {detail.phone || "—"}
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Status</span>
+                                        <strong>
+                                            {detail.status}
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Submitted</span>
+                                        <strong>
+                                            {formatDate(
+                                                detail.submittedAt
+                                            )}
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        <span>Updated</span>
+                                        <strong>
+                                            {formatDate(
+                                                detail.updatedAt
+                                            )}
+                                        </strong>
+                                    </div>
+
+                                </div>
+
+                                <section>
+
+                                    <h3>
+                                        Submitted Answers
+                                    </h3>
+
+                                    <div className="application-answer-list">
+
+                                        {Object.entries(
+                                            parseSubmittedData(
+                                                detail.submittedData
+                                            )
+                                        ).length === 0 ? (
+
+                                            <div className="application-answer-empty">
+                                                No submitted answers.
+                                            </div>
+
+                                        ) : (
+
+                                            Object.entries(
+                                                parseSubmittedData(
+                                                    detail.submittedData
+                                                )
+                                            ).map(
+                                                ([key, value]) => (
+
+                                                    <div
+                                                        key={key}
+                                                        className="application-answer-item"
+                                                    >
+
+                                                        <span>
+                                                            {key}
+                                                        </span>
+
+                                                        <strong>
+                                                            {displayValue(
+                                                                value
+                                                            )}
+                                                        </strong>
+
+                                                    </div>
+
+                                                )
+                                            )
+
+                                        )}
+
+                                    </div>
+
+                                </section>
+
+                                <section className="application-detail-section">
+
+                                    <div className="application-detail-section-header">
+                                        <div>
                                             <span>
-                                                {key}
+                                                FILES
                                             </span>
 
+                                            <h3>
+                                                Submitted Files
+                                            </h3>
+                                        </div>
+                                    </div>
+
+                                    {parseFileMetadata(
+                                        detail.fileMetadata
+                                    ).length === 0 ? (
+
+                                        <div className="application-file-empty">
+
                                             <strong>
-                                                {String(
-                                                    value
-                                                )}
+                                                No files attached
                                             </strong>
+
+                                            <span>
+                                                This application contains
+                                                no uploaded file metadata.
+                                            </span>
 
                                         </div>
 
-                                    )
-                                )}
+                                    ) : (
+
+                                        <div className="application-file-list">
+
+                                            {parseFileMetadata(
+                                                detail.fileMetadata
+                                            ).map(
+                                                (file,index) => {
+
+                                                    const name =
+                                                        file.name ||
+                                                        file.filename ||
+                                                        file.fileName ||
+                                                        `File ${index + 1}`;
+
+                                                    const mime =
+                                                        file.mimeType ||
+                                                        file.contentType ||
+                                                        file.type ||
+                                                        "Unknown";
+
+                                                    const size =
+                                                        file.size ??
+                                                        file.fileSize;
+
+                                                    const status =
+                                                        file.status ||
+                                                        "RECORDED";
+
+                                                    const storageKey =
+                                                        file.storageKey ||
+                                                        file.key ||
+                                                        file.objectKey ||
+                                                        null;
+
+                                                    return (
+
+                                                        <article
+                                                            key={
+                                                                `${name}-${index}`
+                                                            }
+                                                            className="application-file-card"
+                                                        >
+
+                                                            <div className="application-file-icon">
+                                                                📎
+                                                            </div>
+
+                                                            <div className="application-file-main">
+
+                                                                <strong>
+                                                                    {name}
+                                                                </strong>
+
+                                                                <div className="application-file-meta">
+
+                                                                    <span>
+                                                                        Type: {mime}
+                                                                    </span>
+
+                                                                    <span>
+                                                                        Size: {formatFileSize(size)}
+                                                                    </span>
+
+                                                                    <span>
+                                                                        Status: {status}
+                                                                    </span>
+
+                                                                </div>
+
+                                                                {storageKey && (
+
+                                                                    <code className="application-file-key">
+                                                                        Storage reference recorded
+                                                                    </code>
+
+                                                                )}
+
+                                                            </div>
+
+                                                            <span className="application-file-badge">
+                                                                Metadata
+                                                            </span>
+
+                                                        </article>
+                                                    );
+                                                }
+                                            )}
+
+                                        </div>
+                                    )}
+
+                                    <p className="application-file-note">
+                                        File metadata is available for organizer
+                                        review. Direct file viewing or download
+                                        will be enabled when secure file storage
+                                        endpoints are implemented.
+                                    </p>
+
+                                </section>
 
                             </div>
 
-                        </div>
+                        ) : null}
 
                     </section>
 
                 </div>
+
             )}
 
         </main>
