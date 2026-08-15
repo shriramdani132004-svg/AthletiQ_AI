@@ -3,6 +3,7 @@ package com.athletiq.backend.application.entity;
 import com.athletiq.backend.event.entity.Event;
 import com.athletiq.backend.form.entity.FormVersion;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,8 +22,15 @@ public class Application {
     @JoinColumn(name = "form_version_id", nullable = false)
     private FormVersion formVersion;
 
-    @Column(name = "applicant_id", nullable = false)
+    @Column(name = "applicant_id")
     private Long applicantId;
+
+    @Column(
+            name = "submitted_data",
+            columnDefinition = "TEXT",
+            nullable = false
+    )
+    private String submittedData;
 
     @Column(name = "submitted_at")
     private LocalDateTime submittedAt;
@@ -56,6 +64,14 @@ public class Application {
 
     public void setApplicantId(Long applicantId) {
         this.applicantId = applicantId;
+    }
+
+    public String getSubmittedData() {
+        return submittedData;
+    }
+
+    public void setSubmittedData(String submittedData) {
+        this.submittedData = submittedData;
     }
 
     public LocalDateTime getSubmittedAt() {

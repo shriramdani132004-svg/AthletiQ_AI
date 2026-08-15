@@ -1,0 +1,734 @@
+.public-application-page {
+    min-height: 100vh;
+    background: #f7f8fc;
+    color: #101828;
+}
+
+.public-application-header {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 22px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.public-application-brand {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -.04em;
+}
+
+.public-application-code {
+    padding: 7px 10px;
+    border: 1px solid #e4e7ec;
+    border-radius: 999px;
+    background: #fff;
+    color: #667085;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.public-application-hero {
+    padding: 46px 24px 54px;
+    background: linear-gradient(135deg, #101828 0%, #1d2939 100%);
+    color: #fff;
+}
+
+.public-application-hero-content {
+    width: min(860px, 100%);
+    margin: 0 auto;
+}
+
+.public-application-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .12em;
+    opacity: .7;
+}
+
+.public-application-hero h1 {
+    margin: 12px 0 8px;
+    font-size: clamp(34px, 5vw, 56px);
+    line-height: 1.02;
+    letter-spacing: -.055em;
+}
+
+.public-application-sport {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    opacity: .82;
+}
+
+.public-application-description {
+    max-width: 720px;
+    margin: 20px 0 0;
+    color: rgba(255,255,255,.76);
+    line-height: 1.7;
+}
+
+.public-application-content {
+    width: min(1180px, 100%);
+    margin: -18px auto 0;
+    padding: 0 24px 56px;
+    position: relative;
+}
+
+.public-application-info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.public-application-info-grid article {
+    padding: 17px;
+    border: 1px solid #e4e7ec;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 8px 28px rgba(16, 24, 40, .05);
+}
+
+.public-application-info-grid span {
+    display: block;
+    margin-bottom: 6px;
+    color: #667085;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+}
+
+.public-application-info-grid strong {
+    display: block;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.public-application-columns {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: 18px;
+    margin-top: 18px;
+}
+
+.public-application-card {
+    margin-bottom: 18px;
+    padding: 22px;
+    border: 1px solid #e4e7ec;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 8px 28px rgba(16, 24, 40, .04);
+}
+
+.public-application-section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.public-application-section-heading > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 31px;
+    height: 31px;
+    border-radius: 10px;
+    background: #f2f4f7;
+    color: #475467;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.public-application-section-heading h2 {
+    margin: 0;
+    font-size: 18px;
+    letter-spacing: -.03em;
+}
+
+.public-application-section-heading p {
+    margin: 4px 0 0;
+    color: #667085;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.public-application-copy {
+    margin-top: 18px;
+    color: #475467;
+    font-size: 13px;
+    line-height: 1.75;
+    white-space: pre-wrap;
+}
+
+.public-application-preview-field {
+    margin-top: 14px;
+}
+
+.public-application-preview-field label {
+    display: block;
+    margin-bottom: 6px;
+    color: #344054;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.public-application-preview-field label span {
+    margin-left: 3px;
+    color: #d92d20;
+}
+
+.public-application-preview-input {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border: 1px solid #d0d5dd;
+    border-radius: 10px;
+    color: #98a2b3;
+    background: #f9fafb;
+    font-size: 11px;
+    text-transform: capitalize;
+}
+
+.public-application-primary {
+    width: 100%;
+    margin-top: 22px;
+    min-height: 46px;
+    border: 0;
+    border-radius: 11px;
+    background: #111827;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.public-application-primary:hover {
+    opacity: .92;
+}
+
+.public-application-loading,
+.public-application-error {
+    width: min(560px, calc(100% - 32px));
+    margin: 12vh auto;
+    padding: 32px;
+    text-align: center;
+    border: 1px solid #e4e7ec;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 16px 50px rgba(16,24,40,.08);
+}
+
+.public-application-spinner {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 14px;
+    border: 3px solid #e4e7ec;
+    border-top-color: #111827;
+    border-radius: 50%;
+    animation: publicApplicationSpin .8s linear infinite;
+}
+
+.public-application-error-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: #fef3f2;
+    color: #b42318;
+    font-weight: 900;
+}
+
+.public-application-error h1 {
+    margin: 0 0 8px;
+    font-size: 23px;
+    letter-spacing: -.04em;
+}
+
+.public-application-error p,
+.public-application-loading p {
+    margin: 0;
+    color: #667085;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.public-application-footer {
+    padding: 24px;
+    text-align: center;
+    color: #98a2b3;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+@keyframes publicApplicationSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 900px) {
+    .public-application-info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .public-application-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 620px) {
+    .public-application-header {
+        padding: 16px;
+    }
+
+    .public-application-hero {
+        padding: 34px 16px 44px;
+    }
+
+    .public-application-content {
+        padding: 0 16px 40px;
+    }
+
+    .public-application-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .public-application-card {
+        padding: 18px;
+    }
+
+    .public-application-code {
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+.public-application-form-fields {
+    display: grid;
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.public-application-form-field {
+    display: grid;
+    gap: 7px;
+}
+
+.public-application-form-field label {
+    color: #344054;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.public-application-form-field label span {
+    margin-left: 3px;
+    color: #d92d20;
+}
+
+.public-application-form-field input,
+.public-application-form-field textarea,
+.public-application-form-field select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 13px;
+    border: 1px solid #d0d5dd;
+    border-radius: 10px;
+    background: #fff;
+    color: #101828;
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
+
+.public-application-form-field textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.public-application-form-field input:focus,
+.public-application-form-field textarea:focus,
+.public-application-form-field select:focus {
+    border-color: #98a2b3;
+    box-shadow: 0 0 0 3px rgba(16,24,40,.06);
+}
+
+.public-application-field-help {
+    color: #667085;
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.public-application-form-field.has-error input,
+.public-application-form-field.has-error textarea,
+.public-application-form-field.has-error select {
+    border-color: #f04438;
+    box-shadow: 0 0 0 3px rgba(240,68,56,.08);
+}
+
+.public-application-field-error {
+    color: #b42318;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.public-application-submit-error {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px solid #fecdca;
+    border-radius: 10px;
+    background: #fef3f2;
+    color: #b42318;
+    font-size: 11px;
+    font-weight: 700;
+}
+/* ============================================================
+   PUBLIC APPLICATION FORM - HARD RESET
+   Prevent global input styles from collapsing controls.
+   ============================================================ */
+
+.public-application-form-field {
+    display: grid !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.public-application-form-field label,
+.public-application-form-field small {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.public-application-form-field input,
+.public-application-form-field textarea,
+.public-application-form-field select {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    min-height: 46px !important;
+    box-sizing: border-box !important;
+    padding: 12px 14px !important;
+    margin: 0 !important;
+    border: 1px solid #d0d5dd !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    color: #101828 !important;
+    font: inherit !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.public-application-form-field input::placeholder,
+.public-application-form-field textarea::placeholder {
+    color: #98a2b3 !important;
+    opacity: 1 !important;
+}
+
+.public-application-form-field input:focus,
+.public-application-form-field textarea:focus,
+.public-application-form-field select:focus {
+    outline: none !important;
+    border-color: #667085 !important;
+    box-shadow: 0 0 0 3px rgba(16, 24, 40, .08) !important;
+}
+
+.public-application-form-fields {
+    display: grid !important;
+    width: 100% !important;
+    max-width: none !important;
+    gap: 18px !important;
+}
+
+.public-application-form-preview {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+/* ============================================================
+   PUBLIC PLAYER FORM - FULL WIDTH LAYOUT
+   ============================================================ */
+
+.public-application-content {
+    width: min(1180px, calc(100% - 32px)) !important;
+    max-width: 1180px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.public-application-columns {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+}
+
+.public-application-columns > div {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+.public-application-columns > div > .public-application-card {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+.public-application-form-preview {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    margin-top: 18px !important;
+}
+
+.public-application-form-fields {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    gap: 18px !important;
+}
+
+.public-application-form-field {
+    display: grid !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    gap: 7px !important;
+}
+
+.public-application-form-field input,
+.public-application-form-field textarea,
+.public-application-form-field select {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    min-height: 48px !important;
+    padding: 12px 14px !important;
+    margin: 0 !important;
+    border: 1px solid #98a2b3 !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    color: #101828 !important;
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    appearance: none !important;
+}
+
+.public-application-form-field input::placeholder,
+.public-application-form-field textarea::placeholder {
+    color: #667085 !important;
+    opacity: 1 !important;
+}
+
+.public-application-form-field input:focus,
+.public-application-form-field textarea:focus,
+.public-application-form-field select:focus {
+    outline: none !important;
+    border-color: #475467 !important;
+    box-shadow: 0 0 0 3px rgba(71,84,103,.12) !important;
+}
+
+.public-application-primary {
+    width: 100% !important;
+    max-width: none !important;
+    margin-top: 22px !important;
+}
+
+@media (max-width: 620px) {
+    .public-application-content {
+        width: calc(100% - 24px) !important;
+    }
+
+    .public-application-form-preview {
+        padding: 18px !important;
+    }
+}
+
+/* ============================================================
+   FINAL PUBLIC PORTAL WIDTH FIX
+   Overrides global layout rules constraining the application
+   form to ~82% width.
+   ============================================================ */
+
+main.public-application-page
+.public-application-content
+.public-application-columns {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+main.public-application-page
+.public-application-content
+.public-application-columns > div {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+main.public-application-page
+.public-application-content
+.public-application-form-preview {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+main.public-application-page
+.public-application-content
+.public-application-form-fields {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+main.public-application-page
+.public-application-content
+.public-application-form-field {
+    display: grid !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+main.public-application-page
+.public-application-content
+.public-application-form-field input,
+main.public-application-page
+.public-application-content
+.public-application-form-field textarea,
+main.public-application-page
+.public-application-content
+.public-application-form-field select {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+@media (max-width: 620px) {
+
+    main.public-application-page
+    .public-application-content {
+        width: calc(100% - 24px) !important;
+        max-width: none !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    main.public-application-page
+    .public-application-content
+    .public-application-columns {
+        width: 100% !important;
+    }
+
+    main.public-application-page
+    .public-application-form-preview {
+        width: 100% !important;
+        padding: 18px !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* ============================================================
+   APPLICATION SUCCESS
+   ============================================================ */
+
+.public-application-success {
+    width: min(620px, calc(100% - 32px));
+    margin: 12vh auto;
+    padding: 42px 28px;
+    box-sizing: border-box;
+    text-align: center;
+    border: 1px solid #e4e7ec;
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 18px 60px rgba(16,24,40,.08);
+}
+
+.public-application-success-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #ecfdf3;
+    color: #027a48;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.public-application-success h1 {
+    margin: 12px 0 10px;
+    color: #101828;
+    font-size: clamp(28px, 5vw, 40px);
+    line-height: 1.08;
+    letter-spacing: -.04em;
+}
+
+.public-application-success p {
+    margin: 0 auto;
+    max-width: 460px;
+    color: #667085;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.public-application-reference {
+    margin: 24px auto 0;
+    padding: 14px 18px;
+    width: min(280px, 100%);
+    box-sizing: border-box;
+    border: 1px solid #e4e7ec;
+    border-radius: 12px;
+    background: #f9fafb;
+}
+
+.public-application-reference span {
+    display: block;
+    margin-bottom: 5px;
+    color: #667085;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+
+.public-application-reference strong {
+    display: block;
+    color: #101828;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.public-application-primary:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
