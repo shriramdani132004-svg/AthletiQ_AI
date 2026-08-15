@@ -1,0 +1,23 @@
+﻿ATHLETIQ E2E-05 + E2E-06 AUTOMATED VERIFICATION
+Generated: 2026-08-15 05:32:44
+PASS=19 FAIL=0 SKIP=0
+
+PASS: Fresh organizer authentication
+PASS: Version 1 exists
+PASS: Version 1 starts as DRAFT
+PASS: Version 1 publish request succeeds
+PASS: Version 1 becomes PUBLISHED
+PASS: Published V1 mutation is blocked
+PASS: Published V1 data remains unchanged
+PASS: Version 2 created as DRAFT
+PASS: Version 2 field creation
+PASS: Version 2 publish request succeeds
+PASS: Version 1 becomes LOCKED after V2 publish
+PASS: Version 2 becomes PUBLISHED
+PASS: Form points to Version 2 as current published version
+PASS: Applications table has exact form_version_id linkage
+PASS: Applications table has event_id linkage
+PASS: Applications table has applicant_id
+PASS: Historical V1 remains persisted after V2 publication
+PASS: V1 and V2 maintain independent field sets
+PASS: No orphan application -> FormVersion links

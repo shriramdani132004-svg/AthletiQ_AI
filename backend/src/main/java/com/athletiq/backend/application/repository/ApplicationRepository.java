@@ -1,0 +1,15 @@
+package com.athletiq.backend.application.repository;
+
+import com.athletiq.backend.application.entity.Application;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface ApplicationRepository extends JpaRepository<Application, Long> {
+
+    List<Application> findByEventId(Long eventId);
+
+    List<Application> findByFormVersionId(Long formVersionId);
+
+    List<Application> findByApplicantId(Long applicantId);
+}

@@ -25,7 +25,7 @@ public class ProfileController {
 
     @GetMapping
     public ProfileResponse getProfile(Authentication authentication) {
-        return profileService.getProfileByEmail(authentication.getName());
+        return profileService.getProfileByUserId(Long.valueOf(authentication.getName()));
     }
 
     @PutMapping("/password")
@@ -33,11 +33,11 @@ public class ProfileController {
             Authentication authentication,
             @RequestBody ChangePasswordRequest request
     ) {
-        profileService.changePassword(authentication.getName(), request);
+        profileService.changePassword(Long.valueOf(authentication.getName()), request);
     }
 
     @PutMapping
     public ProfileResponse updateProfile(Authentication authentication, @RequestBody UpdateProfileRequest request) {
-        return profileService.updateProfileByEmail(authentication.getName(), request);
+        return profileService.updateProfileByUserId(Long.valueOf(authentication.getName()), request);
     }
 }

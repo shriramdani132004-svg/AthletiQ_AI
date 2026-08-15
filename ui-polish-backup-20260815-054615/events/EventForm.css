@@ -1,0 +1,63 @@
+.event-form {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.event-form header {
+    margin-bottom: 24px;
+}
+
+.event-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.event-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.event-form input,
+.event-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.event-form textarea {
+    resize: vertical;
+}
+
+.event-form button {
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.event-form button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.event-form-error,
+.event-form-message {
+    padding: 12px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+}
+
+@media (max-width: 700px) {
+    .event-form-grid {
+        grid-template-columns: 1fr;
+    }
+}

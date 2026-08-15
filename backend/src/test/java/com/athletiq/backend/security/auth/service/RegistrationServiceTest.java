@@ -4,6 +4,7 @@ import com.athletiq.backend.security.auth.dto.RegisterRequest;
 import com.athletiq.backend.security.auth.dto.RegisterResponse;
 import com.athletiq.backend.security.auth.entity.Role;
 import com.athletiq.backend.security.auth.entity.User;
+import com.athletiq.backend.security.verification.EmailVerificationService;
 import com.athletiq.backend.security.auth.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,9 @@ class RegistrationServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private EmailVerificationService emailVerificationService;
 
     @InjectMocks
     private RegistrationService registrationService;
@@ -53,6 +57,8 @@ class RegistrationServiceTest {
         saved.setEnabled(true);
 
         when(userRepository.save(any(User.class))).thenReturn(saved);
+
+        doNothing().when(emailVerificationService).sendVerification(anyString(), eq("organizer@athletiq.test"));
 
         RegisterResponse response =
                 registrationService.registerOrganizer(request);

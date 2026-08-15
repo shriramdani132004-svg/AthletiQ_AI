@@ -1,5 +1,8 @@
 package com.athletiq.backend.security.jwt;
 
+import com.athletiq.backend.security.auth.entity.Role;
+import com.athletiq.backend.security.authorization.Permission;
+import com.athletiq.backend.security.authorization.RolePermissions;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -43,19 +47,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Claims claims = jwtService.parseToken(token);
 
             String subject = claims.getSubject();
-            String role = claims.get("role", String.class);
+            String roleName = claims.get("role", String.class);
 
-            if (subject != null && role != null) {
-                UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                        subject,
-                        null,
-                        List.of(new SimpleGrantedAuthority("ROLE_" + role))
+            if (subject != null && roleName != null) {
+                Role role = Role.valueOf(roleName);
+
+                List<SimpleGrantedAuthority> authorities =
+                        new ArrayList<>();
+
+                authorities.add(
+                        new SimpleGrantedAuthority("ROLE_" + role.name())
+                );
+
+                for (Permission permission : RolePermissions.permissionsFor(role)) {
+                    authorities.add(
+                            new SimpleGrantedAuthority(permission.name())
                     );
+                }
+
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                subject,
+                                null,
+                                authorities
+                        );
 
                 SecurityContextHolder
-                    .getContext()
-                    .setAuthentication(authentication);
+                        .getContext()
+                        .setAuthentication(authentication);
             }
         } catch (Exception ignored) {
             SecurityContextHolder.clearContext();

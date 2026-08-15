@@ -1,0 +1,11 @@
+﻿PASS: Fresh organizer login
+PASS: Form exists and is linked to Event 1
+PASS: Version 1 exists as DRAFT
+PASS: Existing form fields load successfully
+PASS: Email field already exists
+PASS: Email field persisted and reloads
+PASS: Email field edit
+PASS: Edited field survives API reload
+PASS: PostgreSQL field persistence
+PASS: Frontend production build
+PASS: Form Preview implementation exists

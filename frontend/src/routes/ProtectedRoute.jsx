@@ -4,6 +4,6 @@ import { useAuth } from "../auth/AuthContext";
 export default function ProtectedRoute() {
     const { isAuthenticated } = useAuth();
     const location = useLocation();
-    if (!isAuthenticated) return <Naviggte to="/login" replace state={{ from: location.pathname }} />;
+    if (!isAuthenticated) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
     return <Outlet />;
 }

@@ -7,6 +7,7 @@ import com.athletiq.backend.security.auth.entity.User;
 import com.athletiq.backend.security.auth.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.athletiq.backend.security.verification.EmailVerificationService;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -14,13 +15,16 @@ public class RegistrationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailVerificationService emailVerificationService;
 
     public RegistrationService(
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            EmailVerificationService emailVerificationService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailVerificationService = emailVerificationService;
     }
 
     @Transactional
@@ -46,6 +50,8 @@ public class RegistrationService {
         user.setEnabled(true);
 
         User savedUser = userRepository.save(user);
+
+        emailVerificationService.sendVerification(String.valueOf(savedUser.getId()), savedUser.getEmail());
 
         return RegisterResponse.from(savedUser);
     }

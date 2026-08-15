@@ -23,11 +23,11 @@ public class ProfilePhotoController {
 
     @GetMapping
     public String getPhoto(Authentication authentication) {
-        return profilePhotoService.getPhoto(authentication.getName());
+        return profilePhotoService.getPhoto(Long.valueOf(authentication.getName()));
     }
 
     @PutMapping
     public String updatePhoto(Authentication authentication, @RequestBody ProfilePhotoRequest request) {
-        return profilePhotoService.updatePhoto(authentication.getName(), request);
+        return profilePhotoService.updatePhoto(Long.valueOf(authentication.getName()), request);
     }
 }

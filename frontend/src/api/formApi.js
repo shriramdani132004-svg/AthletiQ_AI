@@ -1,12 +1,15 @@
 const API_BASE = "/api";
 
 async function request(url, options = {}) {
+    const token = localStorage.getItem("athletiq_access_token");
+
     const response = await fetch(`${API_BASE}${url}`, {
+        ...options,
         headers: {
             "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
             ...(options.headers || {})
-        },
-        ...options
+        }
     });
 
     if (!response.ok) {

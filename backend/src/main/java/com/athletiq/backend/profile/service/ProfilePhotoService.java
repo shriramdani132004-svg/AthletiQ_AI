@@ -17,13 +17,11 @@ public class ProfilePhotoService {
         this.userRepository = userRepository;
     }
 
-    public String getPhoto(String email) {
-        Long userId = findUserId(email);
+    public String getPhoto(Long userId) {
         return profileRepository.findByUserId(userId).map(Profile::getProfilePhotoUrl).orElse(null);
     }
 
-    public String updatePhoto(String email, ProfilePhotoRequest request) {
-        Long userId = findUserId(email);
+    public String updatePhoto(Long userId, ProfilePhotoRequest request) {
         Profile profile = profileRepository.findByUserId(userId).orElseGet(() -> createProfile(userId));
         String url = request.profilePhotoUrl();
         if (url != null && url.length() > 2048) {
@@ -32,10 +30,6 @@ public class ProfilePhotoService {
         profile.setProfilePhotoUrl(url);
         profileRepository.save(profile);
         return url;
-    }
-
-    private Long findUserId(String email) {
-        return userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new IllegalArgumentException("Authenticated user not found")).getId();
     }
 
     private Profile createProfile(Long userId) {

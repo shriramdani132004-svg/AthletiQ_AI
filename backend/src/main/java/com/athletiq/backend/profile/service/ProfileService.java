@@ -23,16 +23,16 @@ public class ProfileService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public ProfileResponse getProfileByEmail(String email) {
-        return getProfile(findUserId(email));
+    public ProfileResponse getProfileByUserId(Long userId) {
+        return getProfile(userId);
     }
 
-    public ProfileResponse updateProfileByEmail(String email, UpdateProfileRequest request) {
-        return updateProfile(findUserId(email), request);
+    public ProfileResponse updateProfileByUserId(Long userId, UpdateProfileRequest request) {
+        return updateProfile(userId, request);
     }
 
-    public void changePassword(String email, ChangePasswordRequest request) {
-        User user = findUser(email);
+    public void changePassword(Long userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Authenticated user not found"));
 
         if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
             throw new IllegalArgumentException("Current password is incorrect");
@@ -60,14 +60,6 @@ public class ProfileService {
         profile.setOrganizationName(request.organizationName());
         profile.setOrganizationDescription(request.organizationDescription());
         return toResponse(profileRepository.save(profile));
-    }
-
-    private User findUser(String email) {
-        return userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new IllegalArgumentException("Authenticated user not found"));
-    }
-
-    private Long findUserId(String email) {
-        return findUser(email).getId();
     }
 
     private Profile createEmptyProfile(Long userId) {

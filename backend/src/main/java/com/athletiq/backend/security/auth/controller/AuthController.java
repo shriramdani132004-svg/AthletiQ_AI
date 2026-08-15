@@ -21,7 +21,6 @@ public class AuthController {
     private final RegistrationService registrationService;
     private final LoginService loginService;
     private final RefreshSessionService refreshSessionService;
-
     public AuthController(RegistrationService registrationService, LoginService loginService, RefreshSessionService refreshSessionService) {
         this.registrationService = registrationService;
         this.loginService = loginService;

@@ -91,6 +91,33 @@ export default function EventDetailsPage() {
                     <img src={event.bannerUrl} alt={`${event.name} banner`} className="event-banner" />
                 </section>
             )}
+            <section className="event-details-card">
+                <h2>Event Setup</h2>
+                <p>
+                    Configure the application form, player requirements,
+                    and evaluation rules for this event.
+                </p>
+
+                <div className="event-details-actions">
+                    <button
+                        type="button"
+                        onClick={() =>
+                            navigate(`/events/${event.id}/form-builder`)
+                        }
+                    >
+                        Form Builder
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() =>
+                            navigate(`/events/${event.id}/evaluation`)
+                        }
+                    >
+                        Requirements & Evaluation
+                    </button>
+                </div>
+            </section>
 
             <section className="event-details-card">
                 <h2>Lifecycle Controls</h2>

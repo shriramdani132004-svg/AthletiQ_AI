@@ -24,11 +24,11 @@ public class OrganizationInfoController {
 
     @GetMapping
     public OrganizationInfoResponse getOrganizationInfo(Authentication authentication) {
-        return organizationInfoService.getOrganizationInfo(authentication.getName());
+        return organizationInfoService.getOrganizationInfo(Long.valueOf(authentication.getName()));
     }
 
     @PutMapping
     public OrganizationInfoResponse updateOrganizationInfo(Authentication authentication, @RequestBody OrganizationInfoRequest request) {
-        return organizationInfoService.updateOrganizationInfo(authentication.getName(), request);
+        return organizationInfoService.updateOrganizationInfo(Long.valueOf(authentication.getName()), request);
     }
 }

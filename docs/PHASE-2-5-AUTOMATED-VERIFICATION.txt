@@ -1,0 +1,67 @@
+﻿ATHLETIQ PHASE 2-5 AUTOMATED VERIFICATION
+Generated: 2026-08-15 04:35:25
+PASS=62 FAIL=0 SKIP=1
+
+PASS | Required file: pom.xml | 
+PASS | Required file: package.json | 
+PASS | Required file: application.properties | 
+PASS | Backend Maven tests | mvn test
+PASS | Backend Java compilation | mvn compile
+PASS | Frontend tests | npm test -- --run
+PASS | Frontend production build | npm run build
+PASS | Frontend runtime | localhost:5173
+SKIP | Backend health | localhost:8080/actuator/health not reachable
+PASS | Password hash model | 
+PASS | Email verification | 
+PASS | Organizer role | 
+PASS | JWT or bearer authentication | 
+PASS | Permission model | 
+PASS | Ownership model | 
+PASS | Profile backend exists | 
+PASS | Profile persistence | 
+PASS | Profile ownership | 
+PASS | Password change support | 
+PASS | Email preferences | 
+PASS | Event entity | 
+PASS | Event ownership | 
+PASS | Event status model | 
+PASS | Event controller | 
+PASS | Event service | 
+PASS | Form entity | 
+PASS | FormVersion entity | 
+PASS | FormField entity | 
+PASS | FieldType model | 
+PASS | Form controller | 
+PASS | Form service | 
+PASS | Form version service | 
+PASS | Form repository | 
+PASS | Form version repository | 
+PASS | Form field repository | 
+PASS | Frontend component FormBuilderPage | 
+PASS | Frontend component FormBuilderWorkspace | 
+PASS | Frontend component FieldConfigurationPanel | 
+PASS | Frontend component FieldOrderList | 
+PASS | Frontend component FormPreview | 
+PASS | Frontend component FormVersionHistory | 
+PASS | Save workflow | 
+PASS | Publish workflow | 
+PASS | Field ordering | 
+PASS | DRAFT state | 
+PASS | PUBLISHED state | 
+PASS | ARCHIVED state | 
+PASS | Version history | 
+PASS | Exact FormVersion linkage | 
+PASS | Application entity | 
+PASS | Application FormVersion link | 
+PASS | Application Event link | 
+PASS | Applicant ID | 
+PASS | Application repository queries | 
+PASS | FormVersion event validation | 
+PASS | PostgreSQL connectivity | 
+PASS | DB table users | 
+PASS | DB table profiles | 
+PASS | DB table events | 
+PASS | DB table forms | 
+PASS | DB table form_versions | 
+PASS | DB table form_fields | 
+PASS | DB table applications | 
