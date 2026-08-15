@@ -14,4 +14,13 @@ public interface EvaluationCriterionRepository
             Long eventId,
             String name
     );
+
+    List<EvaluationCriterion> findByEventId(
+            Long eventId
+    );
+
+    List<EvaluationCriterion>
+    findByEventIdAndEnabledTrueOrderByDisplayOrderAsc(
+            Long eventId
+    );
 }
