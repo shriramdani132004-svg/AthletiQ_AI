@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    ATHLETIQ APPLICATIONS
    2026 CANDIDATE COMMAND CENTER
    ============================================================ */
@@ -322,7 +322,7 @@
 .applications-back::before {
 
     content:
-        "←";
+        "â†";
 
     margin-right:
         6px;
@@ -1133,7 +1133,41 @@
     border-bottom:
         0;
 }
+.applications-table th:nth-child(1),
+.applications-table th:nth-child(3),
+.applications-table th:nth-child(5),
+.applications-table th:nth-child(7),
+.applications-table td:nth-child(1),
+.applications-table td:nth-child(3),
+.applications-table td:nth-child(5),
+.applications-table td:nth-child(7) {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
 
+.applications-table td:nth-child(1) {
+    color: #c7d2fe;
+    font-weight: 800;
+}
+
+.applications-table td:nth-child(5) {
+    color: #a5b4fc;
+    font-weight: 800;
+}
+
+.applications-table td:nth-child(7) {
+    color: #cbd5e1;
+    font-weight: 700;
+}
+
+.applications-table td:nth-child(3),
+.applications-table td:nth-child(4) {
+    color: #cbd5e1;
+}
+
+.applications-table td:nth-child(4) {
+    white-space: nowrap;
+}
 
 /* ============================================================
    PLAYER CELL
@@ -2511,4 +2545,394 @@
         transition:
             none !important;
     }
+}
+
+/* PHASE 11.6 â€” AI EVALUATE */
+
+.application-ai-button {
+
+    min-height:
+        32px;
+
+    min-width:
+        92px;
+
+    margin-left:
+        0;
+
+    padding:
+        0 10px;
+
+    border:
+        1px solid
+        rgba(129,140,248,.24);
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(99,102,241,.08);
+
+    color:
+        #a5b4fc;
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+    white-space:
+        nowrap;
+
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        opacity .15s ease;
+}
+.application-actions {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    gap:
+        8px;
+
+    flex-wrap:
+        wrap;
+}
+
+.application-actions button {
+
+    white-space:
+        nowrap;
+}
+.application-ai-score {
+
+    font-weight:
+        800;
+
+    font-variant-numeric:
+        tabular-nums;
+}
+
+.application-ai-score-unevaluated {
+
+    opacity:
+        .55;
+}
+
+.application-ai-button:hover:not(:disabled) {
+
+    transform:
+        translateY(-1px);
+
+    background:
+        rgba(99,102,241,.15);
+
+    border-color:
+        rgba(129,140,248,.38);
+}
+
+.application-ai-button:disabled {
+
+    opacity:
+        .55;
+
+    cursor:
+        wait;
+}
+/* PHASE 11.7 — AI CANDIDATE REPORT */
+
+.application-ai-report {
+
+    margin:
+        18px 0 20px;
+
+    padding:
+        18px;
+
+    border:
+        1px solid
+        rgba(129,140,248,.18);
+
+    border-radius:
+        15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(79,70,229,.07),
+            rgba(15,23,42,.60)
+        );
+}
+
+.application-ai-report-header {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        16px;
+
+    margin-bottom:
+        14px;
+}
+
+.application-ai-report-header span,
+.application-ai-report-section > span,
+.application-ai-report-recommendation > span {
+
+    display:
+        block;
+
+    color:
+        #818cf8;
+
+    font-size:
+        7px;
+
+    font-weight:
+        950;
+
+    letter-spacing:
+        .10em;
+
+    text-transform:
+        uppercase;
+}
+
+.application-ai-report-header h3 {
+
+    margin:
+        5px 0 0;
+
+    color:
+        #eef2ff;
+
+    font-size:
+        18px;
+
+    font-weight:
+        950;
+}
+
+.application-ai-report-score {
+
+    min-width:
+        80px;
+
+    padding:
+        9px;
+
+    text-align:
+        center;
+
+    border:
+        1px solid
+        rgba(129,140,248,.18);
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(99,102,241,.07);
+}
+
+.application-ai-report-score strong {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        #c7d2fe;
+
+    font-size:
+        25px;
+
+    font-weight:
+        950;
+}
+
+.application-ai-report-recommendation {
+
+    margin-bottom:
+        13px;
+
+    padding:
+        10px 12px;
+
+    border:
+        1px solid
+        rgba(129,140,248,.12);
+
+    border-radius:
+        10px;
+
+    background:
+        rgba(99,102,241,.045);
+}
+
+.application-ai-report-recommendation strong {
+
+    display:
+        block;
+
+    margin-top:
+        4px;
+
+    color:
+        #a5b4fc;
+
+    font-size:
+        11px;
+
+    font-weight:
+        950;
+}
+
+.application-ai-report-section {
+
+    margin-top:
+        13px;
+}
+
+.application-ai-report-section p {
+
+    margin:
+        5px 0 0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        9px;
+
+    line-height:
+        1.6;
+}
+
+.application-ai-report-section ul {
+
+    display:
+        grid;
+
+    gap:
+        5px;
+
+    margin:
+        6px 0 0;
+
+    padding-left:
+        17px;
+
+    color:
+        #cbd5e1;
+
+    font-size:
+        9px;
+
+    line-height:
+        1.5;
+}
+
+.application-ai-report-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0,1fr)
+        );
+
+    gap:
+        14px;
+}
+
+.application-ai-advisory {
+
+    margin:
+        16px 0 0;
+
+    padding-top:
+        10px;
+
+    border-top:
+        1px solid
+        rgba(148,163,184,.08);
+
+    color:
+        #64748b;
+
+    font-size:
+        7px;
+
+    line-height:
+        1.5;
+}
+
+@media (max-width:760px){
+
+    .application-ai-report-header{
+        flex-direction:column;
+    }
+
+    .application-ai-report-score{
+        width:100%;
+        box-sizing:border-box;
+    }
+
+    .application-ai-report-grid{
+        grid-template-columns:1fr;
+    }
+}
+.application-ai-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 92px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.application-ai-status-evaluated {
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366f1;
+}
+
+.application-ai-status-unevaluated {
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    background: rgba(148, 163, 184, 0.08);
+    color: #64748b;
 }

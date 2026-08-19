@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { applicationApi } from "../api/applicationApi";
+import { useAuth } from "../auth/AuthContext";
 import "./EventApplicationsPage.css";
 
 const DEFAULT_FILTERS = {
@@ -23,7 +24,7 @@ const EMPTY_STATS = {
 function formatDate(value) {
 
     if(!value){
-        return "—";
+        return "\u2014";
     }
 
     const date =
@@ -60,7 +61,7 @@ function displayValue(value) {
         value === undefined ||
         value === ""
     ){
-        return "—";
+        return "\u2014";
     }
 
     if(Array.isArray(value)){
@@ -122,7 +123,7 @@ function formatFileSize(value) {
         !Number.isFinite(bytes) ||
         bytes < 0
     ){
-        return "—";
+        return "\u2014";
     }
 
     if(bytes < 1024){
@@ -143,6 +144,278 @@ function formatFileSize(value) {
     ).toFixed(1)} GB`;
 }
 
+function AiReport({ result }) {
+
+    if(!result){
+        return null;
+    }
+
+    const list = value => {
+
+        if(!Array.isArray(value)){
+            return [];
+        }
+
+        return value.map(
+            item => {
+
+                if(
+                    item !== null &&
+                    typeof item === "object"
+                ){
+
+                    const requirement =
+                        item.requirement ??
+                        item.name ??
+                        item.title ??
+                        item.label ??
+                        "";
+
+                    const status =
+                        item.status ??
+                        item.result ??
+                        item.assessment ??
+                        "";
+
+                    const evidence =
+                        item.evidence ??
+                        item.explanation ??
+                        item.reason ??
+                        "";
+
+                    const parts =
+                        [
+                            requirement,
+                            status,
+                            evidence
+                        ]
+                            .filter(
+                                x =>
+                                    x !== null &&
+                                    x !== undefined &&
+                                    String(x).trim() !== ""
+                            )
+                            .map(
+                                x => String(x)
+                            );
+
+                    return parts.length
+                        ? parts.join(" \u2022 ")
+                        : JSON.stringify(item);
+                }
+
+                return String(item);
+            }
+        );
+    };
+
+    const strengths =
+        list(result.strengths);
+
+    const weaknesses =
+        list(result.weaknesses);
+
+    const requirementFit =
+        list(result.requirementFit);
+
+    const concerns =
+        list(result.concerns);
+
+    return (
+        <section className="application-ai-report">
+
+            <div className="application-ai-report-header">
+
+                <div>
+
+                    <span>
+                        PHASE 11 AI
+                    </span>
+
+                    <h3>
+                        AI Candidate Assessment
+                    </h3>
+
+                </div>
+
+                <div className="application-ai-report-score">
+
+                    <span>
+                        AI Score
+                    </span>
+
+                    <strong>
+                        {result.score ?? "\u2014"}
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div className="application-ai-report-recommendation">
+
+                <span>
+                    Recommendation
+                </span>
+
+                <strong>
+                    {result.recommendation || "No recommendation"}
+                </strong>
+
+            </div>
+
+            <div className="application-ai-report-section">
+
+                <span>
+                    Assessment
+                </span>
+
+                <p>
+                    {result.assessment || "No assessment provided."}
+                </p>
+
+            </div>
+
+            <div className="application-ai-report-grid">
+
+                <div className="application-ai-report-section">
+
+                    <span>
+                        Strengths
+                    </span>
+
+                    <ul>
+
+                        {strengths.map(
+                            (item,index) => (
+                                <li key={index}>
+                                    {item}
+                                </li>
+                            )
+                        )}
+
+                    </ul>
+
+                </div>
+
+                <div className="application-ai-report-section">
+
+                    <span>
+                        Weaknesses
+                    </span>
+
+                    <ul>
+
+                        {weaknesses.map(
+                            (item,index) => (
+                                <li key={index}>
+                                    {item}
+                                </li>
+                            )
+                        )}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div className="application-ai-report-section">
+
+                <span>
+                    Experience Analysis
+                </span>
+
+                <p>
+                    {
+                        result.experienceAnalysis ||
+                        "No experience analysis provided."
+                    }
+                </p>
+
+            </div>
+
+            <div className="application-ai-report-section">
+
+                <span>
+                    Requirement Fit
+                </span>
+
+                <ul>
+
+                    {requirementFit.map(
+                        (item,index) => (
+                            <li key={index}>
+                                {item}
+                            </li>
+                        )
+                    )}
+
+                </ul>
+
+            </div>
+
+            <div className="application-ai-report-section">
+
+                <span>
+                    Position Suitability
+                </span>
+
+                <p>
+                    {
+                        result.positionSuitability ||
+                        "No position assessment provided."
+                    }
+                </p>
+
+            </div>
+
+            <div className="application-ai-report-section">
+
+                <span>
+                    Concerns
+                </span>
+
+                <ul>
+
+                    {concerns.map(
+                        (item,index) => (
+                            <li key={index}>
+                                {item}
+                            </li>
+                        )
+                    )}
+
+                </ul>
+
+            </div>
+
+            <div className="application-ai-report-section">
+
+                <span>
+                    Explanation
+                </span>
+
+                <p>
+                    {
+                        result.explanation ||
+                        "No explanation provided."
+                    }
+                </p>
+
+            </div>
+
+            <p className="application-ai-advisory">
+
+                AI recommendations are advisory only.
+                Final player selection remains with the organizer.
+
+            </p>
+
+        </section>
+    );
+}
+
 export default function EventApplicationsPage() {
 
     const { eventId } =
@@ -150,6 +423,9 @@ export default function EventApplicationsPage() {
 
     const navigate =
         useNavigate();
+
+    const { user } =
+        useAuth();
 
     const [page, setPage] =
         useState(0);
@@ -203,6 +479,23 @@ export default function EventApplicationsPage() {
 
     const [detailError, setDetailError] =
         useState("");
+
+    const [aiEvaluatingApplicationId,
+        setAiEvaluatingApplicationId] =
+        useState(null);
+
+    const [aiResults,
+        setAiResults] =
+        useState({});
+
+    const [selectedAiApplicationId,
+        setSelectedAiApplicationId] =
+        useState(null);
+
+    // Legacy 11.6 compatibility state used by the existing AI button.
+    const [aiEvaluatedApplicationIds,
+        setAiEvaluatedApplicationIds] =
+        useState(new Set());
 
     const requestVersionRef =
         useRef(0);
@@ -558,6 +851,74 @@ export default function EventApplicationsPage() {
         setDetailError("");
     }
 
+    async function evaluateAI(
+        applicationId
+    ){
+
+        if(!user?.userId){
+
+            setError(
+                "Organizer authentication is required."
+            );
+
+            return;
+        }
+
+        setAiEvaluatingApplicationId(
+            applicationId
+        );
+
+        try{
+
+            const result =
+                await applicationApi.evaluateAI(
+                    eventId,
+                    applicationId,
+                    user.userId
+                );
+
+            setAiResults(
+                current => ({
+                    ...current,
+                    [applicationId]: result
+                })
+            );
+
+            setAiEvaluatedApplicationIds(
+                current => {
+
+                    const next =
+                        new Set(current);
+
+                    next.add(applicationId);
+
+                    return next;
+                }
+            );
+
+            setSelectedAiApplicationId(
+                applicationId
+            );
+
+            openApplication(
+                applicationId
+            );
+
+        }catch(err){
+
+            setError(
+                err.message ||
+                "Unable to evaluate candidate with AI."
+            );
+
+        }finally{
+
+            setAiEvaluatingApplicationId(
+                null
+            );
+        }
+    }
+
     const applications =
         data.content || [];
 
@@ -577,7 +938,7 @@ export default function EventApplicationsPage() {
                             )
                         }
                     >
-                        ← Back to Event
+                        Back to Event
                     </button>
 
                     <span className="applications-eyebrow">
@@ -615,7 +976,7 @@ export default function EventApplicationsPage() {
                     <span>Total Applications</span>
                     <strong>
                         {statsLoading
-                            ? "—"
+                            ? "\u2014"
                             : stats.totalApplications}
                     </strong>
                 </div>
@@ -624,7 +985,7 @@ export default function EventApplicationsPage() {
                     <span>Pending Evaluation</span>
                     <strong>
                         {statsLoading
-                            ? "—"
+                            ? "\u2014"
                             : stats.pendingEvaluation}
                     </strong>
                 </div>
@@ -633,7 +994,7 @@ export default function EventApplicationsPage() {
                     <span>Evaluated</span>
                     <strong>
                         {statsLoading
-                            ? "—"
+                            ? "\u2014"
                             : stats.evaluated}
                     </strong>
                 </div>
@@ -642,7 +1003,7 @@ export default function EventApplicationsPage() {
                     <span>Selected</span>
                     <strong>
                         {statsLoading
-                            ? "—"
+                            ? "\u2014"
                             : stats.selected}
                     </strong>
                 </div>
@@ -651,7 +1012,7 @@ export default function EventApplicationsPage() {
                     <span>Accepted</span>
                     <strong>
                         {statsLoading
-                            ? "—"
+                            ? "\u2014"
                             : stats.accepted}
                     </strong>
                 </div>
@@ -660,7 +1021,7 @@ export default function EventApplicationsPage() {
                     <span>Declined</span>
                     <strong>
                         {statsLoading
-                            ? "—"
+                            ? "\u2014"
                             : stats.declined}
                     </strong>
                 </div>
@@ -811,6 +1172,9 @@ export default function EventApplicationsPage() {
                             <option value="status">
                                 Status
                             </option>
+                            <option value="aiScore">
+    AI Score
+</option>
                         </select>
                     </label>
 
@@ -820,8 +1184,8 @@ export default function EventApplicationsPage() {
                         onClick={toggleDirection}
                     >
                         {direction === "asc"
-                            ? "Ascending ↑"
-                            : "Descending ↓"}
+                            ? "Ascending"
+                            : "Descending"}
                     </button>
 
                     <label>
@@ -885,6 +1249,8 @@ export default function EventApplicationsPage() {
                                     <th>Player</th>
                                     <th>Age</th>
                                     <th>Position</th>
+                                    <th>AI Score</th>
+                                    <th>AI Status</th>
                                     <th>Score</th>
                                     <th>Status</th>
                                     <th>Application Date</th>
@@ -894,8 +1260,8 @@ export default function EventApplicationsPage() {
 
                             <tbody>
 
-                                {applications.map(
-                                    application => (
+                               {applications.map(
+    (application, index) => (
 
                                         <tr
                                             key={
@@ -904,41 +1270,59 @@ export default function EventApplicationsPage() {
                                         >
 
                                             <td>
-                                                {application.ranking ??
-                                                    "—"}
-                                            </td>
+    {(data.page * data.size) + index + 1}
+</td>
 
-                                            <td>
-                                                <div className="player-cell">
+<td>
+    <div className="player-cell">
 
-                                                    <strong>
-                                                        {application.playerName ||
-                                                            "Public Applicant"}
-                                                    </strong>
+        <strong>
+            {application.playerName ||
+                "Public Applicant"}
+        </strong>
 
-                                                    <span>
-                                                        {application.email ||
-                                                            application.phone ||
-                                                            "No contact information"}
-                                                    </span>
+        <span>
+            {application.email ||
+                application.phone ||
+                "No contact information"}
+        </span>
 
-                                                </div>
-                                            </td>
+    </div>
+</td>
 
-                                            <td>
-                                                {application.age ??
-                                                    "—"}
-                                            </td>
+<td>
+    {application.age ??
+        "\u2014"}
+</td>
 
-                                            <td>
-                                                {application.position ||
-                                                    "—"}
-                                            </td>
+<td>
+    {application.position ||
+        "\u2014"}
+</td>
 
-                                            <td>
-                                                {application.score ??
-                                                    "—"}
-                                            </td>
+<td>
+    {application.aiScore ??
+        "\u2014"}
+</td>
+
+<td>
+    <span
+        className={
+            `application-ai-status-badge application-ai-status-${String(
+                application.aiEvaluationStatus ||
+                "UNEVALUATED"
+            ).toLowerCase()}`
+        }
+    >
+        {application.aiEvaluationStatus ||
+            "UNEVALUATED"}
+    </span>
+</td>
+
+<td>
+    {application.score ??
+        "\u2014"}
+</td>
 
                                             <td>
 
@@ -974,6 +1358,30 @@ export default function EventApplicationsPage() {
                                                     }
                                                 >
                                                     View
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="application-ai-button"
+                                                    disabled={
+                                                        aiEvaluatingApplicationId ===
+                                                        application.applicationId
+                                                    }
+                                                    onClick={() =>
+                                                        evaluateAI(
+                                                            application.applicationId
+                                                        )
+                                                    }
+                                                >
+                                                    {
+                                                        aiEvaluatingApplicationId ===
+                                                        application.applicationId
+                                                            ? "Evaluating..."
+                                                            : aiEvaluatedApplicationIds.has(
+                                                                application.applicationId
+                                                            )
+                                                                ? "AI Done"
+                                                                : "AI Evaluate"
+                                                    }
                                                 </button>
 
                                             </td>
@@ -1070,7 +1478,7 @@ export default function EventApplicationsPage() {
 
                                 <span>
                                     APPLICATION #
-                                    {detail?.applicationId || "…"}
+                                    {detail?.applicationId || "..."}
                                 </span>
 
                                 <h2>
@@ -1083,7 +1491,7 @@ export default function EventApplicationsPage() {
                                 type="button"
                                 onClick={closeDetail}
                             >
-                                ×
+                                X
                             </button>
 
                         </header>
@@ -1131,14 +1539,14 @@ export default function EventApplicationsPage() {
                                     <div>
                                         <span>Email</span>
                                         <strong>
-                                            {detail.email || "—"}
+                                            {detail.email || "\u2014"}
                                         </strong>
                                     </div>
 
                                     <div>
                                         <span>Phone</span>
                                         <strong>
-                                            {detail.phone || "—"}
+                                            {detail.phone || "\u2014"}
                                         </strong>
                                     </div>
 
@@ -1168,6 +1576,16 @@ export default function EventApplicationsPage() {
                                     </div>
 
                                 </div>
+
+
+                                {selectedAiApplicationId &&
+                                    aiResults[selectedAiApplicationId] && (
+                                    <AiReport
+                                        result={
+                                            aiResults[selectedAiApplicationId]
+                                        }
+                                    />
+                                )}
 
                                 <section>
 
@@ -1298,7 +1716,7 @@ export default function EventApplicationsPage() {
                                                         >
 
                                                             <div className="application-file-icon">
-                                                                📎
+                                                                
                                                             </div>
 
                                                             <div className="application-file-main">

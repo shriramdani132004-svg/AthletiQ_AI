@@ -1,0 +1,61 @@
+package com.athletiq.backend.ai.phase11;
+
+import tools.jackson.databind.json.JsonMapper;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AiEvaluationServiceTest {
+
+    @Test
+    void evaluatesAndValidatesMockResult() {
+
+        JsonMapper mapper =
+                JsonMapper.builder().build();
+
+        AiEvaluationProvider provider =
+                new MockAiEvaluationProvider();
+
+        AiEvaluationService service =
+                new AiEvaluationService(
+                        provider,
+                        mapper
+                );
+
+        AiEvaluationProviderRequest request =
+                new AiEvaluationProviderRequest(
+                        "APPLICATION-TEST-001",
+                        "candidate context",
+                        "requirements context",
+                        "application context",
+                        "criteria context",
+                        "objective context",
+                        "prompt-v1"
+                );
+
+        AiEvaluationResult result =
+                service.evaluate(request);
+
+        assertNotNull(result);
+
+        assertEquals(
+                "APPLICATION-TEST-001",
+                result.candidateReference()
+        );
+
+        assertNotNull(result.score());
+
+        assertTrue(
+                result.score() >= 0 &&
+                result.score() <= 100
+        );
+
+        assertNotNull(result.assessment());
+        assertNotNull(result.strengths());
+        assertNotNull(result.weaknesses());
+        assertNotNull(result.requirementFit());
+        assertNotNull(result.concerns());
+        assertNotNull(result.recommendation());
+        assertNotNull(result.explanation());
+    }
+}

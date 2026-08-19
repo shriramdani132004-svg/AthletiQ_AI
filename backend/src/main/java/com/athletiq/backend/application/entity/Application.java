@@ -1,11 +1,26 @@
 package com.athletiq.backend.application.entity;
 
-import com.athletiq.backend.event.entity.Event;
-import com.athletiq.backend.form.entity.FormVersion;
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.Formula;
+
+import com.athletiq.backend.event.entity.Event;
+import com.athletiq.backend.form.entity.FormVersion;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 @Entity
 @Table(
         name = "applications",
@@ -41,6 +56,17 @@ public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Formula("""
+    (
+        select ace.ai_score
+        from ai_candidate_evaluations ace
+        where ace.application_id = id
+        order by ace.evaluated_at desc
+        limit 1
+    )
+""")
+private Double aiScore;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
@@ -187,6 +213,10 @@ public class Application {
     public Long getId() {
         return id;
     }
+
+    public Double getAiScore() {
+    return aiScore;
+}
 
     public Event getEvent() {
         return event;

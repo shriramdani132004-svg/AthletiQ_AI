@@ -28,7 +28,11 @@ public record OrganizerApplicationSummaryResponse(
 
         LocalDateTime applicationDate,
 
-        Long formVersionId
+        Long formVersionId,
+
+        Double aiScore,
+
+        String aiEvaluationStatus
 
 ) {
 }

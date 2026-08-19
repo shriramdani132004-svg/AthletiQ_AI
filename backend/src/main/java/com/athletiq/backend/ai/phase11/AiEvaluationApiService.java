@@ -1,0 +1,171 @@
+package com.athletiq.backend.ai.phase11;
+
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.athletiq.backend.application.entity.Application;
+import com.athletiq.backend.application.repository.ApplicationRepository;
+import com.athletiq.backend.event.evaluation.entity.EvaluationCriterion;
+import com.athletiq.backend.event.evaluation.repository.EvaluationCriterionRepository;
+import com.athletiq.backend.event.requirements.entity.EventRequirements;
+import com.athletiq.backend.event.requirements.repository.EventRequirementsRepository;
+import com.athletiq.backend.objectiveevaluation.dto.ObjectiveEvaluationResponse;
+import com.athletiq.backend.objectiveevaluation.service.ObjectiveEvaluationService;
+
+@Service
+public class AiEvaluationApiService {
+
+    private static final String PROMPT_VERSION = "prompt-v1";
+
+    private final ApplicationRepository applicationRepository;
+    private final EventRequirementsRepository requirementsRepository;
+    private final EvaluationCriterionRepository criterionRepository;
+    private final ObjectiveEvaluationService objectiveEvaluationService;
+    private final CandidateContextBuilder contextBuilder;
+    private final AiEvaluationService aiEvaluationService;
+    private final AiCandidateEvaluationPersistenceService persistenceService;
+
+    public AiEvaluationApiService(
+            ApplicationRepository applicationRepository,
+            EventRequirementsRepository requirementsRepository,
+            EvaluationCriterionRepository criterionRepository,
+            ObjectiveEvaluationService objectiveEvaluationService,
+            CandidateContextBuilder contextBuilder,
+            AiEvaluationService aiEvaluationService,
+            AiCandidateEvaluationPersistenceService persistenceService
+    ) {
+        this.applicationRepository =
+                applicationRepository;
+
+        this.requirementsRepository =
+                requirementsRepository;
+
+        this.criterionRepository =
+                criterionRepository;
+
+        this.objectiveEvaluationService =
+                objectiveEvaluationService;
+
+        this.contextBuilder =
+                contextBuilder;
+
+        this.aiEvaluationService =
+                aiEvaluationService;
+
+        this.persistenceService =
+                persistenceService;
+    }
+
+    @Transactional
+    public AiEvaluationResult evaluate(
+            Long organizerId,
+            Long eventId,
+            Long applicationId
+    ) {
+
+        if (organizerId == null) {
+            throw new IllegalArgumentException(
+                    "Organizer ID is required."
+            );
+        }
+
+        if (eventId == null) {
+            throw new IllegalArgumentException(
+                    "Event ID is required."
+            );
+        }
+
+        if (applicationId == null) {
+            throw new IllegalArgumentException(
+                    "Application ID is required."
+            );
+        }
+
+        Application application =
+                applicationRepository
+                        .findById(applicationId)
+                        .orElseThrow(() ->
+                                new IllegalArgumentException(
+                                        "Application not found."
+                                )
+                        );
+
+        if (
+                application.getEvent() == null ||
+                application.getEvent().getId() == null ||
+                !eventId.equals(
+                        application.getEvent().getId()
+                )
+        ) {
+            throw new IllegalArgumentException(
+                    "Application does not belong to this event."
+            );
+        }
+
+        if (
+                application.getEvent().getOrganizerId() == null ||
+                !organizerId.equals(
+                        application.getEvent().getOrganizerId()
+                )
+        ) {
+            throw new IllegalArgumentException(
+                    "Organizer does not own this event."
+            );
+        }
+
+        EventRequirements requirements =
+                requirementsRepository
+                        .findByEventId(eventId)
+                        .orElseThrow(() ->
+                                new IllegalArgumentException(
+                                        "Event requirements not found."
+                                )
+                        );
+
+        List<EvaluationCriterion> criteria =
+                criterionRepository
+                        .findByEventIdOrderByDisplayOrderAsc(
+                                eventId
+                        );
+
+        ObjectiveEvaluationResponse objective =
+                objectiveEvaluationService.evaluate(
+                        organizerId,
+                        eventId,
+                        applicationId
+                );
+
+        AiEvaluationProviderRequest request =
+                contextBuilder.build(
+                        application,
+                        requirements,
+                        criteria,
+                        objective,
+                        PROMPT_VERSION
+                );
+
+        AiEvaluationResult result =
+                aiEvaluationService.evaluate(
+                        request
+                );
+
+        persistenceService.save(
+                eventId,
+                applicationId,
+                result,
+                "MOCK",
+                "athletiq-mock-v1",
+                "1.0",
+                PROMPT_VERSION,
+                "AUDIT-V1",
+                "AI-EVAL-" +
+                        UUID.randomUUID()
+                                .toString()
+        );
+
+        return result;
+    }
+}

@@ -1,52 +1,64 @@
 package com.athletiq.backend.application.service;
 
-import com.athletiq.backend.application.dto.OrganizerApplicationDetailResponse;
-
-import com.athletiq.backend.event.entity.Event;
-
-import com.athletiq.backend.event.repository.EventRepository;
-
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import com.athletiq.backend.objectiveevaluation.repository.ObjectiveEvaluationRepository;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.athletiq.backend.application.specification.ApplicationSpecification;
-
-
-
+import com.athletiq.backend.ai.phase11.AiCandidateEvaluationEntity;
+import com.athletiq.backend.ai.phase11.AiCandidateEvaluationPersistenceService;
+import com.athletiq.backend.application.dto.OrganizerApplicationDetailResponse;
 import com.athletiq.backend.application.dto.OrganizerApplicationPageResponse;
 import com.athletiq.backend.application.dto.OrganizerApplicationStatisticsResponse;
 import com.athletiq.backend.application.dto.OrganizerApplicationSummaryResponse;
 import com.athletiq.backend.application.entity.Application;
 import com.athletiq.backend.application.entity.ApplicationStatus;
 import com.athletiq.backend.application.repository.ApplicationRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.List;
+import com.athletiq.backend.application.specification.ApplicationSpecification;
+import com.athletiq.backend.event.entity.Event;
+import com.athletiq.backend.event.repository.EventRepository;
 
 @Service
 public class OrganizerApplicationService {
 
     private static final int DEFAULT_PAGE_SIZE = 20;
     private static final int MAX_PAGE_SIZE = 100;
-
+            private final ObjectiveEvaluationRepository objectiveEvaluationRepository;
     private final ApplicationRepository applicationRepository;
 
     private final EventRepository eventRepository;
 
-    public OrganizerApplicationService(
+    private final AiCandidateEvaluationPersistenceService aiEvaluationPersistenceService;
+            private final JsonMapper jsonMapper;
+            public OrganizerApplicationService(
             ApplicationRepository applicationRepository,
-            EventRepository eventRepository
+            EventRepository eventRepository,
+            AiCandidateEvaluationPersistenceService aiEvaluationPersistenceService,
+            JsonMapper jsonMapper,
+            ObjectiveEvaluationRepository objectiveEvaluationRepository
     ) {
+
         this.applicationRepository =
                 applicationRepository;
 
         this.eventRepository =
                 eventRepository;
+
+        this.aiEvaluationPersistenceService =
+                aiEvaluationPersistenceService;
+                this.objectiveEvaluationRepository =
+                objectiveEvaluationRepository;
+        this.jsonMapper =
+                jsonMapper;
     }
 
     @Transactional
@@ -372,6 +384,26 @@ public OrganizerApplicationStatisticsResponse getStatistics(
             Application application
     ){
 
+        AiCandidateEvaluationEntity latestEvaluation =
+                aiEvaluationPersistenceService
+                        .findLatestByApplication(
+                                application.getId()
+                        );
+
+        Double aiScore = null;
+
+        String aiEvaluationStatus =
+                "UNEVALUATED";
+
+        if(latestEvaluation != null){
+
+            aiScore =
+                    latestEvaluation.getAiScore();
+
+            aiEvaluationStatus =
+                    "EVALUATED";
+        }
+
         return new OrganizerApplicationSummaryResponse(
                 application.getId(),
                 application.getEvent().getId(),
@@ -384,26 +416,129 @@ public OrganizerApplicationStatisticsResponse getStatistics(
                 null,
                 application.getStatus(),
                 application.getSubmittedAt(),
-                application.getFormVersion().getId()
+                application.getFormVersion().getId(),
+                aiScore,
+                aiEvaluationStatus
         );
     }
 
-    private Integer extractAge(
+
+            private Integer extractAge(
             Application application
     ){
-        return null;
+
+        if(
+                application == null ||
+                application.getSubmittedData() == null ||
+                application.getSubmittedData().isBlank()
+        ){
+            return null;
+        }
+
+        try{
+
+            Map<String,Object> answers =
+                    jsonMapper.readValue(
+                            application.getSubmittedData(),
+                            new TypeReference<
+                                    Map<String,Object>
+                                    >(){}
+                    );
+
+            Object ageValue =
+                    answers.get("age");
+
+            if(ageValue instanceof Number number){
+                return number.intValue();
+            }
+
+            if(ageValue instanceof String text){
+
+                String normalized =
+                        text.trim();
+
+                return normalized.isBlank()
+                        ? null
+                        : Integer.valueOf(
+                                normalized
+                        );
+            }
+
+            return null;
+
+        }catch(Exception exception){
+            return null;
+        }
+    }
+           private String extractPosition(
+            Application application
+    ){
+
+        if(
+                application == null ||
+                application.getSubmittedData() == null ||
+                application.getSubmittedData().isBlank()
+        ){
+            return null;
+        }
+
+        try{
+
+            Map<String,Object> answers =
+                    jsonMapper.readValue(
+                            application.getSubmittedData(),
+                            new TypeReference<
+                                    Map<String,Object>
+                                    >(){}
+                    );
+
+            Object positionValue =
+                    answers.get("position");
+
+            if(positionValue == null){
+                return null;
+            }
+
+            String position =
+                    String.valueOf(
+                            positionValue
+                    ).trim();
+
+            return position.isBlank()
+                    ? null
+                    : position;
+
+        }catch(Exception exception){
+            return null;
+        }
     }
 
-    private String extractPosition(
+        private BigDecimal extractScore(
             Application application
     ){
-        return null;
-    }
 
-    private BigDecimal extractScore(
-            Application application
-    ){
-        return null;
+        if(
+                application == null ||
+                application.getId() == null
+        ){
+            return null;
+        }
+
+        try{
+
+            return objectiveEvaluationRepository
+                    .findByApplicationId(
+                            application.getId()
+                    )
+                    .map(
+                            evaluation ->
+                                    evaluation.getObjectiveScore()
+                    )
+                    .orElse(null);
+
+        }catch(Exception exception){
+            return null;
+        }
     }
 
     private Sort resolveSort(
@@ -435,13 +570,18 @@ public OrganizerApplicationStatisticsResponse getStatistics(
                                 "applicantPhone";
 
                         case "status" ->
-                                "status";
+        "status";
 
-                        default ->
-                                throw new IllegalArgumentException(
-                                        "Invalid application sort field: " +
-                                                sort
-                                );
+case "aiScore",
+     "aiscore",
+     "ai-score" ->
+        "aiScore";
+
+default ->
+        throw new IllegalArgumentException(
+                "Invalid application sort field: " +
+                        sort
+        );
                     };
         }
 

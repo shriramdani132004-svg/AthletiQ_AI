@@ -117,5 +117,17 @@ export const applicationApi = {
     ) =>
         request(
             `/${eventId}/applications/${applicationId}`
+        ),
+
+    evaluateAI: (
+        eventId,
+        applicationId,
+        organizerId
+    ) =>
+        request(
+            `/${eventId}/applications/${applicationId}/ai-evaluation?organizerId=${encodeURIComponent(organizerId)}`,
+            {
+                method: "POST"
+            }
         )
 };
