@@ -41,7 +41,47 @@ function DynamicPublicField({
                     id={id}
                     name={field.fieldKey}
                     value={value ?? ""}
-                    onChange={e => onChange(e.target.value)}
+                                        onChange={e => onChange(e.target.value)}
+                                        onKeyDown={event => {
+
+                        if(event.key !== "Enter"){
+                            return;
+                        }
+
+                        event.preventDefault();
+
+                        const container =
+                            event.currentTarget.closest(
+                                ".public-application-form-fields"
+                            );
+
+                        if(!container){
+                            return;
+                        }
+
+                        const controls =
+                            Array.from(
+                                container.querySelectorAll(
+                                    "input, textarea, select"
+                                )
+                            ).filter(
+                                element =>
+                                    !element.disabled &&
+                                    element.type !== "hidden"
+                            );
+
+                        const currentIndex =
+                            controls.indexOf(
+                                event.currentTarget
+                            );
+
+                        const nextControl =
+                            controls[currentIndex + 1];
+
+                        if(nextControl){
+                            nextControl.focus();
+                        }
+                    }}
                     type={
                         type === "EMAIL"
                             ? "email"
@@ -667,7 +707,44 @@ export default function PublicApplicationPage() {
             </main>
         );
     }
+        if (submission) {
 
+        return (
+            <main className="public-application-page">
+
+                <section className="public-application-success">
+
+                    <div className="public-application-brand">
+                        AthletiQ
+                    </div>
+
+                    <div className="public-application-success-icon">
+                        ✓
+                    </div>
+
+                    <h1>
+                        Application submitted successfully
+                    </h1>
+
+                    <p>
+                        Thank you for applying. Your application has been
+                        received and is now available to the organizer.
+                    </p>
+
+                    {submission.applicationId && (
+                        <div className="public-application-reference">
+                            <span>Application Reference</span>
+                            <strong>
+                                #{submission.applicationId}
+                            </strong>
+                        </div>
+                    )}
+
+                </section>
+
+            </main>
+        );
+    }
     return (
         <main className="public-application-page">
 

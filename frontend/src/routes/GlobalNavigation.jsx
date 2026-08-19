@@ -388,13 +388,12 @@ export default function GlobalNavigation() {
 
     return (
         <div className={`aq-global-navigation ${open ? "is-open" : ""} ${dragging ? "is-dragging" : ""}`}>
-            onMouseLeave={closeNavigation}
+            
 
             <aside
                     className="aq-global-navigation-panel"
                     aria-label="Page navigation"
-                    onMouseLeave={closeNavigation}
-                >
+                    onMouseLeave={closeNavigation}>
 
                     <div className="aq-global-navigation-header">
 

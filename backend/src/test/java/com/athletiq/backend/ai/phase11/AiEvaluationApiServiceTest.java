@@ -1,5 +1,22 @@
 package com.athletiq.backend.ai.phase11;
 
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.athletiq.backend.application.entity.Application;
 import com.athletiq.backend.application.repository.ApplicationRepository;
 import com.athletiq.backend.event.entity.Event;
@@ -10,18 +27,6 @@ import com.athletiq.backend.objectiveevaluation.dto.ObjectiveEvaluationResponse;
 import com.athletiq.backend.objectiveevaluation.entity.EligibilityStatus;
 import com.athletiq.backend.objectiveevaluation.entity.ObjectiveEvaluationStatus;
 import com.athletiq.backend.objectiveevaluation.service.ObjectiveEvaluationService;
-import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 class AiEvaluationApiServiceTest {
 
@@ -226,15 +231,19 @@ class AiEvaluationApiServiceTest {
                 expected
         );
 
-        AiEvaluationApiService service =
-                new AiEvaluationApiService(
-                        applicationRepository,
-                        requirementsRepository,
-                        criterionRepository,
-                        objectiveService,
-                        contextBuilder,
-                        aiEvaluationService
-                );
+        AiCandidateEvaluationPersistenceService persistenceService =
+        mock(AiCandidateEvaluationPersistenceService.class);
+
+AiEvaluationApiService service =
+        new AiEvaluationApiService(
+                applicationRepository,
+                requirementsRepository,
+                criterionRepository,
+                objectiveService,
+                contextBuilder,
+                aiEvaluationService,
+                persistenceService
+        );
 
         AiEvaluationResult actual =
                 service.evaluate(
