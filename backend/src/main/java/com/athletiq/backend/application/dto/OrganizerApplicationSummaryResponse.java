@@ -1,8 +1,9 @@
 package com.athletiq.backend.application.dto;
 
-import com.athletiq.backend.application.entity.ApplicationStatus;
-
 import java.time.LocalDateTime;
+
+import com.athletiq.backend.application.entity.ApplicationStatus;
+import com.athletiq.backend.application.entity.SelectionStatus;
 
 public record OrganizerApplicationSummaryResponse(
 
@@ -32,7 +33,13 @@ public record OrganizerApplicationSummaryResponse(
 
         Double aiScore,
 
-        String aiEvaluationStatus
+        String aiEvaluationStatus,
+
+        SelectionStatus selectionStatus,
+
+        String selectionReason,
+
+        LocalDateTime selectionDecidedAt
 
 ) {
 }

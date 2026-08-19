@@ -13,7 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.athletiq.backend.application.entity.SelectionStatus;
 import com.athletiq.backend.ai.phase11.AiCandidateEvaluationEntity;
 import com.athletiq.backend.ai.phase11.AiCandidateEvaluationPersistenceService;
 import com.athletiq.backend.application.dto.OrganizerApplicationDetailResponse;
@@ -241,15 +241,21 @@ public OrganizerApplicationStatisticsResponse getStatistics(
             );
 
     long total =
-            applicationRepository
-                    .countByEventId(eventId);
+        applicationRepository
+                .countByEventIdAndSelectionStatusNot(
+                        eventId,
+                        SelectionStatus.REJECTED
+                );
 
-    long pending =
-            applicationRepository
-                    .countByEventIdAndStatus(
-                            eventId,
-                            ApplicationStatus.EVALUATION_PENDING
-                    );
+    long evaluated =
+        aiEvaluationPersistenceService
+                .countByEventId(eventId);
+
+long pending =
+        Math.max(
+                0,
+                total - evaluated
+        );
 
     /*
      * Current ApplicationStatus contains only:
@@ -267,8 +273,12 @@ public OrganizerApplicationStatisticsResponse getStatistics(
      * unrelated status values.
      */
 
-    long evaluated = 0;
-    long selected = 0;
+    long selected =
+        applicationRepository
+                .countByEventIdAndSelectionStatus(
+                        eventId,
+                        SelectionStatus.SELECTED
+                );
     long accepted = 0;
     long declined = 0;
 
@@ -416,9 +426,12 @@ public OrganizerApplicationStatisticsResponse getStatistics(
                 null,
                 application.getStatus(),
                 application.getSubmittedAt(),
-                application.getFormVersion().getId(),
+                               application.getFormVersion().getId(),
                 aiScore,
-                aiEvaluationStatus
+                aiEvaluationStatus,
+                application.getSelectionStatus(),
+                application.getSelectionReason(),
+                application.getSelectionDecidedAt()
         );
     }
 

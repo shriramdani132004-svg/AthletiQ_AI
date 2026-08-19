@@ -157,6 +157,25 @@ private Double aiScore;
     )
     private ApplicationStatus status;
 
+    @Enumerated(EnumType.STRING)
+@Column(
+        name = "selection_status",
+        nullable = false,
+        length = 30
+)
+private SelectionStatus selectionStatus;
+
+@Column(
+        name = "selection_reason",
+        columnDefinition = "TEXT"
+)
+private String selectionReason;
+
+@Column(
+        name = "selection_decided_at"
+)
+private LocalDateTime selectionDecidedAt;
+
     @Column(
             name = "submitted_at",
             nullable = false
@@ -199,6 +218,9 @@ private Double aiScore;
         if (status == null) {
             status = ApplicationStatus.SUBMITTED;
         }
+        if (selectionStatus == null) {
+    selectionStatus = SelectionStatus.NOT_REVIEWED;
+}
 
         if (submittedData == null) {
             submittedData = "{}";
@@ -321,4 +343,33 @@ private Double aiScore;
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
+    public SelectionStatus getSelectionStatus() {
+    return selectionStatus;
+}
+
+public void setSelectionStatus(
+        SelectionStatus selectionStatus
+) {
+    this.selectionStatus = selectionStatus;
+}
+
+public String getSelectionReason() {
+    return selectionReason;
+}
+
+public void setSelectionReason(
+        String selectionReason
+) {
+    this.selectionReason = selectionReason;
+}
+
+public LocalDateTime getSelectionDecidedAt() {
+    return selectionDecidedAt;
+}
+
+public void setSelectionDecidedAt(
+        LocalDateTime selectionDecidedAt
+) {
+    this.selectionDecidedAt = selectionDecidedAt;
+}
 }

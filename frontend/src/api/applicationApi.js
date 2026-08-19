@@ -1,7 +1,26 @@
 const API_BASE = "/api/v1/events";
 
 async function request(path, options = {}) {
+    return sendRequest(
+        `${API_BASE}${path}`,
+        options,
+        "Application"
+    );
+}
 
+async function requestDirect(path, options = {}) {
+    return sendRequest(
+        `/api/v1${path}`,
+        options,
+        "Selection"
+    );
+}
+
+async function sendRequest(
+    url,
+    options,
+    requestName
+) {
     const token =
         localStorage.getItem(
             "athletiq_access_token"
@@ -9,7 +28,7 @@ async function request(path, options = {}) {
 
     const response =
         await fetch(
-            `${API_BASE}${path}`,
+            url,
             {
                 ...options,
                 headers: {
@@ -28,38 +47,34 @@ async function request(path, options = {}) {
             }
         );
 
-    if(!response.ok){
-
+    if (!response.ok) {
         const message =
             await response.text();
 
         throw new Error(
             message ||
-            `Application request failed: ${response.status}`
+            `${requestName} request failed: ${response.status}`
         );
     }
 
-    if(response.status === 204){
+    if (response.status === 204) {
         return null;
     }
 
     return response.json();
 }
 
-function buildQuery(params = {}){
-
+function buildQuery(params = {}) {
     const query =
         new URLSearchParams();
 
     Object.entries(params)
-        .forEach(([key,value]) => {
-
-            if(
+        .forEach(([key, value]) => {
+            if (
                 value !== undefined &&
                 value !== null &&
                 String(value).trim() !== ""
-            ){
-
+            ) {
                 query.set(
                     key,
                     String(value)
@@ -76,7 +91,6 @@ function buildQuery(params = {}){
 }
 
 export const applicationApi = {
-
     list: (
         eventId,
         {
@@ -125,9 +139,26 @@ export const applicationApi = {
         organizerId
     ) =>
         request(
-            `/${eventId}/applications/${applicationId}/ai-evaluation?organizerId=${encodeURIComponent(organizerId)}`,
+            `/${eventId}/applications/${applicationId}/ai-evaluation` +
+            `?organizerId=${encodeURIComponent(organizerId)}`,
             {
                 method: "POST"
+            }
+        ),
+
+    decideSelection: (
+        applicationId,
+        selectionStatus,
+        selectionReason = ""
+    ) =>
+        requestDirect(
+            `/organizer/applications/${applicationId}/selection`,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    selectionStatus,
+                    selectionReason
+                })
             }
         )
 };

@@ -1,8 +1,8 @@
 package com.athletiq.backend.ai.phase11;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AiCandidateEvaluationRepository
         extends JpaRepository<AiCandidateEvaluationEntity, Long> {
@@ -11,4 +11,6 @@ public interface AiCandidateEvaluationRepository
     findFirstByApplicationIdOrderByEvaluatedAtDesc(
             Long applicationId
     );
+
+    long countByEventId(Long eventId);
 }

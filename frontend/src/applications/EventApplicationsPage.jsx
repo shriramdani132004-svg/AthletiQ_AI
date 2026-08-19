@@ -16,9 +16,7 @@ const EMPTY_STATS = {
     totalApplications: 0,
     pendingEvaluation: 0,
     evaluated: 0,
-    selected: 0,
-    accepted: 0,
-    declined: 0
+    selected: 0
 };
 
 function formatDate(value) {
@@ -538,17 +536,20 @@ export default function EventApplicationsPage() {
                         return;
                     }
 
-                    setData(
-                        result || {
-                            content: [],
-                            page,
-                            size,
-                            totalElements: 0,
-                            totalPages: 0,
-                            first: true,
-                            last: true
-                        }
-                    );
+                    const visibleApplications =
+    (result?.content || []).filter(
+        application =>
+            application.selectionStatus !==
+            "REJECTED"
+    );
+
+setData({
+    ...(result || {}),
+    content: visibleApplications,
+    totalElements:
+        result?.totalElements ??
+        visibleApplications.length
+});
 
                 }catch(err){
 
@@ -850,6 +851,117 @@ export default function EventApplicationsPage() {
         setDetail(null);
         setDetailError("");
     }
+           async function decideSelection(
+        applicationId,
+        selectionStatus
+    ) {
+        const isSelecting =
+            selectionStatus === "SELECTED";
+
+        const confirmationMessage =
+            isSelecting
+                ? "Do you confirm you want to select this player?"
+                : selectionStatus === "REJECTED"
+                    ? "Do you confirm you want to reject this player?"
+                    : "Do you want to unselect this player?";
+
+        const confirmed =
+            window.confirm(
+                confirmationMessage
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            await applicationApi.decideSelection(
+                applicationId,
+                selectionStatus,
+                ""
+            );
+
+            if (
+                selectionStatus === "REJECTED"
+            ) {
+                setData(current => ({
+                    ...current,
+                    content:
+                        current.content.filter(
+                            application =>
+                                application.applicationId !==
+                                applicationId
+                        )
+                }));
+                setStats(current => ({
+    ...current,
+    selected:
+        current.selected + 1
+}));
+
+                setStats(current => ({
+                    ...current,
+                    totalApplications:
+                        Math.max(
+                            0,
+                            current.totalApplications - 1
+                        )
+                }));
+
+                window.alert(
+                    "Player rejected successfully."
+                );
+
+                return;
+            }
+
+            if (
+                selectionStatus === "SELECTED"
+            ) {
+                setData(current => ({
+                    ...current,
+                    content:
+                        current.content.map(
+                            application =>
+                                application.applicationId ===
+                                applicationId
+                                    ? {
+                                        ...application,
+                                        selectionStatus:
+                                            "SELECTED"
+                                    }
+                                    : application
+                        )
+                }));
+
+                window.alert(
+                    "Player selected successfully."
+                );
+
+                return;
+            }
+
+            await loadApplications();
+
+setStats(current => ({
+    ...current,
+    selected:
+        Math.max(
+            0,
+            current.selected - 1
+        )
+}));
+
+window.alert(
+    "Player unselected successfully."
+);
+        } catch (selectionError) {
+            window.alert(
+                selectionError.message ||
+                "Selection action failed."
+            );
+        }
+    }
 
     async function evaluateAI(
         applicationId
@@ -883,6 +995,30 @@ export default function EventApplicationsPage() {
                     [applicationId]: result
                 })
             );
+            setData(current => ({
+    ...current,
+    content:
+        current.content.map(
+            application =>
+                application.applicationId ===
+                applicationId
+                    ? {
+                        ...application,
+                        aiScore:
+                            result.aiScore ??
+                            result.score ??
+                            application.aiScore,
+                        aiEvaluationStatus:
+                            "EVALUATED"
+                    }
+                    : application
+        )
+}));
+setStats(current => ({
+    ...current,
+    evaluated:
+        current.evaluated + 1
+}));
 
             setAiEvaluatedApplicationIds(
                 current => {
@@ -1008,27 +1144,62 @@ export default function EventApplicationsPage() {
                     </strong>
                 </div>
 
-                <div className="application-stat-card">
-                    <span>Accepted</span>
-                    <strong>
-                        {statsLoading
-                            ? "\u2014"
-                            : stats.accepted}
-                    </strong>
-                </div>
-
-                <div className="application-stat-card">
-                    <span>Declined</span>
-                    <strong>
-                        {statsLoading
-                            ? "\u2014"
-                            : stats.declined}
-                    </strong>
-                </div>
 
             </section>
 
+                        <div className="applications-progress-panel">
+                <div className="applications-progress-header">
+                    <div>
+                        <span className="applications-progress-label">
+                            EVALUATION PROGRESS
+                        </span>
+
+                        <strong>
+                            {stats.evaluated} of{" "}
+                            {stats.totalApplications} applications evaluated
+                        </strong>
+                    </div>
+
+                    <span className="applications-progress-percent">
+                        {
+                            stats.totalApplications > 0
+                                ? Math.round(
+                                    (
+                                        stats.evaluated /
+                                        stats.totalApplications
+                                    ) * 100
+                                )
+                                : 0
+                        }%
+                    </span>
+                </div>
+
+                <div className="applications-progress-track">
+                    <div
+                        className="applications-progress-fill"
+                        style={{
+                            width: `${
+                                stats.totalApplications > 0
+                                    ? Math.min(
+                                        100,
+                                        (
+                                            stats.evaluated /
+                                            stats.totalApplications
+                                        ) * 100
+                                    )
+                                    : 0
+                            }%`
+                        }}
+                    />
+                </div>
+
+                <span className="applications-progress-caption">
+                    {stats.pendingEvaluation} applications still need review.
+                </span>
+            </div>
+
             {statsError && (
+                
                 <div className="applications-inline-error">
                     {statsError}
                 </div>
@@ -1251,7 +1422,6 @@ export default function EventApplicationsPage() {
                                     <th>Position</th>
                                     <th>AI Score</th>
                                     <th>AI Status</th>
-                                    <th>Score</th>
                                     <th>Status</th>
                                     <th>Application Date</th>
                                     <th>Actions</th>
@@ -1319,26 +1489,35 @@ export default function EventApplicationsPage() {
     </span>
 </td>
 
-<td>
-    {application.score ??
-        "\u2014"}
-</td>
+
 
                                             <td>
+    <span
+        className={
+            `application-status-badge application-status-${String(
+                application.status ||
+                ""
+            ).toLowerCase()}`
+        }
+    >
+        {application.status ||
+            "UNKNOWN"}
+    </span>
 
-                                                <span
-                                                    className={
-                                                        `application-status-badge application-status-${String(
-                                                            application.status ||
-                                                            ""
-                                                        ).toLowerCase()}`
-                                                    }
-                                                >
-                                                    {application.status ||
-                                                        "UNKNOWN"}
-                                                </span>
+    {application.selectionStatus ===
+        "SELECTED" && (
+        <span className="application-selection-badge application-selection-selected">
+            SELECTED
+        </span>
+    )}
 
-                                            </td>
+    {application.selectionStatus ===
+        "REJECTED" && (
+        <span className="application-selection-badge application-selection-rejected">
+            REJECTED
+        </span>
+    )}
+</td>
 
                                             <td>
                                                 {formatDate(
@@ -1347,45 +1526,88 @@ export default function EventApplicationsPage() {
                                             </td>
 
                                             <td>
+    <button
+        type="button"
+        className="application-view-button"
+        onClick={() =>
+            openApplication(
+                application.applicationId
+            )
+        }
+    >
+        View
+    </button>
 
-                                                <button
-                                                    type="button"
-                                                    className="application-view-button"
-                                                    onClick={() =>
-                                                        openApplication(
-                                                            application.applicationId
-                                                        )
-                                                    }
-                                                >
-                                                    View
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="application-ai-button"
-                                                    disabled={
-                                                        aiEvaluatingApplicationId ===
-                                                        application.applicationId
-                                                    }
-                                                    onClick={() =>
-                                                        evaluateAI(
-                                                            application.applicationId
-                                                        )
-                                                    }
-                                                >
-                                                    {
-                                                        aiEvaluatingApplicationId ===
-                                                        application.applicationId
-                                                            ? "Evaluating..."
-                                                            : aiEvaluatedApplicationIds.has(
-                                                                application.applicationId
-                                                            )
-                                                                ? "AI Done"
-                                                                : "AI Evaluate"
-                                                    }
-                                                </button>
+    <button
+        type="button"
+        className="application-ai-button"
+        disabled={
+            aiEvaluatingApplicationId ===
+            application.applicationId
+        }
+        onClick={() =>
+            evaluateAI(
+                application.applicationId
+            )
+        }
+    >
+        {
+            aiEvaluatingApplicationId ===
+            application.applicationId
+                ? "Evaluating..."
+                : aiEvaluatedApplicationIds.has(
+                    application.applicationId
+                )
+                    ? "AI Done"
+                    : "AI Evaluate"
+        }
+    </button>
 
-                                            </td>
+    <button
+        type="button"
+        className="application-select-button"
+        onClick={() =>
+            decideSelection(
+                application.applicationId,
+                "SELECTED"
+            )
+        }
+    >
+        Select
+    </button>
 
+    <button
+        type="button"
+        className="application-reject-button"
+        onClick={() =>
+            decideSelection(
+                application.applicationId,
+                "REJECTED"
+            )
+        }
+    >
+        Reject
+    </button>
+
+    {
+        application.selectionStatus &&
+        application.selectionStatus !==
+            "NOT_REVIEWED" && (
+            <button
+                type="button"
+                className="application-unselect-button"
+                onClick={() =>
+                    decideSelection(
+                        application.applicationId,
+                        "NOT_REVIEWED"
+                    )
+                }
+            >
+                Unselect
+            </button>
+        )
+    }
+</td>
                                         </tr>
 
                                     )

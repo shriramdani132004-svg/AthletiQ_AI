@@ -109,4 +109,11 @@ public class AiCandidateEvaluationPersistenceService {
                 )
                 .orElse(null);
     }
+        public long countByEventId(Long eventId) {
+        if (eventId == null) {
+            return 0;
+        }
+
+        return repository.countByEventId(eventId);
+    }
 }

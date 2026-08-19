@@ -1,7 +1,7 @@
 package com.athletiq.backend.application.repository;
 
-import com.athletiq.backend.application.entity.Application;
-import com.athletiq.backend.application.entity.ApplicationStatus;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +9,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import com.athletiq.backend.application.entity.Application;
+import com.athletiq.backend.application.entity.ApplicationStatus;
+import com.athletiq.backend.application.entity.SelectionStatus;
 
 public interface ApplicationRepository
         extends JpaRepository<Application, Long>, JpaSpecificationExecutor<Application> {
@@ -82,6 +84,15 @@ public interface ApplicationRepository
             Long eventId,
             ApplicationStatus status
     );
+    long countByEventIdAndSelectionStatusNot(
+        Long eventId,
+        SelectionStatus selectionStatus
+);
+
+long countByEventIdAndSelectionStatus(
+        Long eventId,
+        SelectionStatus selectionStatus
+);
 
     // --------------------------------------------------------
     // DUPLICATE PROTECTION - EXISTING CONTRACT

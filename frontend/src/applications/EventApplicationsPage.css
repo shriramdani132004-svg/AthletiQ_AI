@@ -2936,3 +2936,91 @@
     background: rgba(148, 163, 184, 0.08);
     color: #64748b;
 }
+.application-selection-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+.application-selection-selected {
+    color: #075e54;
+    background: #b7f7df;
+    border: 1px solid #52d6a5;
+}
+
+.application-selection-rejected {
+    color: #9f1239;
+    background: #ffe0e8;
+    border: 1px solid #fb7185;
+}
+.applications-progress-panel {
+    margin: 20px 0 28px;
+    padding: 22px 26px;
+    border: 1px solid rgba(91, 214, 255, 0.28);
+    border-radius: 18px;
+    background: linear-gradient(
+        135deg,
+        rgba(18, 34, 62, 0.96),
+        rgba(33, 43, 91, 0.92)
+    );
+    color: #f8fbff;
+}
+
+.applications-progress-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.applications-progress-header > div {
+    display: grid;
+    gap: 7px;
+}
+
+.applications-progress-label {
+    color: #62dcff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+
+.applications-progress-header strong {
+    font-size: 18px;
+}
+
+.applications-progress-percent {
+    color: #bda9ff;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.applications-progress-track {
+    height: 12px;
+    margin-top: 18px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.13);
+}
+
+.applications-progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        #22d3ee,
+        #818cf8
+    );
+    transition: width 0.45s ease;
+}
+
+.applications-progress-caption {
+    display: block;
+    margin-top: 11px;
+    color: #aebbd3;
+    font-size: 13px;
+}
