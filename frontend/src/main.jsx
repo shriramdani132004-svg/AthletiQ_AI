@@ -6,7 +6,7 @@ import {
     Routes,
     useParams
 } from "react-router-dom";
-
+import PlayerResponsePage from "./player-response/PlayerResponsePage";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import GlobalNavigation from "./routes/GlobalNavigation";
@@ -80,12 +80,22 @@ ReactDOM
                                 <PublicApplicationPage />
                             }
                         />
+                        <Route
+    path="/player-response/:token/:response"
+    element={
+        <PlayerResponsePage />
+    }
+/>
 
                         {/* AUTHENTICATION */}
                         <Route
                             path="/login"
                             element={<Login />}
                         />
+                        <Route
+    path="/player-response/:token/:response"
+    element={<PlayerResponsePage />}
+/>
 
                         <Route
                             path="/register"

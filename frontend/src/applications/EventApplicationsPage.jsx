@@ -482,6 +482,16 @@ export default function EventApplicationsPage() {
         setAiEvaluatingApplicationId] =
         useState(null);
 
+        const [
+        emailSendingApplicationId,
+        setEmailSendingApplicationId
+    ] = useState(null);
+
+    const [
+        emailStatuses,
+        setEmailStatuses
+    ] = useState({});
+
     const [aiResults,
         setAiResults] =
         useState({});
@@ -851,7 +861,58 @@ setData({
         setDetail(null);
         setDetailError("");
     }
-           async function decideSelection(
+
+            async function sendSelectionEmail(
+        application
+    ) {
+        const applicationId =
+            application.applicationId;
+
+        setEmailSendingApplicationId(
+            applicationId
+        );
+
+        setEmailStatuses(current => ({
+            ...current,
+            [applicationId]: "QUEUED"
+        }));
+
+        try {
+            setEmailStatuses(current => ({
+                ...current,
+                [applicationId]: "SENDING"
+            }));
+
+            await applicationApi.sendSelectionEmail(
+                applicationId,
+                "",
+                ""
+            );
+
+            setEmailStatuses(current => ({
+                ...current,
+                [applicationId]: "SENT"
+            }));
+
+        } catch (emailError) {
+            setEmailStatuses(current => ({
+                ...current,
+                [applicationId]: "FAILED"
+            }));
+
+            window.alert(
+                emailError.message ||
+                "Selection email failed."
+            );
+
+        } finally {
+            setEmailSendingApplicationId(
+                null
+            );
+        }
+    }
+
+        async function decideSelection(
         applicationId,
         selectionStatus
     ) {
@@ -1576,7 +1637,7 @@ setStats(current => ({
         Select
     </button>
 
-    <button
+        <button
         type="button"
         className="application-reject-button"
         onClick={() =>
@@ -1605,6 +1666,40 @@ setStats(current => ({
             >
                 Unselect
             </button>
+        )
+    }
+
+    {
+        application.selectionStatus ===
+            "SELECTED" && (
+            <button
+    type="button"
+    className="application-email-button"
+    disabled={
+        emailSendingApplicationId ===
+        application.applicationId
+    }
+    onClick={() =>
+        sendSelectionEmail(
+            application
+        )
+    }
+>
+    {
+        emailSendingApplicationId ===
+        application.applicationId
+            ? "Sending..."
+            : emailStatuses[
+                application.applicationId
+            ] === "SENT"
+                ? "Email Sent"
+                : emailStatuses[
+                    application.applicationId
+                ] === "FAILED"
+                    ? "Retry Email"
+                    : "Email"
+    }
+</button>
         )
     }
 </td>

@@ -146,7 +146,7 @@ export const applicationApi = {
             }
         ),
 
-    decideSelection: (
+        decideSelection: (
         applicationId,
         selectionStatus,
         selectionReason = ""
@@ -160,5 +160,25 @@ export const applicationApi = {
                     selectionReason
                 })
             }
-        )
+        ),
+
+    sendSelectionEmail: (
+        applicationId,
+        subject,
+        message
+    ) =>
+        requestDirect(
+            `/organizer/applications/${applicationId}/selection-email`,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    subject,
+                    message
+                })
+            }
+        ),
+        getSelectionEmailStatus: applicationId =>
+        requestDirect(
+            `/organizer/applications/${applicationId}/selection-email/status`
+        )   
 };

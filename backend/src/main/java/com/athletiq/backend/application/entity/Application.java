@@ -182,6 +182,19 @@ private LocalDateTime selectionDecidedAt;
     )
     private LocalDateTime submittedAt;
 
+    @Enumerated(EnumType.STRING)
+@Column(
+        name = "player_response_status",
+        nullable = false,
+        length = 30
+)
+private PlayerResponseStatus playerResponseStatus;
+
+@Column(
+        name = "player_responded_at"
+)
+private LocalDateTime playerRespondedAt;
+
     @Column(
             name = "created_at",
             nullable = false
@@ -202,6 +215,11 @@ private LocalDateTime selectionDecidedAt;
 
         LocalDateTime now =
                 LocalDateTime.now();
+
+        if (playerResponseStatus == null) {
+    playerResponseStatus =
+            PlayerResponseStatus.NOT_REQUESTED;
+}
 
         if (submittedAt == null) {
             submittedAt = now;
@@ -371,5 +389,26 @@ public void setSelectionDecidedAt(
         LocalDateTime selectionDecidedAt
 ) {
     this.selectionDecidedAt = selectionDecidedAt;
+}
+public PlayerResponseStatus getPlayerResponseStatus() {
+    return playerResponseStatus;
+}
+
+public void setPlayerResponseStatus(
+        PlayerResponseStatus playerResponseStatus
+) {
+    this.playerResponseStatus =
+            playerResponseStatus;
+}
+
+public LocalDateTime getPlayerRespondedAt() {
+    return playerRespondedAt;
+}
+
+public void setPlayerRespondedAt(
+        LocalDateTime playerRespondedAt
+) {
+    this.playerRespondedAt =
+            playerRespondedAt;
 }
 }

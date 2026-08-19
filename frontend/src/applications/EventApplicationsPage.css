@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    ATHLETIQ APPLICATIONS
    2026 CANDIDATE COMMAND CENTER
    ============================================================ */
@@ -3023,4 +3023,40 @@
     margin-top: 11px;
     color: #aebbd3;
     font-size: 13px;
+}
+.application-email-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 6px 4px 0 0;
+    padding: 9px 14px;
+    border: 1px solid #7dd3fc;
+    border-radius: 10px;
+    background: #e0f2fe;
+    color: #075985;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.application-email-button:hover {
+    background: #bae6fd;
+    transform: translateY(-1px);
+}
+
+.application-email-button:active {
+    transform: translateY(0);
+}
+.application-email-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.application-email-button[data-status="SENT"] {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #166534;
 }

@@ -1,0 +1,19 @@
+package com.athletiq.backend.application.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.athletiq.backend.application.entity.SelectionEmailDelivery;
+
+public interface SelectionEmailDeliveryRepository
+        extends JpaRepository<
+        SelectionEmailDelivery,
+        Long
+        > {
+
+    Optional<SelectionEmailDelivery>
+    findFirstByApplicationIdOrderByCreatedAtDesc(
+            Long applicationId
+    );
+}
