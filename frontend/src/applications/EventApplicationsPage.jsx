@@ -778,6 +778,56 @@ setData({
                 filters.status
         });
     }
+    function exportFinalConfirmedPlayers() {
+    const confirmedPlayers = applications.filter(
+        application =>
+            application.selectionStatus === "SELECTED" &&
+            application.playerResponseStatus === "ACCEPTED"
+    );
+
+    const header = [
+        "Player",
+        "Email",
+        "Position",
+        "AI Score",
+        "Accepted At"
+    ];
+
+    const rows = confirmedPlayers.map(application => [
+        application.playerName || "",
+        application.email || "",
+        application.position || "",
+        application.aiScore ?? "",
+        application.playerRespondedAt || ""
+    ]);
+
+    const csv = [
+        header,
+        ...rows
+    ]
+        .map(row =>
+            row
+                .map(value =>
+                    `"${String(value).replaceAll('"', '""')}"`
+                )
+                .join(",")
+        )
+        .join("\n");
+
+    const blob = new Blob(
+        [csv],
+        { type: "text/csv;charset=utf-8;" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "athletiq-final-confirmed-players.csv";
+    link.click();
+
+    URL.revokeObjectURL(url);
+}
     function clearFilters(){
 
         if(
@@ -1204,6 +1254,20 @@ setStats(current => ({
                             : stats.selected}
                     </strong>
                 </div>
+                <div className="application-stat-card">
+    <span>Final Confirmed</span>
+    <strong>
+        {statsLoading
+            ? "\u2014"
+            : applications.filter(
+                application =>
+                    application.selectionStatus ===
+                        "SELECTED" &&
+                    application.playerResponseStatus ===
+                        "ACCEPTED"
+            ).length}
+    </strong>
+</div>
 
 
             </section>
@@ -1265,7 +1329,73 @@ setStats(current => ({
                     {statsError}
                 </div>
             )}
+            <section className="final-confirmed-section">
+    <div className="final-confirmed-header">
+        <div>
+            <span className="applications-progress-label">
+                FINAL CONFIRMED PLAYERS
+            </span>
 
+            <h2>
+                Accepted selections
+            </h2>
+            <button
+    type="button"
+    className="final-confirmed-export-button"
+    onClick={exportFinalConfirmedPlayers}
+>
+    Export Final List
+</button>
+        </div>
+
+        <strong>
+            {
+                applications.filter(
+                    application =>
+                        application.selectionStatus ===
+                            "SELECTED" &&
+                        application.playerResponseStatus ===
+                            "ACCEPTED"
+                ).length
+            }
+        </strong>
+    </div>
+
+    <div className="final-confirmed-list">
+        {
+            applications
+                .filter(
+                    application =>
+                        application.selectionStatus ===
+                            "SELECTED" &&
+                        application.playerResponseStatus ===
+                            "ACCEPTED"
+                )
+                .map(application => (
+                    <div
+                        className="final-confirmed-player"
+                        key={application.applicationId}
+                    >
+                        <strong>
+                            {application.playerName}
+                        </strong>
+
+                        <span>
+                            {application.email}
+                        </span>
+
+                        <span>
+                            {application.position || "—"}
+                        </span>
+
+                        <span className="final-confirmed-badge">
+                            ACCEPTED
+                        </span>
+                    </div>
+                ))
+        }
+    </div>
+</section>
             <section className="applications-toolbar">
 
                 <div className="application-filter-grid">
@@ -1483,6 +1613,7 @@ setStats(current => ({
                                     <th>Position</th>
                                     <th>AI Score</th>
                                     <th>AI Status</th>
+                                    <th>Player Response</th>
                                     <th>Status</th>
                                     <th>Application Date</th>
                                     <th>Actions</th>
@@ -1536,6 +1667,7 @@ setStats(current => ({
         "\u2014"}
 </td>
 
+
 <td>
     <span
         className={
@@ -1549,6 +1681,28 @@ setStats(current => ({
             "UNEVALUATED"}
     </span>
 </td>
+
+<td>
+    <span
+        className={
+            `player-response-badge ${
+                application.playerResponseStatus === "ACCEPTED"
+                    ? "is-accepted"
+                    : application.playerResponseStatus === "DECLINED"
+                        ? "is-declined"
+                        : "is-awaiting"
+            }`
+        }
+    >
+        {application.playerResponseStatus === "ACCEPTED"
+            ? "ACCEPTED"
+            : application.playerResponseStatus === "DECLINED"
+                ? "DECLINED"
+                : "AWAITING RESPONSE"}
+    </span>
+</td>
+
+
 
 
 

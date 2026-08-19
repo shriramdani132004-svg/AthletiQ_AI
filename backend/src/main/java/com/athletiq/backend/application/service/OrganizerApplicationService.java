@@ -430,8 +430,10 @@ long pending =
                 aiScore,
                 aiEvaluationStatus,
                 application.getSelectionStatus(),
-                application.getSelectionReason(),
-                application.getSelectionDecidedAt()
+application.getSelectionReason(),
+application.getSelectionDecidedAt(),
+application.getPlayerResponseStatus(),
+application.getPlayerRespondedAt()
         );
     }
 

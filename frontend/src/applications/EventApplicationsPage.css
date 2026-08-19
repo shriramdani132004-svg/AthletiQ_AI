@@ -322,7 +322,7 @@
 .applications-back::before {
 
     content:
-        "â†";
+        "├óΓÇá┬É";
 
     margin-right:
         6px;
@@ -2547,7 +2547,7 @@
     }
 }
 
-/* PHASE 11.6 â€” AI EVALUATE */
+/* PHASE 11.6 ├óΓé¼ΓÇ¥ AI EVALUATE */
 
 .application-ai-button {
 
@@ -2657,7 +2657,7 @@
     cursor:
         wait;
 }
-/* PHASE 11.7 — AI CANDIDATE REPORT */
+/* PHASE 11.7 ΓÇö AI CANDIDATE REPORT */
 
 .application-ai-report {
 
@@ -3024,39 +3024,137 @@
     color: #aebbd3;
     font-size: 13px;
 }
-.application-email-button {
+/* ============================================================
+   PHASE 16 ADDITIONS
+   Final confirmed players and player response badges
+   ============================================================ */
+
+.player-response-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 6px 4px 0 0;
-    padding: 9px 14px;
-    border: 1px solid #7dd3fc;
-    border-radius: 10px;
-    background: #e0f2fe;
-    color: #075985;
-    font-size: 13px;
+    min-width: 118px;
+    min-height: 30px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.68rem;
     font-weight: 800;
-    cursor: pointer;
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease;
+    line-height: 1.1;
+    text-align: center;
 }
 
-.application-email-button:hover {
-    background: #bae6fd;
+.player-response-badge.is-accepted {
+    color: #087443;
+    background: #d8f8e8;
+    border: 1px solid #72d8a5;
+}
+
+.player-response-badge.is-awaiting {
+    color: #80651a;
+    background: #fff4c7;
+    border: 1px solid #e7cc6d;
+}
+
+.player-response-badge.is-declined {
+    color: #a42a37;
+    background: #ffe1e5;
+    border: 1px solid #f39aa6;
+}
+
+.final-confirmed-section {
+    margin: 24px 0;
+    padding: 24px;
+    border: 1px solid rgba(91, 224, 255, 0.28);
+    border-radius: 22px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(20, 39, 76, 0.96),
+            rgba(27, 32, 74, 0.96)
+        );
+}
+
+.final-confirmed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.final-confirmed-header h2 {
+    margin: 6px 0 0;
+    color: #ffffff;
+}
+
+.final-confirmed-header strong {
+    min-width: 48px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: #07152d;
+    background: #61e7ff;
+    font-size: 1.25rem;
+    text-align: center;
+}
+
+.final-confirmed-export-button {
+    margin-top: 14px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 10px;
+    color: #07152d;
+    background: #61e7ff;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.final-confirmed-export-button:hover {
+    background: #8ceeff;
     transform: translateY(-1px);
 }
 
-.application-email-button:active {
-    transform: translateY(0);
-}
-.application-email-button:disabled {
-    cursor: wait;
-    opacity: 0.65;
+.final-confirmed-list {
+    display: grid;
+    gap: 10px;
 }
 
-.application-email-button[data-status="SENT"] {
-    background: #dcfce7;
-    border-color: #86efac;
-    color: #166534;
+.final-confirmed-player {
+    display: grid;
+    grid-template-columns: 1.3fr 1.6fr 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    color: #dce7ff;
+    background: rgba(255, 255, 255, 0.09);
+}
+
+.final-confirmed-player strong {
+    color: #ffffff;
+}
+
+.final-confirmed-player span {
+    color: #b9cceb;
+}
+
+.final-confirmed-badge {
+    padding: 7px 12px;
+    border-radius: 999px;
+    color: #087443;
+    background: #d8f8e8;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-align: center;
+}
+
+@media (max-width: 760px) {
+    .final-confirmed-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .final-confirmed-player {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
 }
