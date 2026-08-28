@@ -7,19 +7,19 @@ export async function saveDraftFields({
     fields
 }) {
     if (!eventId) {
-        throw new Error(Event ID is required.);
+        throw new Error("Event ID is required.");
     }
 
     if (!versionId) {
-        throw new Error(Form version ID is required.);
+        throw new Error("Form version ID is required.");
     }
 
     if (!organizerId) {
-        throw new Error(Organizer ID is required.);
+        throw new Error("Organizer ID is required.");
     }
 
     if (!Array.isArray(fields)) {
-        throw new Error(Fields must be an array.);
+        throw new Error("Fields must be an array.");
     }
 
     const existingFields = fields.filter(
