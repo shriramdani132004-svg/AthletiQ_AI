@@ -30,3 +30,5 @@ Thumbs.db
 # Databases / dumps
 *.dump
 *.sql
+
+# Pythonai-service/.venv/ai-service/__pycache__/*.py[cod]
