@@ -7,22 +7,31 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.athletiq.backend.ai.phase11.AiCandidateEvaluationRepository;
 import com.athletiq.backend.application.dto.SelectionDecisionRequest;
 import com.athletiq.backend.application.dto.SelectionEmailRequest;
 import com.athletiq.backend.application.entity.Application;
 import com.athletiq.backend.application.entity.SelectionStatus;
 import com.athletiq.backend.application.repository.ApplicationRepository;
+import com.athletiq.backend.application.repository.PlayerResponseTokenRepository;
 import com.athletiq.backend.application.repository.SelectionEmailDeliveryRepository;
+import com.athletiq.backend.objectiveevaluation.repository.ObjectiveEvaluationRepository;
 
 @Service
 public class OrganizerSelectionService {
     private final SelectionEmailService selectionEmailService;
     private final ApplicationRepository applicationRepository;
     private final SelectionEmailDeliveryRepository deliveryRepository;
+    private final AiCandidateEvaluationRepository aiEvaluationRepository;
+private final PlayerResponseTokenRepository playerResponseTokenRepository;
+private final ObjectiveEvaluationRepository objectiveEvaluationRepository;
    public OrganizerSelectionService(
         ApplicationRepository applicationRepository,
         SelectionEmailService selectionEmailService,
-        SelectionEmailDeliveryRepository deliveryRepository
+        SelectionEmailDeliveryRepository deliveryRepository,
+        AiCandidateEvaluationRepository aiEvaluationRepository,
+        PlayerResponseTokenRepository playerResponseTokenRepository,
+        ObjectiveEvaluationRepository objectiveEvaluationRepository
 ) {
     this.applicationRepository =
             applicationRepository;
@@ -32,6 +41,15 @@ public class OrganizerSelectionService {
 
     this.deliveryRepository =
             deliveryRepository;
+
+    this.aiEvaluationRepository =
+            aiEvaluationRepository;
+
+    this.playerResponseTokenRepository =
+            playerResponseTokenRepository;
+
+    this.objectiveEvaluationRepository =
+            objectiveEvaluationRepository;
 }
 @Transactional(readOnly = true)
 public Map<String, Object> getEmailStatus(
@@ -190,47 +208,99 @@ public Map<String, Object> sendManualEmail(
         }
 
         SelectionStatus target =
-                request.selectionStatus();
+        request.selectionStatus();
 
-        if (target == SelectionStatus.NOT_REVIEWED) {
-            application.setSelectionReason(null);
-            application.setSelectionDecidedAt(null);
-        } else {
-            application.setSelectionReason(
-                    normalizeReason(
-                            request.selectionReason()
-                    )
+if (target == SelectionStatus.REJECTED) {
+
+    Long rejectedApplicationId =
+            application.getId();
+
+    objectiveEvaluationRepository
+            .deleteByApplicationId(
+                    rejectedApplicationId
             );
-            application.setSelectionDecidedAt(
-                    LocalDateTime.now()
+
+    aiEvaluationRepository
+            .deleteByApplicationId(
+                    rejectedApplicationId
             );
-        }
 
-        application.setSelectionStatus(target);
+    playerResponseTokenRepository
+            .deleteByApplicationId(
+                    rejectedApplicationId
+            );
 
-        if (target == SelectionStatus.SELECTED) {
+    deliveryRepository
+            .deleteByApplicationId(
+                    rejectedApplicationId
+            );
+
+    applicationRepository.delete(
+            application
+    );
+
+    return Map.of(
+            "applicationId",
+            rejectedApplicationId,
+            "selectionStatus",
+            SelectionStatus.REJECTED.name(),
+            "deleted",
+            true
+    );
+}
+
+if (target == SelectionStatus.NOT_REVIEWED) {
+
+    application.setSelectionReason(null);
+
+    application.setSelectionDecidedAt(null);
+
+} else {
+
+    application.setSelectionReason(
+            normalizeReason(
+                    request.selectionReason()
+            )
+    );
+
+    application.setSelectionDecidedAt(
+            LocalDateTime.now()
+    );
+}
+
+application.setSelectionStatus(
+        target
+);
+
+if (target == SelectionStatus.SELECTED) {
+
     selectionEmailService.sendSelectionEmail(
             application
     );
 }
 
-        Application saved =
-                applicationRepository.save(application);
-
-        return Map.of(
-                "applicationId",
-                saved.getId(),
-                "selectionStatus",
-                saved.getSelectionStatus().name(),
-                "selectionReason",
-                saved.getSelectionReason() == null
-                        ? ""
-                        : saved.getSelectionReason(),
-                "selectionDecidedAt",
-                saved.getSelectionDecidedAt() == null
-                        ? ""
-                        : saved.getSelectionDecidedAt().toString()
+Application saved =
+        applicationRepository.save(
+                application
         );
+
+return Map.of(
+        "applicationId",
+        saved.getId(),
+        "selectionStatus",
+        saved.getSelectionStatus().name(),
+        "selectionReason",
+        saved.getSelectionReason() == null
+                ? ""
+                : saved.getSelectionReason(),
+        "selectionDecidedAt",
+        saved.getSelectionDecidedAt() == null
+                ? ""
+                : saved.getSelectionDecidedAt()
+                    .toString(),
+        "deleted",
+        false
+);
     }
 
     private String normalizeReason(String reason) {

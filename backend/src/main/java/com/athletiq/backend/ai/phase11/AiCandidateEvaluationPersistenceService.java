@@ -114,6 +114,6 @@ public class AiCandidateEvaluationPersistenceService {
             return 0;
         }
 
-        return repository.countByEventId(eventId);
+        return repository.countDistinctApplicationIdsByEventId(eventId);
     }
 }

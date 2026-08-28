@@ -11,7 +11,7 @@ public interface SelectionEmailDeliveryRepository
         SelectionEmailDelivery,
         Long
         > {
-
+                long deleteByApplicationId(Long applicationId);
     Optional<SelectionEmailDelivery>
     findFirstByApplicationIdOrderByCreatedAtDesc(
             Long applicationId

@@ -92,11 +92,7 @@ ReactDOM
                             path="/login"
                             element={<Login />}
                         />
-                        <Route
-    path="/player-response/:token/:response"
-    element={<PlayerResponsePage />}
-/>
-
+                       
                         <Route
                             path="/register"
                             element={<Register />}

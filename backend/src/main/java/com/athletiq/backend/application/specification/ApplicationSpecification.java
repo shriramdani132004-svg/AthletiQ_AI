@@ -1,8 +1,10 @@
 package com.athletiq.backend.application.specification;
 
+import org.springframework.data.jpa.domain.Specification;
+
 import com.athletiq.backend.application.entity.Application;
 import com.athletiq.backend.application.entity.ApplicationStatus;
-import org.springframework.data.jpa.domain.Specification;
+import com.athletiq.backend.application.entity.SelectionStatus;
 
 public final class ApplicationSpecification {
 
@@ -151,6 +153,21 @@ public final class ApplicationSpecification {
                 cb.equal(
                         root.get("status"),
                         status
+                );
+    }
+
+    public static Specification<Application> selectionStatusNot(
+            SelectionStatus selectionStatus
+    ) {
+
+        return (
+                root,
+                query,
+                cb
+        ) ->
+                cb.notEqual(
+                        root.get("selectionStatus"),
+                        selectionStatus
                 );
     }
 }

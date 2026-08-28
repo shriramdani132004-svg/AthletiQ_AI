@@ -738,3 +738,236 @@ main.public-application-page
     color: #667085;
     font-size: 12px;
 }
+.public-application-form-field {
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.public-application-form-field input,
+.public-application-form-field textarea,
+.public-application-form-field select {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 48px;
+    font-size: 16px;
+    padding: 12px 14px;
+    border-radius: 10px;
+}
+
+.public-application-form-field textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.public-application-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.public-application-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #d9dfe7;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.public-application-option input {
+    width: 20px;
+    height: 20px;
+    min-height: 20px;
+    flex: 0 0 auto;
+}
+
+.public-application-rating {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.rating-button {
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+    .public-application-form-field {
+        margin-bottom: 16px;
+    }
+
+    .public-application-form-field input,
+    .public-application-form-field textarea,
+    .public-application-form-field select {
+        font-size: 16px;
+        min-height: 50px;
+    }
+
+    .public-application-option {
+        min-height: 48px;
+    }
+}
+/* =========================================================
+   MULTI-SELECT / RADIO MOBILE FIX
+   ========================================================= */
+
+.public-application-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.public-application-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 42px;
+    margin: 0;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    border: 1px solid #d9dee8;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.public-application-option > input[type="checkbox"],
+.public-application-option > input[type="radio"] {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex: 0 0 20px !important;
+    box-sizing: border-box !important;
+}
+
+.public-application-option > span {
+    flex: 1;
+    min-width: 0;
+    font-size: 15px;
+    line-height: 1.3;
+}
+
+@media (max-width: 600px) {
+
+    .public-application-options {
+        gap: 6px;
+    }
+
+    .public-application-option {
+        min-height: 42px;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+
+    .public-application-option > input[type="checkbox"],
+    .public-application-option > input[type="radio"] {
+        width: 19px !important;
+        height: 19px !important;
+        min-width: 19px !important;
+        min-height: 19px !important;
+        max-width: 19px !important;
+        max-height: 19px !important;
+        flex-basis: 19px !important;
+    }
+
+    .public-application-option > span {
+        font-size: 14px;
+    }
+}
+/* =========================================================
+   MULTI SELECT - REAL CHECKBOXES
+   ========================================================= */
+
+.public-application-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.public-application-option {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-height: 42px !important;
+    padding: 8px 12px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    border: 1px solid #e1e5eb;
+    border-radius: 9px;
+    background: #fff;
+}
+
+.public-application-option input[type="checkbox"] {
+    appearance: checkbox !important;
+    -webkit-appearance: checkbox !important;
+
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+
+    min-height: 18px !important;
+    max-height: 18px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    flex: 0 0 18px !important;
+    border-radius: 3px !important;
+}
+
+.public-application-option input[type="radio"] {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+    min-height: 18px !important;
+    max-height: 18px !important;
+    flex: 0 0 18px !important;
+}
+
+.public-application-option span {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    font-size: 15px !important;
+    line-height: 1.35 !important;
+}
+
+@media (max-width: 600px) {
+    .public-application-options {
+        gap: 6px;
+    }
+
+    .public-application-option {
+        min-height: 44px !important;
+        padding: 8px 10px !important;
+    }
+
+    .public-application-option input[type="checkbox"] {
+        width: 19px !important;
+        height: 19px !important;
+        min-width: 19px !important;
+        max-width: 19px !important;
+        min-height: 19px !important;
+        max-height: 19px !important;
+        flex-basis: 19px !important;
+    }
+
+    .public-application-option span {
+        font-size: 14px !important;
+    }
+}

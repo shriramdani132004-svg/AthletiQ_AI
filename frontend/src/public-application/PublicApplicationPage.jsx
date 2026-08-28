@@ -3,6 +3,38 @@ import { useParams } from "react-router-dom";
 import { publicApplicationApi } from "./publicApplicationApi";
 import "./PublicApplicationPage.css";
 
+function parseOptions(optionsConfig) {
+    if (!optionsConfig) {
+        return [];
+    }
+
+    try {
+        const parsed = JSON.parse(optionsConfig);
+
+        if (Array.isArray(parsed)) {
+            return parsed
+                .map(option =>
+                    typeof option === "object"
+                        ? String(
+                              option.value ??
+                              option.label ??
+                              ""
+                          )
+                        : String(option)
+                )
+                .map(option => option.trim())
+                .filter(Boolean);
+        }
+    } catch {
+        return String(optionsConfig)
+            .split(/[\r\n,]+/)
+            .map(option => option.trim())
+            .filter(Boolean);
+    }
+
+    return [];
+}
+
 function DynamicPublicField({
     field,
     value,
@@ -14,6 +46,63 @@ function DynamicPublicField({
 
     const id = `public-field-${field.id}`;
 
+    const options = parseOptions(
+        field.optionsConfig
+    );
+
+    const moveToNextControl = event => {
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        if (
+            event.currentTarget instanceof
+                HTMLTextAreaElement
+        ) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const container =
+            event.currentTarget.closest(
+                ".public-application-form-fields"
+            );
+
+        if (!container) {
+            return;
+        }
+
+        const controls = Array.from(
+            container.querySelectorAll(
+                "input, textarea, select, button"
+            )
+        ).filter(
+            element =>
+                !element.disabled &&
+                element.type !== "hidden"
+        );
+
+        const currentIndex =
+            controls.indexOf(
+                event.currentTarget
+            );
+
+        const nextControl =
+            controls[currentIndex + 1];
+
+        if (nextControl) {
+            nextControl.focus();
+        }
+    };
+
+    const commonProps = {
+        id,
+        name: field.fieldKey,
+        required: field.required,
+        onKeyDown: moveToNextControl
+    };
+
     return (
         <div
             className={
@@ -23,94 +112,295 @@ function DynamicPublicField({
         >
             <label htmlFor={id}>
                 {field.label}
-                {field.required && <span>*</span>}
+                {field.required && (
+                    <span>*</span>
+                )}
             </label>
-
-            {type === "LONG_TEXT" ? (
-                <textarea
-                    id={id}
-                    name={field.fieldKey}
-                    value={value ?? ""}
-                    onChange={e => onChange(e.target.value)}
-                    rows={5}
-                    placeholder={field.description || ""}
-                    required={field.required}
-                />
-            ) : (
-                <input
-                    id={id}
-                    name={field.fieldKey}
-                    value={value ?? ""}
-                                        onChange={e => onChange(e.target.value)}
-                                        onKeyDown={event => {
-
-                        if(event.key !== "Enter"){
-                            return;
-                        }
-
-                        event.preventDefault();
-
-                        const container =
-                            event.currentTarget.closest(
-                                ".public-application-form-fields"
-                            );
-
-                        if(!container){
-                            return;
-                        }
-
-                        const controls =
-                            Array.from(
-                                container.querySelectorAll(
-                                    "input, textarea, select"
-                                )
-                            ).filter(
-                                element =>
-                                    !element.disabled &&
-                                    element.type !== "hidden"
-                            );
-
-                        const currentIndex =
-                            controls.indexOf(
-                                event.currentTarget
-                            );
-
-                        const nextControl =
-                            controls[currentIndex + 1];
-
-                        if(nextControl){
-                            nextControl.focus();
-                        }
-                    }}
-                    type={
-                        type === "EMAIL"
-                            ? "email"
-                            : type === "PHONE"
-                                ? "tel"
-                                : type === "NUMBER"
-                                    ? "number"
-                                    : type === "DATE"
-                                        ? "date"
-                                        : type === "URL"
-                                            ? "url"
-                                            : "text"
-                    }
-                    inputMode={
-                        type === "PHONE"
-                            ? "tel"
-                            : type === "NUMBER"
-                                ? "decimal"
-                                : undefined
-                    }
-                    placeholder={field.description || ""}
-                    required={field.required}
-                />
-            )}
 
             {field.description && (
                 <small className="public-application-field-help">
                     {field.description}
                 </small>
+            )}
+
+            {type === "LONG_TEXT" ? (
+                <textarea
+                    {...commonProps}
+                    value={value ?? ""}
+                    onChange={e =>
+                        onChange(e.target.value)
+                    }
+                    rows={5}
+                    placeholder={
+                        field.description || ""
+                    }
+                />
+
+            ) : type === "DROPDOWN" ||
+              type === "SELECT" ? (
+
+                <select
+                    {...commonProps}
+                    value={value ?? ""}
+                    onChange={e =>
+                        onChange(e.target.value)
+                    }
+                >
+                    <option value="">
+                        Select an option
+                    </option>
+
+                    {options.map(option => (
+                        <option
+                            key={option}
+                            value={option}
+                        >
+                            {option}
+                        </option>
+                    ))}
+                </select>
+
+            ) : type === "RADIO" ? (
+
+                <div
+                    className="public-application-options"
+                    role="radiogroup"
+                >
+                    {options.map(option => (
+                        <label
+                            key={option}
+                            className="public-application-option"
+                        >
+                            <input
+                                type="radio"
+                                name={field.fieldKey}
+                                value={option}
+                                checked={
+                                    value === option
+                                }
+                                onChange={e =>
+                                    onChange(
+                                        e.target.value
+                                    )
+                                }
+                            />
+                            <span>{option}</span>
+                        </label>
+                    ))}
+                </div>
+
+            ) : type === "CHECKBOX" ? (
+
+                <label className="public-application-option">
+                    <input
+                        type="checkbox"
+                        checked={Boolean(value)}
+                        onChange={e =>
+                            onChange(
+                                e.target.checked
+                            )
+                        }
+                    />
+                    <span>
+                        {field.description ||
+                            field.label}
+                    </span>
+                </label>
+
+            ) : type === "MULTI_SELECT" ? (
+
+                <div className="public-application-options">
+                    {options.map(option => {
+                        const selected =
+                            Array.isArray(value)
+                                ? value
+                                : [];
+
+                        return (
+                            <label
+                                key={option}
+                                className="public-application-option"
+                            >
+                                <input
+                                    type="checkbox"
+                                    value={option}
+                                    checked={selected.includes(
+                                        option
+                                    )}
+                                    onChange={e => {
+                                        const next =
+                                            e.target.checked
+                                                ? [
+                                                      ...selected,
+                                                      option
+                                                  ]
+                                                : selected.filter(
+                                                      item =>
+                                                          item !==
+                                                          option
+                                                  );
+
+                                        onChange(next);
+                                    }}
+                                />
+
+                                <span>{option}</span>
+                            </label>
+                        );
+                    })}
+                </div>
+
+            ) : type === "DATE" ? (
+
+                <input
+                    {...commonProps}
+                    type="date"
+                    value={value ?? ""}
+                    onChange={e =>
+                        onChange(e.target.value)
+                    }
+                />
+
+            ) : type === "NUMBER" ? (
+
+                <input
+                    {...commonProps}
+                    type="number"
+                    inputMode="decimal"
+                    value={value ?? ""}
+                    onChange={e =>
+                        onChange(e.target.value)
+                    }
+                    placeholder={
+                        field.description || ""
+                    }
+                />
+
+            ) : type === "EMAIL" ? (
+
+                <input
+                    {...commonProps}
+                    type="email"
+                    inputMode="email"
+                    autoComplete="email"
+                    value={value ?? ""}
+                    onChange={e =>
+                        onChange(e.target.value)
+                    }
+                    placeholder={
+                        field.description || ""
+                    }
+                />
+
+            ) : type === "PHONE" ? (
+
+                <input
+                    {...commonProps}
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    value={value ?? ""}
+                    onChange={e =>
+                        onChange(e.target.value)
+                    }
+                    placeholder={
+                        field.description || ""
+                    }
+                />
+
+            ) : type === "URL" ? (
+
+                <input
+                    {...commonProps}
+                    type="url"
+                    inputMode="url"
+                    value={value ?? ""}
+                    onChange={e =>
+                        onChange(e.target.value)
+                    }
+                    placeholder={
+                        field.description || ""
+                    }
+                />
+
+            ) : type === "FILE" ||
+  type === "IMAGE" ? (
+
+    <input
+        {...commonProps}
+        type="file"
+        accept={
+            type === "IMAGE"
+                ? ".jpg,.jpeg,.png,image/jpeg,image/png"
+                : undefined
+        }
+        onChange={e => {
+
+            const file =
+                e.target.files?.[0] ?? null;
+
+            if(!file){
+                onChange(null);
+                return;
+            }
+
+            const fileName =
+                String(file.name || "").trim();
+
+            const fileType =
+                String(file.type || "").trim() ||
+                (
+                    /\.(jpe?g)$/i.test(fileName)
+                        ? "image/jpeg"
+                        : /\.(png)$/i.test(fileName)
+                            ? "image/png"
+                            : "application/octet-stream"
+                );
+
+            onChange({
+                name: fileName,
+                type: fileType,
+                size: Number(file.size || 0)
+            });
+        }}
+    />
+
+            ) : type === "RATING" ? (
+
+                <div className="public-application-rating">
+                    {[1, 2, 3, 4, 5].map(rating => (
+                        <button
+                            key={rating}
+                            type="button"
+                            className={
+                                "rating-button" +
+                                (Number(value) >=
+                                rating
+                                    ? " selected"
+                                    : "")
+                            }
+                            onClick={() =>
+                                onChange(rating)
+                            }
+                        >
+                            {rating}
+                        </button>
+                    ))}
+                </div>
+
+            ) : (
+
+                <input
+                    {...commonProps}
+                    type="text"
+                    value={value ?? ""}
+                    onChange={e =>
+                        onChange(e.target.value)
+                    }
+                    placeholder={
+                        field.description || ""
+                    }
+                />
             )}
 
             {error && (
@@ -384,32 +674,42 @@ export default function PublicApplicationPage() {
         }
 
         // ----------------------------------------------------
-        // DATE
-        // ----------------------------------------------------
+// DATE
+// ----------------------------------------------------
 
-        if(fieldType === "DATE"){
+if(fieldType === "DATE"){
 
-            const parsed =
-                new Date(`${value}T00:00:00`);
+    if(
+        !/^\d{4}-\d{2}-\d{2}$/.test(
+            String(value)
+        )
+    ){
+        return "Enter a valid date.";
+    }
 
-            if(
-                Number.isNaN(
-                    parsed.getTime()
-                )
-            ){
-                return "Enter a valid date.";
-            }
+    const [year, month, day] =
+        String(value)
+            .split("-")
+            .map(Number);
 
-            const normalized =
-                parsed
-                    .toISOString()
-                    .slice(0,10);
+    const date =
+        new Date(
+            Date.UTC(
+                year,
+                month - 1,
+                day
+            )
+        );
 
-            if(normalized !== value){
-                return "Enter a valid date.";
-            }
-        }
-
+    if(
+        Number.isNaN(date.getTime()) ||
+        date.getUTCFullYear() !== year ||
+        date.getUTCMonth() !== month - 1 ||
+        date.getUTCDate() !== day
+    ){
+        return "Enter a valid date.";
+    }
+}
         // ----------------------------------------------------
         // URL
         // ----------------------------------------------------

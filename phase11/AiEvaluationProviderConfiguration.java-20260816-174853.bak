@@ -1,0 +1,32 @@
+package com.athletiq.backend.ai.phase11;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AiEvaluationProviderConfiguration {
+
+    @Bean
+    public ObjectMapper athletiqAiObjectMapper() {
+        return new ObjectMapper();
+    }
+
+    @Bean
+    public AiEvaluationProvider aiEvaluationProvider(
+            ObjectMapper objectMapper
+    ) {
+        return new MockAiEvaluationProvider();
+    }
+
+    @Bean
+    public AiEvaluationService aiEvaluationService(
+            AiEvaluationProvider provider,
+            ObjectMapper objectMapper
+    ) {
+        return new AiEvaluationService(
+                provider,
+                objectMapper
+        );
+    }
+}

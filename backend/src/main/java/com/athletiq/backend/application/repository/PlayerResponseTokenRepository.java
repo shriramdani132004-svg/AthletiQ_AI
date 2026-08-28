@@ -14,7 +14,7 @@ public interface PlayerResponseTokenRepository
 
     Optional<PlayerResponseToken>
     findByTokenHash(String tokenHash);
-
+        long deleteByApplicationId(Long applicationId);
     Optional<PlayerResponseToken>
     findFirstByApplicationIdAndUsedAtIsNullOrderByExpiresAtDesc(
             Long applicationId

@@ -1,9 +1,10 @@
 package com.athletiq.backend.objectiveevaluation.repository;
 
-import com.athletiq.backend.objectiveevaluation.entity.ObjectiveEvaluation;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import com.athletiq.backend.objectiveevaluation.entity.ObjectiveEvaluation;
 
 public interface ObjectiveEvaluationRepository
         extends JpaRepository<ObjectiveEvaluation, Long> {
@@ -16,7 +17,7 @@ public interface ObjectiveEvaluationRepository
     boolean existsByApplicationId(
             Long applicationId
     );
-
+        long deleteByApplicationId(Long applicationId);
     Optional<ObjectiveEvaluation>
     findByApplicationIdAndEventId(
             Long applicationId,

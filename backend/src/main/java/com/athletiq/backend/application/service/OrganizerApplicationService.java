@@ -133,9 +133,13 @@ public class OrganizerApplicationService {
                 normalize(position);
 
         Specification<Application> specification =
-                ApplicationSpecification.eventId(
-                        eventId
-                );
+        ApplicationSpecification.eventId(
+                eventId
+        ).and(
+                ApplicationSpecification.selectionStatusNot(
+                        SelectionStatus.REJECTED
+                )
+        );
 
         if(normalizedSearch != null){
 
@@ -485,48 +489,51 @@ application.getPlayerRespondedAt()
             return null;
         }
     }
-           private String extractPosition(
-            Application application
+          private String extractPosition(
+        Application application
+){
+    if(
+            application == null ||
+            application.getSubmittedData() == null ||
+            application.getSubmittedData().isBlank()
     ){
-
-        if(
-                application == null ||
-                application.getSubmittedData() == null ||
-                application.getSubmittedData().isBlank()
-        ){
-            return null;
-        }
-
-        try{
-
-            Map<String,Object> answers =
-                    jsonMapper.readValue(
-                            application.getSubmittedData(),
-                            new TypeReference<
-                                    Map<String,Object>
-                                    >(){}
-                    );
-
-            Object positionValue =
-                    answers.get("position");
-
-            if(positionValue == null){
-                return null;
-            }
-
-            String position =
-                    String.valueOf(
-                            positionValue
-                    ).trim();
-
-            return position.isBlank()
-                    ? null
-                    : position;
-
-        }catch(Exception exception){
-            return null;
-        }
+        return null;
     }
+
+    try{
+        Map<String,Object> answers =
+                jsonMapper.readValue(
+                        application.getSubmittedData(),
+                        new TypeReference<
+                                Map<String,Object>
+                                >(){}
+                );
+
+        Object positionValue =
+                answers.get("playing_position");
+
+        if(positionValue == null){
+            positionValue =
+                    answers.get("position");
+        }
+
+        if(positionValue == null){
+            return null;
+        }
+
+        String position =
+                String.valueOf(
+                        positionValue
+                ).trim();
+
+        return position.isBlank()
+                ? null
+                : position;
+
+    }catch(Exception exception){
+        return null;
+    }
+}
 
         private BigDecimal extractScore(
             Application application
